@@ -1,5 +1,5 @@
 // src/context/JobContext.jsx
-import React, { createContext, useContext, useCallback, useState } from "react";
+import React, { createContext, useContext, useCallback, useState, useEffect } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage"; 
 
 export const JobContext = createContext();
@@ -10,16 +10,16 @@ const initialJobs = [];
 export const JobProvider = ({ children }) => {
   const [jobs, setJobs] = useLocalStorage("devTrackJobs", initialJobs);
   const [searchQuery, setSearchQuery] = useState('');
-  const [editingJob, setEditingJob] = useState(null); // Added for Edit Modal control
+  const [editingJob, setEditingJob] = useState(null); 
+  const [ministryMode, setMinistryMode] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   // 1. Manual Entry
-  const addJob = useCallback(newJob => {
-    setJobs(prevJobs => [...prevJobs, { 
-      id: Date.now().toString(), 
-      isVerified: false, // Prep for Employer stage
-      ...newJob 
-    }]);
-  }, [setJobs]);
+  const addJob = (newJob) => {
+    const enrichedJob = enrichJob(newJob);
+    setJobs(prevJobs => [...prevJobs, enrichedJob]);
+  };
 
   // 2. JSearch Results Integration
   const addJobFromSearch = useCallback((apiJob) => {
@@ -58,6 +58,42 @@ export const JobProvider = ({ children }) => {
     setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
   }, [setJobs]);
 
+  useEffect(() => {
+    if (jobs.length > 0) {
+      localStorage.setItem('ministry-jobs', JSON.stringify(jobs));
+      localStorage.setItem('ministry-last-update', new Date().toISOString());
+    }
+  }, [jobs]);
+
+  // ✅ ADD THIS - Load jobs from localStorage on app start
+  useEffect(() => {
+    const savedJobs = localStorage.getItem('ministry-jobs');
+    if (savedJobs) {
+      try {
+        setJobs(JSON.parse(savedJobs));
+      } catch (error) {
+        console.error('Error loading saved jobs:', error);
+      }
+    }
+  }, []);
+
+
+  // ✅ ADD THIS - Helper function to add ministry-specific fields to jobs
+  const enrichJob = (job) => {
+    return {
+      ...job,
+      // Add these fields if they don't exist
+      county: job.county || 'Nairobi',
+      jobSource: job.jobSource || 'Manual',
+      skillsRequired: job.skillsRequired || [],
+      employmentType: job.employmentType || 'Full-time',
+      isVerified: job.isVerified || false,
+      scrapedDate: job.scrapedDate || new Date().toISOString(),
+      salaryRange: job.salaryRange || { min: 0, max: 0 }
+    };
+  };
+
+
   const contextValue = { 
     jobs, 
     addJob, 
@@ -68,7 +104,11 @@ export const JobProvider = ({ children }) => {
     editingJob,
     setEditingJob,
     searchQuery, 
-    setSearchQuery 
+    setSearchQuery,
+    ministryMode,   
+    setMinistryMode, 
+    isLoading,      
+    setIsLoading,   
   };
 
   return (
