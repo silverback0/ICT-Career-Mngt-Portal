@@ -59,24 +59,24 @@ export const JobProvider = ({ children }) => {
   }, [setJobs]);
 
   useEffect(() => {
-    if (jobs.length > 0) {
-      localStorage.setItem('ministry-jobs', JSON.stringify(jobs));
-      localStorage.setItem('ministry-last-update', new Date().toISOString());
+  const savedJobs = localStorage.getItem('ministry-jobs');
+  if (savedJobs && jobs.length === 0) {
+    // Only load on initial mount if jobs array is empty
+    try {
+      setJobs(JSON.parse(savedJobs));
+    } catch (error) {
+      console.error('Error loading saved jobs:', error);
     }
-  }, [jobs]);
+  }
+}, []); // Empty dependency array - only run once on mount
 
-  // ✅ ADD THIS - Load jobs from localStorage on app start
-  useEffect(() => {
-    const savedJobs = localStorage.getItem('ministry-jobs');
-    if (savedJobs) {
-      try {
-        setJobs(JSON.parse(savedJobs));
-      } catch (error) {
-        console.error('Error loading saved jobs:', error);
-      }
-    }
-  }, []);
-
+// ✅ This one saves jobs whenever they change
+useEffect(() => {
+  if (jobs.length > 0) {
+    localStorage.setItem('ministry-jobs', JSON.stringify(jobs));
+    localStorage.setItem('ministry-last-update', new Date().toISOString());
+  }
+}, [jobs]);
 
   // ✅ ADD THIS - Helper function to add ministry-specific fields to jobs
   const enrichJob = (job) => {
@@ -96,7 +96,8 @@ export const JobProvider = ({ children }) => {
 
   const contextValue = { 
     jobs, 
-    addJob, 
+    addJob,
+    setJobs,
     addJobFromSearch, 
     moveJob, 
     updateJob,

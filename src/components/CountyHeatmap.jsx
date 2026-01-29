@@ -1,63 +1,106 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import React, { useMemo, useState } from 'react';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { scaleLinear } from 'd3-scale';
 
-export default function CountyHeatmap({ data }) {
-  // Convert object to array for recharts
-  const chartData = Object.entries(data)
-    .map(([county, count]) => ({ county, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10); // Top 10 counties
-  
-  // Color scale based on job count
-  const getColor = (count) => {
-    const max = Math.max(...chartData.map(d => d.count));
-    const intensity = (count / max) * 255;
-    return `rgb(${255 - intensity}, ${100 + intensity/2}, ${intensity})`;
-  };
-  
+const KENYA_GEO_URL = "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/kenya/kenya-counties.json";
+
+const CountyHeatmap = ({ data = {} }) => {
+  // We store 'x' and 'y' to make the tooltip follow the mouse
+  const [tooltip, setTooltip] = useState({ content: "", x: 0, y: 0 });
+
+  const { maxJobs, colorScale } = useMemo(() => {
+    const counts = Object.values(data);
+    const max = counts.length > 0 ? Math.max(...counts) : 0;
+    return {
+      maxJobs: max,
+      colorScale: scaleLinear()
+        .domain([0, max || 1])
+        .range(["#f8fafc", "#1d4ed8"]) // From slate-50 to deep blue
+    };
+  }, [data]);
+
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        📍 Geographic Distribution
-      </h2>
-      <p className="text-gray-600 text-sm mb-6">
-        ICT job openings by county
-      </p>
-      
-      {chartData.length > 0 ? (
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="county" 
-              angle={-45}
-              textAnchor="end"
-              height={100}
-            />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="count" radius={[8, 8, 0, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell key={index} fill={getColor(entry.count)} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="text-center text-gray-500 py-12">
-          No data available. Click "Refresh Data" to load jobs.
-        </div>
-      )}
-      
-      {/* Top 3 Counties */}
-      <div className="mt-6 grid grid-cols-3 gap-4">
-        {chartData.slice(0, 3).map((item, idx) => (
-          <div key={idx} className="text-center p-3 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">{item.count}</div>
-            <div className="text-xs text-gray-600 mt-1">{item.county}</div>
+    <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200 w-full relative">
+      <header className="mb-6">
+        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span>📍</span> Geographic Distribution
+        </h2>
+        <p className="text-slate-500 text-sm">ICT job density across the 47 counties</p>
+      </header>
+
+      <div className="h-[500px] w-full bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden relative">
+        
+        {/* MOUSE-TRACKING TOOLTIP */}
+        {tooltip.content && (
+          <div 
+            className="pointer-events-none absolute z-50 bg-slate-900/95 backdrop-blur-sm text-white px-3 py-2 rounded-lg text-xs font-bold shadow-2xl border border-slate-700 whitespace-nowrap"
+            style={{ 
+              left: tooltip.x, 
+              top: tooltip.y,
+              transform: 'translate(-50%, -120%)', // Positions bubble above the cursor
+              transition: 'left 0.1s ease-out, top 0.1s ease-out'
+            }}
+          >
+            {tooltip.content}
+            {/* Tooltip Arrow */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-slate-900/95" />
           </div>
-        ))}
+        )}
+
+        <ComposableMap
+          projection="geoMercator"
+          projectionConfig={{ scale: 2800, center: [37.8, 0.6] }}
+          className="w-full h-full"
+        >
+          <Geographies geography={KENYA_GEO_URL}>
+            {({ geographies }) =>
+              geographies.map((geo) => {
+                const countyName = geo.properties.NAME_1; 
+                const jobCount = data[countyName] || 0;
+
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill={colorScale(jobCount)}
+                    stroke="#ffffff"
+                    strokeWidth={0.5}
+                    onMouseMove={(e) => {
+                      // Calculate mouse position relative to this container
+                      const bounds = e.currentTarget.parentElement.getBoundingClientRect();
+                      setTooltip({
+                        content: `${countyName}: ${jobCount} Jobs`,
+                        x: e.clientX - bounds.left,
+                        y: e.clientY - bounds.top
+                      });
+                    }}
+                    onMouseLeave={() => setTooltip({ content: "", x: 0, y: 0 })}
+                    style={{
+                      default: { outline: "none" },
+                      hover: { fill: "#10b981", outline: "none", cursor: "pointer" },
+                      pressed: { fill: "#059669", outline: "none" },
+                    }}
+                  />
+                );
+              })
+            }
+          </Geographies>
+        </ComposableMap>
       </div>
+
+      <footer className="mt-6">
+        <div className="flex items-center justify-between mb-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <span>Low Density</span>
+          <span>High Density</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="text-xs font-bold text-slate-600">0</span>
+          <div className="flex-1 h-3 bg-gradient-to-r from-[#f8fafc] to-[#1d4ed8] rounded-full border border-slate-100 shadow-inner" />
+          <span className="text-xs font-bold text-slate-600">{maxJobs}</span>
+        </div>
+      </footer>
     </div>
   );
-}
+};
+
+export default CountyHeatmap;

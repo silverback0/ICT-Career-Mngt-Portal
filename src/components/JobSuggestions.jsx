@@ -16,37 +16,64 @@ export default function JobSuggestions() {
     };
 
     const searchJobs = async () => {
-        if (!query) return;
-        setLoading(true);
+    if (!query) return;
+    setLoading(true);
 
-        try {
-            const searchQuery = isRemoteOnly ? query : `${query} in Kenya`;
-            let url = `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery)}&num_pages=1`;
-            
-            if (isRemoteOnly) url += `&remote_jobs_only=true`;
-            if (jobType !== 'ALL') url += `&employment_types=${jobType}`;
+    try {
+        const apiKey = import.meta.env.VITE_RAPIDAPI_KEY;
+        const apiHost = import.meta.env.VITE_RAPIDAPI_HOST;
 
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'X-RapidAPI-Key': 'c9da3ff44fmsh37dd31581fcc87cp1097fcjsn5799b903355f',
-                    'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
-                }
-            });
+        // DEBUG: Log the exact values
+        console.log('Using API Key:', apiKey);
+        console.log('Key length:', apiKey?.length);
+        console.log('First 10 chars:', apiKey?.substring(0, 10));
 
-            if (response.status === 429) {
-                alert("Rate limit hit! Wait 10 seconds.");
-                return;
+        const searchQuery = isRemoteOnly ? query : `${query} in Kenya`;
+        
+        const params = new URLSearchParams({
+            query: searchQuery,
+            num_pages: '1'
+        });
+        
+        if (isRemoteOnly) params.append('remote_jobs_only', 'true');
+        if (jobType !== 'ALL') params.append('employment_types', jobType);
+
+        const url = `https://jsearch.p.rapidapi.com/search?${params.toString()}`;
+        
+        console.log('Request URL:', url);
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': apiKey,
+                'X-RapidAPI-Host': apiHost
             }
+        });
 
-            const data = await response.json();
-            setResults(data.data || []);
-        } catch (error) {
-            console.error('Fetch Error:', error);
-        } finally {
-            setLoading(false);
+        console.log('Response status:', response.status);
+
+        if (response.status === 403) {
+            alert('API key authentication failed. Check console for details.');
+            return;
         }
-    };
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API Error Response:', errorText);
+            alert(`API Error (${response.status}): Check console`);
+            return;
+        }
+
+        const data = await response.json();
+        console.log('API Response:', data);
+        setResults(data.data || []);
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        alert('Failed to fetch jobs. Check console for details.');
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div style={containerStyle}>

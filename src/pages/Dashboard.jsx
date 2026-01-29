@@ -2,51 +2,101 @@ import React from 'react';
 import { useJob } from '../context/JobContext.jsx';
 import JobCard from '../components/JobCard.jsx';
 
-const STATUSES = ['Backlog', 'Tailoring', 'Active', 'In-Play', 'Offer', 'Rejected', 'Ghosted/Archive'];
+const STATUSES = [
+  'Backlog', 
+  'Tailoring', 
+  'Active', 
+  'In-Play', 
+  'Offer', 
+  'Rejected', 
+  'Ghosted/Archive'
+];
 
-function Dashboard () {
-    const { jobs, moveJob, deleteJob, searchQuery } = useJob();  
-    const getJobsByStatus = (status) => {   
-        return jobs
-        .filter(job => job.status === status)
-        .filter(job => 
-        job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        job.position.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    };
+function Dashboard() {
+  const { jobs, moveJob, deleteJob, searchQuery } = useJob();
 
-    const handleDragOver = (e) => {
-        e.preventDefault(); 
-    };
+  // Filter jobs by status and search query
+  const getJobsByStatus = (status) => {
+    const query = searchQuery.toLowerCase();
+    return jobs.filter(job => {
+      const matchesStatus = job.status === status;
+      const matchesSearch = !query || 
+        job.company.toLowerCase().includes(query) ||
+        job.position.toLowerCase().includes(query);
+      return matchesStatus && matchesSearch;
+    });
+  };
 
-    const handleDrop = (e, status) => {
-        const jobId = e.dataTransfer.getData('jobId');
-        moveJob(Number(jobId), status);
-    };
+  // Drag and drop handlers
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
 
-    return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px' }}>
-            {STATUSES.map(status => (
-                <div key={status}
-                    onDragOver={handleDragOver}
-                    onDrop={(e) => handleDrop(e, status)}
-                    style={{ flex: 1, margin: '0 10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', minHeight: '400px', backgroundColor: '#f9f9f9', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-                    <h2 style={{ textAlign: 'center' }}>{status}</h2>
-                    {getJobsByStatus(status).map(job => (   
-                        <div key={job.id}
-                            draggable
-                            onDragStart={(e) => e.dataTransfer.setData('jobId', job.id)}        
-                            >
-                            <JobCard job={job} onDelete={deleteJob} />
-                        </div>
-                    ))}
-                    {getJobsByStatus(status).length === 0 && (
-                        <p style={{ color: '#888', fontStyle: 'italic' }}>Drag a job here or add a new one.</p>
-                    )}
-                </div>
-            ))}
-        </div>  
-    );
+  const handleDrop = (e, status) => {
+    e.preventDefault();
+    const jobId = e.dataTransfer.getData('jobId');
+    if (jobId) {
+      moveJob(Number(jobId), status);
+    }
+  };
+
+  const handleDragStart = (e, jobId) => {
+    e.dataTransfer.setData('jobId', String(jobId));
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
+      <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+        {STATUSES.map(status => {
+          const statusJobs = getJobsByStatus(status);
+          const isEmpty = statusJobs.length === 0;
+
+          return (
+            <div
+              key={status}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, status)}
+              className="flex-shrink-0 w-[340px] bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 flex flex-col max-h-[calc(100vh-120px)]"
+            >
+              {/* Column Header */}
+              <div className="p-5 border-b border-slate-200">
+                <h2 className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center justify-between">
+                  <span>{status}</span>
+                  <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 bg-slate-100 text-slate-500 rounded-full text-xs font-semibold">
+                    {statusJobs.length}
+                  </span>
+                </h2>
+              </div>
+
+              {/* Cards Container */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+                {statusJobs.map(job => (
+                  <div
+                    key={job.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, job.id)}
+                    className="cursor-grab active:cursor-grabbing transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+                  >
+                    <JobCard job={job} onDelete={deleteJob} />
+                  </div>
+                ))}
+
+                {/* Empty State */}
+                {isEmpty && (
+                  <div className="flex items-center justify-center h-40 border-2 border-dashed border-slate-200 rounded-lg bg-slate-50/50 transition-colors hover:border-slate-300">
+                    <p className="text-slate-400 text-sm font-medium">
+                      Drop jobs here
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default Dashboard;
