@@ -1,67 +1,78 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export default function SkillsGapChart({ data }) {
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
-  
-  // Get top 6 skills
+  // 1. Safety Guard: Prevents the .reduce or .map errors if data hasn't loaded
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <div className="h-[300px] flex flex-col items-center justify-center text-slate-400 gap-2">
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+        <p className="text-sm italic font-medium">Analyzing skill demand...</p>
+      </div>
+    );
+  }
+
+  // 2. Transform the 'bySkill' object into an array and take the Top 5
   const chartData = Object.entries(data)
-    .map(([skill, count]) => ({ name: skill, value: count }))
+    .map(([name, value]) => ({ 
+      name: name.length > 15 ? `${name.substring(0, 12)}...` : name, // Truncate long skill names
+      fullName: name,
+      value 
+    }))
     .sort((a, b) => b.value - a.value)
-    .slice(0, 6);
-  
+    .slice(0, 5);
+
+  // High-contrast professional palette
+  const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        🎯 Skills in Demand
-      </h2>
-      <p className="text-gray-600 text-sm mb-6">
-        Most requested technical skills
-      </p>
-      
-      {chartData.length > 0 ? (
-        <>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-          
-          {/* Skills List */}
-          <div className="mt-6 space-y-2">
-            {chartData.map((skill, idx) => (
-              <div key={idx} className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: COLORS[idx % COLORS.length] }}
-                  />
-                  <span className="text-sm font-medium">{skill.name}</span>
-                </div>
-                <span className="text-sm text-gray-600">{skill.value} jobs</span>
-              </div>
+    <div className="h-[320px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="45%"
+            innerRadius={70}
+            outerRadius={90}
+            paddingAngle={8}
+            dataKey="value"
+            animationBegin={0}
+            animationDuration={800}
+          >
+            {chartData.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={COLORS[index % COLORS.length]} 
+                stroke="none"
+              />
             ))}
-          </div>
-        </>
-      ) : (
-        <div className="text-center text-gray-500 py-12">
-          No skills data available
-        </div>
-      )}
+          </Pie>
+          
+          <Tooltip 
+            cursor={{ fill: 'transparent' }}
+            content={({ active, payload }) => {
+              if (active && payload && payload.length) {
+                return (
+                  <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
+                    <p className="font-bold mb-1">{payload[0].payload.fullName}</p>
+                    <p className="text-blue-400">{payload[0].value} Open Positions</p>
+                  </div>
+                );
+              }
+              return null;
+            }}
+          />
+          
+          <Legend 
+            verticalAlign="bottom" 
+            align="center"
+            iconType="circle"
+            layout="horizontal"
+            wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: '600' }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 }

@@ -5,6 +5,8 @@ import JobSuggestions from './components/JobSuggestions';
 import Dashboard from './pages/Dashboard';
 import EditJobModal from './components/EditJobModal';
 import MinistryDashboard from './components/MinistryDashboard';
+import Analytics from './components/Analytics';
+import SkillsGapChart from './components/SkillsGapChart';
 
 function App() {
   const [view, setView] = useState('user'); 
@@ -69,7 +71,7 @@ function App() {
           )}
         </main>
 
-        <EditJobModal />
+        <EditJobModal /> 
       </div>
     </JobProvider>
   );

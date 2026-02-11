@@ -3,13 +3,13 @@ import { useJob } from '../context/JobContext.jsx';
 import JobCard from '../components/JobCard.jsx';
 
 const STATUSES = [
-  'Backlog', 
-  'Tailoring', 
-  'Active', 
-  'In-Play', 
-  'Offer', 
-  'Rejected', 
-  'Ghosted/Archive'
+  'National Pipeline',      // Sourcing new talent
+  'Verification Phase',     // Vetting MDA history/performance
+  'MDA Rotation (Active)',  // Currently serving in an MDA
+  'Deployment Ready',       // Finished rotation, ready for absorption
+  'Placed (Public)',        // Permanent Government Role
+  'Placed (Private)',       // Transitioned to Private Sector partner
+  'Attrition/Inactive'      // Exited the government program
 ];
 
 function Dashboard() {

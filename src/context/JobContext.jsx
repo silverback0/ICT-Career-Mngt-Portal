@@ -1,119 +1,53 @@
-// src/context/JobContext.jsx
-import React, { createContext, useContext, useCallback, useState, useEffect } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage"; 
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export const JobContext = createContext();
 
-// Placeholder jobs removed for a clean "Production" state
-const initialJobs = []; 
-
 export const JobProvider = ({ children }) => {
-  const [jobs, setJobs] = useLocalStorage("devTrackJobs", initialJobs);
+  const [jobs, setJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [editingJob, setEditingJob] = useState(null); 
-  const [ministryMode, setMinistryMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
 
-
-  // 1. Manual Entry
-  const addJob = (newJob) => {
-    const enrichedJob = enrichJob(newJob);
-    setJobs(prevJobs => [...prevJobs, enrichedJob]);
-  };
-
-  // 2. JSearch Results Integration
-  const addJobFromSearch = useCallback((apiJob) => {
-    const formattedJob = {
-      id: Date.now().toString(),
-      company: apiJob.employer_name,
-      position: apiJob.job_title,
-      status: 'Backlog', 
-      location: apiJob.job_city || 'Kenya',
-      link: apiJob.job_apply_link,
-      interviewDate: null,
-      isVerified: false, // Default to unverified until Employer confirms
-      dateAdded: new Date().toLocaleDateString(),
-      notes: '' 
-    };
-    
-    setJobs(prevJobs => [...prevJobs, formattedJob]);
-    alert(`🚀 ${apiJob.job_title} tracked in Backlog!`);
-  }, [setJobs]);
-
-  // 3. Move Job (Standardized ID comparison)
-  const moveJob = useCallback((jobId, newStatus) => { 
-    setJobs(prevJobs =>
-      prevJobs.map(job => String(job.id) === String(jobId) ? { ...job, status: newStatus } : job)
-    );
-  }, [setJobs]);
-
-  // 4. Update existing job (Required for EditModal)
-  const updateJob = useCallback((updatedJob) => {
-    setJobs(prevJobs =>
-      prevJobs.map(job => job.id === updatedJob.id ? updatedJob : job)
-    );
-  }, [setJobs]);
-
-  const deleteJob = useCallback(jobId => {
-    setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
-  }, [setJobs]);
-
+  // Initial Fetch
   useEffect(() => {
-  const savedJobs = localStorage.getItem('ministry-jobs');
-  if (savedJobs && jobs.length === 0) {
-    // Only load on initial mount if jobs array is empty
-    try {
-      setJobs(JSON.parse(savedJobs));
-    } catch (error) {
-      console.error('Error loading saved jobs:', error);
-    }
-  }
-}, []); // Empty dependency array - only run once on mount
+    fetch('http://localhost:5000/jobs')
+      .then(res => res.json())
+      .then(data => setJobs(data))
+      .catch(err => console.error("Could not fetch data:", err));
+  }, []);
 
-// ✅ This one saves jobs whenever they change
-useEffect(() => {
-  if (jobs.length > 0) {
-    localStorage.setItem('ministry-jobs', JSON.stringify(jobs));
-    localStorage.setItem('ministry-last-update', new Date().toISOString());
-  }
-}, [jobs]);
-
-  // ✅ ADD THIS - Helper function to add ministry-specific fields to jobs
-  const enrichJob = (job) => {
-    return {
-      ...job,
-      // Add these fields if they don't exist
-      county: job.county || 'Nairobi',
-      jobSource: job.jobSource || 'Manual',
-      skillsRequired: job.skillsRequired || [],
-      employmentType: job.employmentType || 'Full-time',
-      isVerified: job.isVerified || false,
-      scrapedDate: job.scrapedDate || new Date().toISOString(),
-      salaryRange: job.salaryRange || { min: 0, max: 0 }
-    };
+  const addJob = async (newJobData) => {
+    const response = await fetch('http://localhost:5000/jobs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...newJobData, id: Date.now().toString() })
+    });
+    const savedJob = await response.json();
+    setJobs(prev => [...prev, savedJob]);
   };
 
+  const updateJob = async (updatedJob) => {
+    await fetch(`http://localhost:5000/jobs/${updatedJob.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedJob)
+    });
+    setJobs(prev => prev.map(j => j.id === updatedJob.id ? updatedJob : j));
+  };
 
-  const contextValue = { 
-    jobs, 
-    addJob,
-    setJobs,
-    addJobFromSearch, 
-    moveJob, 
-    updateJob,
-    deleteJob, 
-    editingJob,
-    setEditingJob,
-    searchQuery, 
-    setSearchQuery,
-    ministryMode,   
-    setMinistryMode, 
-    isLoading,      
-    setIsLoading,   
+  const deleteJob = async (id) => {
+    await fetch(`http://localhost:5000/jobs/${id}`, { method: 'DELETE' });
+    setJobs(prev => prev.filter(j => j.id !== id));
+  };
+
+  const moveJob = async (jobId, newStatus) => {
+    const jobToMove = jobs.find(j => j.id === jobId);
+    if (jobToMove) {
+      updateJob({ ...jobToMove, status: newStatus });
+    }
   };
 
   return (
-    <JobContext.Provider value={contextValue}>
+    /* We include setJobs here so the Dashboard can update the context state */
+    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, moveJob, searchQuery, setSearchQuery }}>
       {children}
     </JobContext.Provider>
   );

@@ -1,0 +1,1904 @@
+{
+  "jobs": [
+    {
+      "id": "1",
+      "name": "Faith Mutua 101",
+      "company": "KenGen",
+      "position": "Cybersecurity Analyst",
+      "status": "MDA Rotation",
+      "county": "Mombasa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.9"
+        }
+      ],
+      "suitabilityScore": 73,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "2",
+      "name": "Mary Atieno 102",
+      "company": "EACC",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Private)",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 60,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "3",
+      "name": "Abdi Hassan 103",
+      "company": "NTSA",
+      "position": "Data Clerk",
+      "status": "Placed (Public)",
+      "county": "Kilifi",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.0"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "4",
+      "name": "Kevin Omolo 104",
+      "company": "KRA",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Public)",
+      "county": "Garissa",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 64,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "5",
+      "name": "Peter Kiprop 105",
+      "company": "NTSA",
+      "position": "Network Admin",
+      "status": "Placed (Private)",
+      "county": "Kisumu",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.1"
+        }
+      ],
+      "suitabilityScore": 87,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "6",
+      "name": "Cynthia Nyambura 106",
+      "company": "KenGen",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Public)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 82,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "7",
+      "name": "Faith Mutua 107",
+      "company": "KRA",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Mombasa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.0"
+        }
+      ],
+      "suitabilityScore": 79,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "8",
+      "name": "Mary Atieno 108",
+      "company": "KRA",
+      "position": "Systems Support",
+      "status": "Deployment Ready",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 67,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "9",
+      "name": "Zainab Mohammed 109",
+      "company": "NTSA",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KRA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 96,
+      "notes": "Former intern at KRA. Verified for PnP eligibility."
+    },
+    {
+      "id": "10",
+      "name": "Mary Atieno 110",
+      "company": "Ministry of ICT",
+      "position": "Data Clerk",
+      "status": "Placed (Public)",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 94,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "11",
+      "name": "Faith Mutua 111",
+      "company": "KRA",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 69,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "12",
+      "name": "Zainab Mohammed 112",
+      "company": "Konza Technopolis",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 89,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "13",
+      "name": "Cynthia Nyambura 113",
+      "company": "Ministry of Health",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KRA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 96,
+      "notes": "Former intern at KRA. Verified for PnP eligibility."
+    },
+    {
+      "id": "14",
+      "name": "Abdi Hassan 114",
+      "company": "State Dept of Lands",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Public)",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.4"
+        }
+      ],
+      "suitabilityScore": 63,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "15",
+      "name": "Sarah Koech 115",
+      "company": "NTSA",
+      "position": "Cybersecurity Analyst",
+      "status": "Available (Ex-Intern)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.9"
+        }
+      ],
+      "suitabilityScore": 82,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "16",
+      "name": "Sarah Koech 116",
+      "company": "KenGen",
+      "position": "Systems Support",
+      "status": "Deployment Ready",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.5"
+        }
+      ],
+      "suitabilityScore": 70,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "17",
+      "name": "Kevin Omolo 117",
+      "company": "KRA",
+      "position": "Frontend Developer",
+      "status": "Available (Ex-Intern)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.1"
+        }
+      ],
+      "suitabilityScore": 92,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "18",
+      "name": "Abdi Hassan 118",
+      "company": "Ministry of Health",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Garissa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.1"
+        }
+      ],
+      "suitabilityScore": 99,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "19",
+      "name": "Cynthia Nyambura 119",
+      "company": "KenGen",
+      "position": "Network Admin",
+      "status": "Placed (Private)",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.6"
+        }
+      ],
+      "suitabilityScore": 97,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "20",
+      "name": "Kevin Omolo 120",
+      "company": "Konza Technopolis",
+      "position": "Network Admin",
+      "status": "MDA Rotation",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of ICT",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at Ministry of ICT. Verified for PnP eligibility."
+    },
+    {
+      "id": "21",
+      "name": "Abdi Hassan 121",
+      "company": "Ministry of ICT",
+      "position": "Systems Support",
+      "status": "Deployment Ready",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 86,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "22",
+      "name": "Sarah Koech 122",
+      "company": "NTSA",
+      "position": "Network Admin",
+      "status": "Placed (Public)",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.8"
+        }
+      ],
+      "suitabilityScore": 72,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "23",
+      "name": "David Wekesa 123",
+      "company": "NTSA",
+      "position": "Data Clerk",
+      "status": "Placed (Public)",
+      "county": "Mombasa",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.2"
+        }
+      ],
+      "suitabilityScore": 67,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "24",
+      "name": "John Kamau 124",
+      "company": "NTSA",
+      "position": "Cybersecurity Analyst",
+      "status": "MDA Rotation",
+      "county": "Garissa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.9"
+        }
+      ],
+      "suitabilityScore": 91,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "25",
+      "name": "Cynthia Nyambura 125",
+      "company": "KRA",
+      "position": "Systems Support",
+      "status": "Placed (Private)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of ICT",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 85,
+      "notes": "Former intern at Ministry of ICT. Verified for PnP eligibility."
+    },
+    {
+      "id": "26",
+      "name": "Faith Mutua 126",
+      "company": "KRA",
+      "position": "Cybersecurity Analyst",
+      "status": "MDA Rotation",
+      "county": "Nairobi",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Ministry of ICT",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.9"
+        }
+      ],
+      "suitabilityScore": 95,
+      "notes": "Former intern at Ministry of ICT. Verified for PnP eligibility."
+    },
+    {
+      "id": "27",
+      "name": "Peter Kiprop 127",
+      "company": "KRA",
+      "position": "Frontend Developer",
+      "status": "MDA Rotation",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.2"
+        }
+      ],
+      "suitabilityScore": 67,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "28",
+      "name": "David Wekesa 128",
+      "company": "KenGen",
+      "position": "Systems Support",
+      "status": "Available (Ex-Intern)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 91,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "29",
+      "name": "Zainab Mohammed 129",
+      "company": "EACC",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.1"
+        }
+      ],
+      "suitabilityScore": 65,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "30",
+      "name": "Faith Mutua 130",
+      "company": "Ministry of ICT",
+      "position": "Network Admin",
+      "status": "MDA Rotation",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.8"
+        }
+      ],
+      "suitabilityScore": 98,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "31",
+      "name": "David Wekesa 131",
+      "company": "Konza Technopolis",
+      "position": "Data Clerk",
+      "status": "MDA Rotation",
+      "county": "Bungoma",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 73,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "32",
+      "name": "Sarah Koech 132",
+      "company": "NTSA",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Public)",
+      "county": "Mombasa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.1"
+        }
+      ],
+      "suitabilityScore": 97,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "33",
+      "name": "Abdi Hassan 133",
+      "company": "ICT Authority",
+      "position": "Systems Support",
+      "status": "MDA Rotation",
+      "county": "Uasin Gishu",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.9"
+        }
+      ],
+      "suitabilityScore": 75,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "34",
+      "name": "John Kamau 134",
+      "company": "State Dept of Lands",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 75,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "35",
+      "name": "Abdi Hassan 135",
+      "company": "KenGen",
+      "position": "Network Admin",
+      "status": "Available (Ex-Intern)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.8"
+        }
+      ],
+      "suitabilityScore": 72,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "36",
+      "name": "Zainab Mohammed 136",
+      "company": "Public Service Commission",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.3"
+        }
+      ],
+      "suitabilityScore": 90,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "37",
+      "name": "Abdi Hassan 137",
+      "company": "KenGen",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.0"
+        }
+      ],
+      "suitabilityScore": 85,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "38",
+      "name": "Mary Atieno 138",
+      "company": "NTSA",
+      "position": "Data Clerk",
+      "status": "Placed (Private)",
+      "county": "Garissa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.8"
+        }
+      ],
+      "suitabilityScore": 78,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "39",
+      "name": "Mary Atieno 139",
+      "company": "Public Service Commission",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Public)",
+      "county": "Uasin Gishu",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Ministry of ICT",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.5"
+        }
+      ],
+      "suitabilityScore": 97,
+      "notes": "Former intern at Ministry of ICT. Verified for PnP eligibility."
+    },
+    {
+      "id": "40",
+      "name": "John Kamau 140",
+      "company": "ICT Authority",
+      "position": "Network Admin",
+      "status": "Placed (Private)",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of ICT",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 84,
+      "notes": "Former intern at Ministry of ICT. Verified for PnP eligibility."
+    },
+    {
+      "id": "41",
+      "name": "Zainab Mohammed 141",
+      "company": "Public Service Commission",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Bungoma",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 80,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "42",
+      "name": "Kevin Omolo 142",
+      "company": "ICT Authority",
+      "position": "Frontend Developer",
+      "status": "Deployment Ready",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.9"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "43",
+      "name": "Mary Atieno 143",
+      "company": "ICT Authority",
+      "position": "Frontend Developer",
+      "status": "MDA Rotation",
+      "county": "Mombasa",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 95,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "44",
+      "name": "David Wekesa 144",
+      "company": "Konza Technopolis",
+      "position": "ICT Officer Intern",
+      "status": "Deployment Ready",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.9"
+        }
+      ],
+      "suitabilityScore": 64,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "45",
+      "name": "Cynthia Nyambura 145",
+      "company": "KenGen",
+      "position": "Frontend Developer",
+      "status": "Placed (Public)",
+      "county": "Bungoma",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 73,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "46",
+      "name": "Peter Kiprop 146",
+      "company": "NTSA",
+      "position": "Cybersecurity Analyst",
+      "status": "Available (Ex-Intern)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.4"
+        }
+      ],
+      "suitabilityScore": 69,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "47",
+      "name": "Faith Mutua 147",
+      "company": "Konza Technopolis",
+      "position": "Cybersecurity Analyst",
+      "status": "Available (Ex-Intern)",
+      "county": "Mombasa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 84,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "48",
+      "name": "Faith Mutua 148",
+      "company": "Ministry of ICT",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Private)",
+      "county": "Garissa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 95,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "49",
+      "name": "Sarah Koech 149",
+      "company": "ICT Authority",
+      "position": "Systems Support",
+      "status": "Placed (Private)",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.8"
+        }
+      ],
+      "suitabilityScore": 81,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "50",
+      "name": "Abdi Hassan 150",
+      "company": "Ministry of Health",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Public)",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.2"
+        }
+      ],
+      "suitabilityScore": 72,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "51",
+      "name": "Peter Kiprop 151",
+      "company": "Public Service Commission",
+      "position": "Data Clerk",
+      "status": "Placed (Public)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.4"
+        }
+      ],
+      "suitabilityScore": 92,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "52",
+      "name": "Cynthia Nyambura 152",
+      "company": "Ministry of ICT",
+      "position": "Network Admin",
+      "status": "Available (Ex-Intern)",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.2"
+        }
+      ],
+      "suitabilityScore": 97,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "53",
+      "name": "Mary Atieno 153",
+      "company": "Ministry of Health",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Private)",
+      "county": "Bungoma",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.7"
+        }
+      ],
+      "suitabilityScore": 77,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "54",
+      "name": "Zainab Mohammed 154",
+      "company": "KRA",
+      "position": "Network Admin",
+      "status": "Placed (Private)",
+      "county": "Bungoma",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 76,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "55",
+      "name": "Cynthia Nyambura 155",
+      "company": "ICT Authority",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Private)",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 90,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "56",
+      "name": "Mary Atieno 156",
+      "company": "KRA",
+      "position": "Network Admin",
+      "status": "Placed (Private)",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 89,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "57",
+      "name": "Mary Atieno 157",
+      "company": "EACC",
+      "position": "Data Clerk",
+      "status": "MDA Rotation",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.8"
+        }
+      ],
+      "suitabilityScore": 71,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "58",
+      "name": "Sarah Koech 158",
+      "company": "Public Service Commission",
+      "position": "ICT Officer Intern",
+      "status": "Available (Ex-Intern)",
+      "county": "Garissa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.1"
+        }
+      ],
+      "suitabilityScore": 80,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "59",
+      "name": "Peter Kiprop 159",
+      "company": "NTSA",
+      "position": "Cybersecurity Analyst",
+      "status": "Deployment Ready",
+      "county": "Garissa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 61,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "60",
+      "name": "Mary Atieno 160",
+      "company": "Ministry of ICT",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.9"
+        }
+      ],
+      "suitabilityScore": 80,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "61",
+      "name": "Mary Atieno 161",
+      "company": "ICT Authority",
+      "position": "Network Admin",
+      "status": "Available (Ex-Intern)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 68,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "62",
+      "name": "Cynthia Nyambura 162",
+      "company": "NTSA",
+      "position": "Network Admin",
+      "status": "MDA Rotation",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.8"
+        }
+      ],
+      "suitabilityScore": 71,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "63",
+      "name": "Faith Mutua 163",
+      "company": "Public Service Commission",
+      "position": "Data Clerk",
+      "status": "MDA Rotation",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.6"
+        }
+      ],
+      "suitabilityScore": 93,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "64",
+      "name": "Peter Kiprop 164",
+      "company": "State Dept of Lands",
+      "position": "ICT Officer Intern",
+      "status": "Available (Ex-Intern)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 97,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "65",
+      "name": "Peter Kiprop 165",
+      "company": "Ministry of Health",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Public)",
+      "county": "Mombasa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "66",
+      "name": "Kevin Omolo 166",
+      "company": "Public Service Commission",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.5"
+        }
+      ],
+      "suitabilityScore": 82,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "67",
+      "name": "Faith Mutua 167",
+      "company": "Ministry of Health",
+      "position": "Cybersecurity Analyst",
+      "status": "MDA Rotation",
+      "county": "Mombasa",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.5"
+        }
+      ],
+      "suitabilityScore": 74,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "68",
+      "name": "Zainab Mohammed 168",
+      "company": "Ministry of Health",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Public)",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.7"
+        }
+      ],
+      "suitabilityScore": 78,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "69",
+      "name": "Abdi Hassan 169",
+      "company": "KenGen",
+      "position": "Data Clerk",
+      "status": "Deployment Ready",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.7"
+        }
+      ],
+      "suitabilityScore": 78,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "70",
+      "name": "Cynthia Nyambura 170",
+      "company": "Public Service Commission",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Nairobi",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.0"
+        }
+      ],
+      "suitabilityScore": 75,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "71",
+      "name": "John Kamau 171",
+      "company": "Public Service Commission",
+      "position": "Data Clerk",
+      "status": "MDA Rotation",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.7"
+        }
+      ],
+      "suitabilityScore": 91,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "72",
+      "name": "Zainab Mohammed 172",
+      "company": "KenGen",
+      "position": "Network Admin",
+      "status": "Available (Ex-Intern)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.0"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "73",
+      "name": "Abdi Hassan 173",
+      "company": "EACC",
+      "position": "Frontend Developer",
+      "status": "Placed (Private)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 99,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "74",
+      "name": "Sarah Koech 174",
+      "company": "Public Service Commission",
+      "position": "Frontend Developer",
+      "status": "MDA Rotation",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 97,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "75",
+      "name": "Mary Atieno 175",
+      "company": "EACC",
+      "position": "Network Admin",
+      "status": "Placed (Private)",
+      "county": "Kisumu",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.4"
+        }
+      ],
+      "suitabilityScore": 88,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "76",
+      "name": "Sarah Koech 176",
+      "company": "KenGen",
+      "position": "ICT Officer Intern",
+      "status": "Deployment Ready",
+      "county": "Bungoma",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 75,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "77",
+      "name": "Abdi Hassan 177",
+      "company": "KenGen",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.4"
+        }
+      ],
+      "suitabilityScore": 74,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "78",
+      "name": "Mary Atieno 178",
+      "company": "KRA",
+      "position": "Cybersecurity Analyst",
+      "status": "Available (Ex-Intern)",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 78,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "79",
+      "name": "Abdi Hassan 179",
+      "company": "NTSA",
+      "position": "Data Clerk",
+      "status": "MDA Rotation",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 67,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "80",
+      "name": "Kevin Omolo 180",
+      "company": "EACC",
+      "position": "Systems Support",
+      "status": "Placed (Public)",
+      "county": "Kilifi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.3"
+        }
+      ],
+      "suitabilityScore": 78,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "81",
+      "name": "Peter Kiprop 181",
+      "company": "KenGen",
+      "position": "ICT Officer Intern",
+      "status": "MDA Rotation",
+      "county": "Kiambu",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.5"
+        }
+      ],
+      "suitabilityScore": 65,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "82",
+      "name": "Abdi Hassan 182",
+      "company": "ICT Authority",
+      "position": "Data Clerk",
+      "status": "MDA Rotation",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 92,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "83",
+      "name": "David Wekesa 183",
+      "company": "EACC",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Public)",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.2"
+        }
+      ],
+      "suitabilityScore": 82,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "84",
+      "name": "Mary Atieno 184",
+      "company": "KenGen",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Public)",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "ICT Authority",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 66,
+      "notes": "Former intern at ICT Authority. Verified for PnP eligibility."
+    },
+    {
+      "id": "85",
+      "name": "John Kamau 185",
+      "company": "Public Service Commission",
+      "position": "Systems Support",
+      "status": "Placed (Public)",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.3"
+        }
+      ],
+      "suitabilityScore": 99,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "86",
+      "name": "Zainab Mohammed 186",
+      "company": "Ministry of ICT",
+      "position": "Systems Support",
+      "status": "MDA Rotation",
+      "county": "Nairobi",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Konza Technopolis",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.0"
+        }
+      ],
+      "suitabilityScore": 99,
+      "notes": "Former intern at Konza Technopolis. Verified for PnP eligibility."
+    },
+    {
+      "id": "87",
+      "name": "Abdi Hassan 187",
+      "company": "ICT Authority",
+      "position": "Network Admin",
+      "status": "Available (Ex-Intern)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "State Dept of Lands",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 93,
+      "notes": "Former intern at State Dept of Lands. Verified for PnP eligibility."
+    },
+    {
+      "id": "88",
+      "name": "Zainab Mohammed 188",
+      "company": "Konza Technopolis",
+      "position": "ICT Officer Intern",
+      "status": "Placed (Public)",
+      "county": "Kisumu",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "89",
+      "name": "Peter Kiprop 189",
+      "company": "EACC",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Kisumu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.7"
+        }
+      ],
+      "suitabilityScore": 71,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "90",
+      "name": "Abdi Hassan 190",
+      "company": "KenGen",
+      "position": "Network Admin",
+      "status": "Available (Ex-Intern)",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Public Service Commission",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "5.0"
+        }
+      ],
+      "suitabilityScore": 73,
+      "notes": "Former intern at Public Service Commission. Verified for PnP eligibility."
+    },
+    {
+      "id": "91",
+      "name": "Kevin Omolo 191",
+      "company": "Ministry of ICT",
+      "position": "Network Admin",
+      "status": "Deployment Ready",
+      "county": "Nyeri",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KRA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.8"
+        }
+      ],
+      "suitabilityScore": 77,
+      "notes": "Former intern at KRA. Verified for PnP eligibility."
+    },
+    {
+      "id": "92",
+      "name": "Faith Mutua 192",
+      "company": "Konza Technopolis",
+      "position": "Systems Support",
+      "status": "Placed (Public)",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.0"
+        }
+      ],
+      "suitabilityScore": 68,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "93",
+      "name": "Faith Mutua 193",
+      "company": "State Dept of Lands",
+      "position": "Systems Support",
+      "status": "MDA Rotation",
+      "county": "Nakuru",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.5"
+        }
+      ],
+      "suitabilityScore": 88,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    },
+    {
+      "id": "94",
+      "name": "Zainab Mohammed 194",
+      "company": "NTSA",
+      "position": "Data Clerk",
+      "status": "Placed (Public)",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.9"
+        }
+      ],
+      "suitabilityScore": 62,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "95",
+      "name": "Kevin Omolo 195",
+      "company": "Public Service Commission",
+      "position": "Cybersecurity Analyst",
+      "status": "Placed (Public)",
+      "county": "Bungoma",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.1"
+        }
+      ],
+      "suitabilityScore": 92,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "96",
+      "name": "Kevin Omolo 196",
+      "company": "EACC",
+      "position": "Network Admin",
+      "status": "MDA Rotation",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of ICT",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.4"
+        }
+      ],
+      "suitabilityScore": 76,
+      "notes": "Former intern at Ministry of ICT. Verified for PnP eligibility."
+    },
+    {
+      "id": "97",
+      "name": "Mary Atieno 197",
+      "company": "State Dept of Lands",
+      "position": "Frontend Developer",
+      "status": "Deployment Ready",
+      "county": "Kiambu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "Ministry of Health",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.8"
+        }
+      ],
+      "suitabilityScore": 77,
+      "notes": "Former intern at Ministry of Health. Verified for PnP eligibility."
+    },
+    {
+      "id": "98",
+      "name": "Zainab Mohammed 198",
+      "company": "Ministry of ICT",
+      "position": "Systems Support",
+      "status": "Placed (Private)",
+      "county": "Uasin Gishu",
+      "isVerified": true,
+      "history": [
+        {
+          "organization": "NTSA",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "3.7"
+        }
+      ],
+      "suitabilityScore": 71,
+      "notes": "Former intern at NTSA. Verified for PnP eligibility."
+    },
+    {
+      "id": "99",
+      "name": "John Kamau 199",
+      "company": "Public Service Commission",
+      "position": "Frontend Developer",
+      "status": "Deployment Ready",
+      "county": "Nairobi",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "EACC",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.6"
+        }
+      ],
+      "suitabilityScore": 64,
+      "notes": "Former intern at EACC. Verified for PnP eligibility."
+    },
+    {
+      "id": "100",
+      "name": "John Kamau 200",
+      "company": "ICT Authority",
+      "position": "Cybersecurity Analyst",
+      "status": "MDA Rotation",
+      "county": "Garissa",
+      "isVerified": false,
+      "history": [
+        {
+          "organization": "KenGen",
+          "role": "Graduate Intern",
+          "period": "2023-2024",
+          "rating": "4.6"
+        }
+      ],
+      "suitabilityScore": 72,
+      "notes": "Former intern at KenGen. Verified for PnP eligibility."
+    }
+  ]
+}

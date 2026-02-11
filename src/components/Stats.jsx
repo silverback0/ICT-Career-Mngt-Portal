@@ -1,66 +1,50 @@
 import React from 'react';
 import { useJob } from '../context/JobContext.jsx'; 
 
+// Replace your existing Stats function with this:
 export default function Stats() {
     const { jobs } = useJob();
 
-    // 1. Basic Metrics
-    const total = jobs.length;
-    const inPlayCount = jobs.filter(j => j.status === 'In-Play' || j.status === 'Interviewing').length;
-    const offerCount = jobs.filter(j => j.status === 'Offer' || j.status === 'Final Offer').length;
-    const interviewRate = total > 0 ? ((inPlayCount / total) * 100).toFixed(1) : "0.0";
-
-    // 2. Weekly Goal Logic
-    const WEEKLY_GOAL = 10; // You can change this number!
+    const totalTalent = jobs.length;
     
-    // Filter jobs created in the last 7 days
-    const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    const jobsThisWeek = jobs.filter(j => {
-        // We use the ID as a timestamp since we did Date.now().toString() in Context
-        const jobDate = parseInt(j.id); 
-        return jobDate > oneWeekAgo;
-    }).length;
+    // Total Placements (Permanent roles)
+    const permanentPlacements = jobs.filter(j => 
+        j.status === 'Placed (Public)' || j.status === 'Placed (Private)'
+    ).length;
+    
+    // Active Deployments (Interns/Staff currently in MDAs)
+    const activeDeployments = jobs.filter(j => 
+        j.status === 'MDA Rotation (Active)' || j.status === 'Deployment Ready'
+    ).length;
 
-    const goalPercentage = Math.min((jobsThisWeek / WEEKLY_GOAL) * 100, 100);
+    // Absorption Rate: Efficiency of moving talent from rotation to permanent roles
+    const absorptionRate = totalTalent > 0 ? ((permanentPlacements / totalTalent) * 100).toFixed(1) : "0.0";
 
     return (
         <div style={{ marginBottom: '40px' }}>
             <div style={containerStyle}>
                 <div style={cardStyle}>
-                    <span style={labelStyle}>Total Apps</span>
-                    <p style={numberStyle}>{total}</p>
+                    <span style={labelStyle}>Total Talent Pool</span>
+                    <p style={numberStyle}>{totalTalent}</p>
                 </div>
                 <div style={cardStyle}>
-                    <span style={labelStyle}>In-Play</span>
-                    <p style={{...numberStyle, color: '#3498db'}}>{inPlayCount}</p>
+                    <span style={labelStyle}>Active MDA Deployments</span>
+                    <p style={{...numberStyle, color: '#3498db'}}>{activeDeployments}</p>
                 </div>
                 <div style={cardStyle}>
-                    <span style={labelStyle}>Interview Rate</span>
-                    <p style={numberStyle}>{interviewRate}%</p>
+                    <span style={labelStyle}>Absorption Rate</span>
+                    <p style={numberStyle}>{absorptionRate}%</p>
                 </div>
                 <div style={cardStyle}>
-                    <span style={labelStyle}>Offers</span>
-                    <p style={{...numberStyle, color: '#27ae60'}}>{offerCount}</p>
+                    <span style={labelStyle}>National Placements</span>
+                    <p style={{...numberStyle, color: '#27ae60'}}>{permanentPlacements}</p>
                 </div>
             </div>
-
-            {/* 🎯 WEEKLY GOAL PROGRESS BAR */}
-            <div style={goalSectionStyle}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#2c3e50' }}>
-                        Weekly Goal Progress: {jobsThisWeek} / {WEEKLY_GOAL}
-                    </span>
-                    <span style={{ fontSize: '14px', color: '#7f8c8d' }}>{goalPercentage.toFixed(0)}%</span>
-                </div>
-                <div style={progressBarBg}>
-                    <div style={{ ...progressBarFill, width: `${goalPercentage}%` }}></div>
-                </div>
-                <p style={{ fontSize: '12px', color: '#95a5a6', marginTop: '8px' }}>
-                    {jobsThisWeek >= WEEKLY_GOAL 
-                        ? "🎉 Weekly goal reached! Keep it up!" 
-                        : `Apply for ${WEEKLY_GOAL - jobsThisWeek} more jobs to hit your target.`}
-                </p>
-            </div>
+            
+            {/* Simple Legend for the Ministry */}
+            <p style={{ fontSize: '12px', color: '#7f8c8d', marginTop: '10px' }}>
+                * Metrics reflect transitions from PDTP/Internship programs to permanent MDAs.
+            </p>
         </div>
     );
 }
