@@ -1,6 +1,8 @@
 import React from 'react';
 import { JobContext } from '../context/JobContext';
 
+// I dont yet know if this is really relevant for the project yet.
+
 export default function JobSuggestions() {
     const [query, setQuery] = React.useState('');
     const [results, setResults] = React.useState([]);
@@ -38,6 +40,7 @@ export default function JobSuggestions() {
         if (isRemoteOnly) params.append('remote_jobs_only', 'true');
         if (jobType !== 'ALL') params.append('employment_types', jobType);
 
+        // We might have to rethink this ie whether we use this api or we use another or forget about it.
         const url = `https://jsearch.p.rapidapi.com/search?${params.toString()}`;
         
         console.log('Request URL:', url);

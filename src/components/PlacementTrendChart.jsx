@@ -1,20 +1,31 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  Area, 
+  AreaChart 
+} from 'recharts';
 
-export default function PlacementTrendChart({ jobs }) {
-  // Logic to process data for the chart
+export default function PlacementTrendChart({ jobs = [] }) {
   const processData = () => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const placementCounts = {};
 
-    // Initialize months
     months.forEach(m => placementCounts[m] = 0);
 
-    // Count placements per month (using a default if date is missing for demo)
-    jobs.filter(j => j.status === "Placed (Public)").forEach(job => {
-      const month = job.placedDate ? months[new Date(job.placedDate).getMonth()] : "Jan";
-      placementCounts[month]++;
-    });
+    // Safely filter and count
+    if (Array.isArray(jobs)) {
+      jobs
+        .filter(j => j?.status === "Placed (Public)")
+        .forEach(job => {
+          const monthIndex = job.placedDate ? new Date(job.placedDate).getMonth() : 0;
+          const monthName = months[monthIndex];
+          placementCounts[monthName]++;
+        });
+    }
 
     return months.map(month => ({ month, placements: placementCounts[month] }));
   };
@@ -22,9 +33,10 @@ export default function PlacementTrendChart({ jobs }) {
   const chartData = processData();
 
   return (
-    <div className="h-[250px] w-full mt-4">
+    // FIX: Explicitly set a min-height for the parent container
+    <div className="w-full h-[300px] min-h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData}>
+        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="colorPlacements" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
@@ -37,10 +49,18 @@ export default function PlacementTrendChart({ jobs }) {
             axisLine={false} 
             tickLine={false} 
             tick={{fill: '#94a3b8', fontSize: 12}} 
+            dy={10}
           />
-          <YAxis hide />
+          <YAxis hide domain={[0, 'auto']} />
           <Tooltip 
-            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+            cursor={{ stroke: '#3b82f6', strokeWidth: 2 }}
+            contentStyle={{ 
+              borderRadius: '12px', 
+              border: 'none', 
+              boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+              fontSize: '12px',
+              fontWeight: 'bold'
+            }}
           />
           <Area 
             type="monotone" 
@@ -49,6 +69,7 @@ export default function PlacementTrendChart({ jobs }) {
             strokeWidth={3}
             fillOpacity={1} 
             fill="url(#colorPlacements)" 
+            animationDuration={1500}
           />
         </AreaChart>
       </ResponsiveContainer>

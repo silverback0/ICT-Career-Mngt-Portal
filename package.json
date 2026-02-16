@@ -17,6 +17,7 @@
     "cheerio": "^1.2.0",
     "d3-scale": "^4.0.2",
     "json-server": "^1.0.0-beta.5",
+    "lucide-react": "^0.564.0",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -1,29 +1,31 @@
 import React, { useMemo, useState } from 'react';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
-import { scaleLinear } from 'd3-scale';
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  ZoomableGroup
+} from "react-simple-maps";
+import { scaleQuantile } from "d3-scale";
 
-// Change this line in CountyHeatmap.jsx
-const KENYA_GEO_URL = "https://raw.githubusercontent.com/wmgeolab/geoBoundaries/9469f09/releaseData/gbOpen/KEN/ADM1/geoBoundaries-KEN-ADM1.topojson";
+// Updated Location of the Kenya.ge0json file from geoBoundaries
+const geoUrl = "/kenya.geojson";
 
-const CountyHeatmap = ({ data = {} }) => {
-  const [tooltip, setTooltip] = useState({ content: "", x: 0, y: 0 });
-
-  const { maxJobs, colorScale } = useMemo(() => {
-    const counts = Object.values(data);
-    const max = counts.length > 0 ? Math.max(...counts) : 1; // Avoid divide-by-zero
-    return {
-      maxJobs: max,
-      colorScale: scaleLinear()
-        .domain([0, max])
-        .range(["#f8fafc", "#1d4ed8"]) 
-    };
-  }, [data]);
+export default function CountyHeatmap({ data = {} }) {
+  const colorScale = scaleQuantile()
+    .domain(Object.values(data))
+    .range([
+      "#f8fafc", // Empty
+      "#dbeafe", 
+      "#93c5fd",
+      "#3b82f6",
+      "#1d4ed8",  // Highest density
+    ]);
 
   return (
     <div className="bg-white rounded-xl p-6 w-full relative">
       <header className="mb-6">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>📍</span> Geographic Distribution
+          <span>📍</span> National Talent Distribution
         </h2>
         <p className="text-slate-500 text-sm">ICT job density across the 47 counties</p>
       </header>
@@ -88,4 +90,3 @@ const CountyHeatmap = ({ data = {} }) => {
   );
 };
 
-export default CountyHeatmap;
