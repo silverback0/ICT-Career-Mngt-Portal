@@ -1,11 +1,8 @@
 @import "tailwindcss";
 
-/* Absolute paths from project root */
-@source "src/components/**/*.{js,jsx}";
-@source "src/pages/**/*.{js,jsx}";
-@source "src/**/*.{js,jsx}";
-
-@theme {
+/* If you are using custom variables or @apply, 
+   v4 handles them natively within this file */
+:root {
   --color-blue-600: #2563eb;
   --color-slate-50: #f8fafc;
 }

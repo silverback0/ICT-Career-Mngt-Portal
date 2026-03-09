@@ -1,28 +1,23 @@
-import React, { useMemo, useState } from 'react';
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  ZoomableGroup
-} from "react-simple-maps";
+import React, { useState } from 'react';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
 import { scaleQuantile } from "d3-scale";
 
-// Updated Location of the Kenya.ge0json file from geoBoundaries
+// Ensure this file is in your /public folder
 const geoUrl = "/kenya.geojson";
 
 export default function CountyHeatmap({ data = {} }) {
+  // 1. Data Processing
+  const values = Object.values(data);
+  const maxJobs = values.length > 0 ? Math.max(...values) : 10;
+  
   const colorScale = scaleQuantile()
-    .domain(Object.values(data))
-    .range([
-      "#f8fafc", // Empty
-      "#dbeafe", 
-      "#93c5fd",
-      "#3b82f6",
-      "#1d4ed8",  // Highest density
-    ]);
+    .domain(values.length > 0 ? values : [0, 10])
+    .range(["#f8fafc", "#dbeafe", "#93c5fd", "#3b82f6", "#1d4ed8"]);
+
+  const [tooltip, setTooltip] = useState({ content: "", x: 0, y: 0 });
 
   return (
-    <div className="bg-white rounded-xl p-6 w-full relative">
+    <div className="bg-white rounded-xl p-6 w-full shadow-sm border border-slate-200">
       <header className="mb-6">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <span>📍</span> National Talent Distribution
@@ -30,53 +25,74 @@ export default function CountyHeatmap({ data = {} }) {
         <p className="text-slate-500 text-sm">ICT job density across the 47 counties</p>
       </header>
 
-      <div className="h-[500px] w-full bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden relative">
+      {/* FIX: Explicit Height and Relative Position */}
+      <div style={{ height: '500px', width: '100%', position: 'relative' }} className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+        
         {tooltip.content && (
           <div 
-            className="pointer-events-none absolute z-50 bg-slate-900/95 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-2xl"
+            className="pointer-events-none absolute z-50 bg-slate-900 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-xl"
             style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, -120%)' }}
           >
             {tooltip.content}
           </div>
         )}
 
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{ scale: 2800, center: [37.8, 0.6] }}
-          className="w-full h-full"
-        >
-          <Geographies geography={KENYA_GEO_URL}>
-            {({ geographies }) =>
-              geographies.map((geo) => {
-                const countyName = geo.properties.shapeName || geo.properties.NAME_1; 
-                const jobCount = data[countyName] || 0;
+        <div style={{ height: '500px', width: '100%', position: 'relative' }}>
+        {/* TOOLTIP remains outside the flip container so the text isn't upside down! */}
+        {tooltip.content && (
+        <div className="absolute z-50 bg-slate-900 text-white px-2 py-1 rounded text-xs pointer-events-none"
+         style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, -120%)' }}>
+      {tooltip.content}
+      </div>
+      )}
 
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill={colorScale(jobCount)}
-                    stroke="#ffffff"
-                    strokeWidth={0.5}
-                    onMouseMove={(e) => {
-                      const bounds = e.currentTarget.parentElement.getBoundingClientRect();
-                      setTooltip({
-                        content: `${countyName}: ${jobCount} Jobs`,
-                        x: e.clientX - bounds.left,
-                        y: e.clientY - bounds.top
-                      });
-                    }}
-                    onMouseLeave={() => setTooltip({ content: "", x: 0, y: 0 })}
-                    style={{
-                      default: { outline: "none" },
-                      hover: { fill: "#10b981", cursor: "pointer" },
-                    }}
-                  />
-                );
-              })
-            }
-          </Geographies>
-        </ComposableMap>
+  {/* We wrap the map in a div that we FLIP using CSS */}
+  <div style={{ width: '100%', height: '100%', transform: 'scaleY(-1)' }}>
+    <ComposableMap
+      projection="geoIdentity"
+      style={{ width: "100%", height: "100%" }}
+    >
+      <ZoomableGroup 
+        // Note: Because we flipped the container, 
+        // the Latitude (0.5) must be NEGATIVE to be seen
+        center={[37.8, -0.5]} 
+        zoom={50}
+      >
+        <Geographies geography={geoUrl}>
+          {({ geographies }) =>
+            geographies.map((geo) => {
+              const countyName = geo.properties.shapeName;
+              const jobCount = data[countyName] || 0;
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill={jobCount > 0 ? colorScale(jobCount) : "#FFFFFF"}
+                  stroke="#64748b"
+                  strokeWidth={0.05}
+                  onMouseMove={(e) => {
+                    // We calculate tooltip position based on the parent
+                    const bounds = e.currentTarget.closest('.bg-slate-50').getBoundingClientRect();
+                    setTooltip({
+                      content: `${countyName}: ${jobCount} Jobs`,
+                      x: e.clientX - bounds.left,
+                      y: e.clientY - bounds.top
+                    });
+                  }}
+                  onMouseLeave={() => setTooltip({ content: "", x: 0, y: 0 })}
+                  style={{
+                    default: { outline: "none" },
+                    hover: { fill: "#1e293b", outline: "none" },
+                  }}
+                />
+              );
+            })
+          }
+        </Geographies>
+      </ZoomableGroup>
+    </ComposableMap>
+  </div>
+</div>
       </div>
 
       <footer className="mt-6">
@@ -88,5 +104,4 @@ export default function CountyHeatmap({ data = {} }) {
       </footer>
     </div>
   );
-};
-
+}
