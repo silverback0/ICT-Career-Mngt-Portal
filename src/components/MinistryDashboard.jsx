@@ -5,6 +5,7 @@ import SkillsGapChart from './SkillsGapChart';
 import PlacementModal from './PlacementModal'; 
 import PlacementTrendChart from './PlacementTrendChart';
 import { fetchAllJobs } from '../services/scrapers/scraperOrchestrator';
+import { exportToPDF } from '../utils/exportReport';
 
 // Professional Lucide Icons
 import { 
@@ -19,7 +20,8 @@ import {
   CheckCircle2,
   Clock,
   TrendingUp,
-  Search
+  Search,
+  FileDown,
 } from 'lucide-react';
 
 export default function MinistryDashboard() {
@@ -27,40 +29,59 @@ export default function MinistryDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
   const [selectedCohort, setSelectedCohort] = useState("");
+  console.log("FIRST JOB OBJECT KEYS:", jobs[0] ? Object.keys(jobs[0]) : "No jobs");
 
   const stats = useMemo(() => {
     const safeJobs = Array.isArray(jobs) ? jobs : [];
     
-    // 1. Filter by Cohort if selected
     let filteredJobs = safeJobs;
     if (selectedCohort) {
       filteredJobs = safeJobs.filter(j => j.history?.some(h => h.period === selectedCohort));
     }
     
-    // 2. Calculate Public vs Private
     const pscJobs = filteredJobs.filter(j => 
       j?.jobSource === 'PSC' || 
       /Ministry|State Department|County Government|Authority|Commission|Govt/i.test(j?.company || '')
     ).length;
 
-    // 3. Evaluation Logic: PnP Eligible must be Vetted AND not yet placed in Public
     const pnpEligible = filteredJobs.filter(j => 
-      j?.vettingStatus === "Vetted" && 
-      j?.status !== "Placed (Public)"
+      j?.vettingStatus === "Vetted" && j?.status !== "Placed (Public)"
     ).length;
 
-    // 4. Distribution Aggregates
     const byCounty = filteredJobs.reduce((acc, job) => {
       const county = job?.county || 'Unknown';
       acc[county] = (acc[county] || 0) + 1;
       return acc;
     }, {});
 
-    const bySkill = filteredJobs.flatMap(j => Array.isArray(j?.skillsRequired) ? j.skillsRequired : [])
-      .reduce((acc, skill) => {
-        if (skill) acc[skill] = (acc[skill] || 0) + 1;
-        return acc;
-      }, {});
+    // This replaces the old bySkillObj logic inside useMemo
+  const bySkillObj = filteredJobs.reduce((acc, job) => {
+  // 1. Try to find the skills field even if the name is slightly different
+  const rawSkills = job.skillsRequired || job.skills || job.tags || job.competencies || [];
+  
+  // 2. Handle both Arrays ["React"] and comma-strings "React, Node"
+  let skillsArray = [];
+  if (Array.isArray(rawSkills)) {
+    skillsArray = rawSkills;
+  } else if (typeof rawSkills === 'string') {
+    skillsArray = rawSkills.split(',').map(s => s.trim());
+  }
+
+  // 3. Count them up
+  skillsArray.forEach(skill => {
+    if (skill) acc[skill] = (acc[skill] || 0) + 1;
+  });
+  
+  return acc;
+}, {});
+
+const skillsArray = Object.entries(bySkillObj)
+  .map(([name, value]) => ({ name, value }))
+  .sort((a, b) => b.value - a.value)
+  .slice(0, 8);
+
+    // ✅ LOGS ARE NOW INSIDE THE BLOCK WHERE THE DATA EXISTS
+    console.log("Calculated Skills Array:", skillsArray);
 
     return { 
       totalJobs: filteredJobs.length, 
@@ -68,31 +89,34 @@ export default function MinistryDashboard() {
       privateJobs: filteredJobs.length - pscJobs, 
       pnpEligible, 
       byCounty, 
-      bySkill 
+      bySkill: skillsArray 
     };
   }, [jobs, selectedCohort]);
 
   const handleRefreshJobs = async () => {
     setIsLoading(true);
     try {
-      // Instead of scraping, we fetch the "Master Data" from your backend
-      const response = await fetch('http://localhost:5000/jobs');
+      const response = await fetch('http://localhost:5000/api/jobs');
       if (!response.ok) throw new Error("Database offline");
-      
       const data = await response.json();
       setJobs(data); 
-      
-      alert(`✅ Pipeline Synced: ${data.length} records updated from National Database.`);
+      alert(`✅ Pipeline Synced: ${data.length} records updated.`);
     } catch (error) {
       console.error("Sync Error:", error);
-      alert("❌ System Offline: Ensure your JSON Server is running (npm run dev-server)");
+      alert("❌ System Offline: Ensure your JSON Server is running");
     } finally {
       setIsLoading(false);
     }
   };
+
+  // ✅ ONLY LOG 'jobs' HERE. 'skillsArray' is inside 'stats.bySkill'
+  console.log("Raw Jobs Data:", jobs);
+  console.log("Stats from Memo:", stats);
+  console.log("Skills Array:", stats.bySkill);
+  console.log("FULL Job Data:", JSON.stringify(jobs[0], null, 2));
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 relative text-slate-900 font-sans">
-      <div className="max-w-[1600px] mx-auto space-y-8">
+      <div id="dashboard-report-target" className="max-w-[1600px] mx-auto space-y-8">
         
         {/* AUTHENTIC HEADER */}
         <header className="bg-white rounded-2xl shadow-sm p-8 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -131,6 +155,13 @@ export default function MinistryDashboard() {
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
               {isLoading ? "Syncing..." : "Refresh Data"}
+            </button>
+            <button
+              onClick={() => exportToPDF('dashboard-report-target')}
+              className="px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all flex items-center gap-2 shadow-md shadow-green-100"   
+            >
+              <FileDown className="w-4 h-4" />
+              Export PDF
             </button>
           </div>
         </header>
@@ -175,7 +206,9 @@ export default function MinistryDashboard() {
                 <BarChart3 className="w-5 h-5 text-purple-600" />
                 <h3 className="text-xl font-bold text-slate-900">High-Demand Skills</h3>
               </div>
-              <SkillsGapChart data={stats.bySkill} />
+              <div className="p-2 rounded-md border-2 border-red-500 bg-red-50">
+                 <SkillsGapChart data={stats.bySkill || []} />
+              </div>
             </div>
 
             <div className="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
@@ -193,7 +226,7 @@ export default function MinistryDashboard() {
                     <div>
                       <p className="font-bold text-sm text-slate-100">{person.name}</p>
                       <p className="text-[10px] text-slate-400 font-medium">
-                        {person.history?.[0]?.organization || person.previousMDA || 'Internship Completed'}
+                        {person.company || 'Ministry Placement'}
                       </p>
                     </div>
                     

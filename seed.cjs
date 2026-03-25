@@ -7,6 +7,9 @@ const positions = ["ICT Officer Intern", "Cybersecurity Analyst", "Data Clerk", 
 const statuses = ["Available (Ex-Intern)", "MDA Rotation", "Deployment Ready", "Placed (Public)", "Placed (Private)"];
 const cohorts = ["2021/22", "2022/23", "2023/24", "2024/25", "2025/26"];
 
+// 1. ADD THIS: A pool of technical skills
+const skillPool = ["React", "Python", "Cloud Security", "Data Analytics", "Network Admin", "UI/UX", "Project Management", "IT Support", "Java", "SQL"];
+
 const jobs = [];
 
 for (let i = 1; i <= 100; i++) {
@@ -14,8 +17,11 @@ for (let i = 1; i <= 100; i++) {
   const selectedCohort = cohorts[Math.floor(Math.random() * cohorts.length)];
   const score = Math.floor(Math.random() * 40) + 60;
   
-  // NEW LOGIC: If they have a high score, they are more likely to be Vetted
-  // This simulates the Ministry actually reviewing the top talent
+  // 2. ADD THIS: Randomly pick 2-4 skills for each person
+  const skillsRequired = skillPool
+    .sort(() => 0.5 - Math.random())
+    .slice(0, Math.floor(Math.random() * 3) + 2);
+
   let vettingStatus = "Pending";
   if (score >= 85 && Math.random() > 0.3) {
     vettingStatus = "Vetted";
@@ -29,7 +35,8 @@ for (let i = 1; i <= 100; i++) {
     status: statuses[Math.floor(Math.random() * statuses.length)],
     county: counties[Math.floor(Math.random() * counties.length)],
     isVerified: Math.random() > 0.2,
-    vettingStatus: vettingStatus, // <--- ADDED THIS LINE
+    vettingStatus: vettingStatus,
+    skillsRequired: skillsRequired, // <--- 3. ADD THIS LINE
     history: [
       {
         organization: previousMDA,
@@ -46,4 +53,4 @@ for (let i = 1; i <= 100; i++) {
 const db = { jobs };
 
 fs.writeFileSync('db.json', JSON.stringify(db, null, 2));
-console.log("✅ 100 Records generated with Vetting Status!");
+console.log("✅ 100 Records generated with Vetting Status and Skills!");

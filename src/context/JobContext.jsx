@@ -8,14 +8,21 @@ export const JobProvider = ({ children }) => {
 
   // Initial Fetch
   useEffect(() => {
-    fetch('http://localhost:5000/jobs')
-      .then(res => res.json())
-      .then(data => setJobs(data))
-      .catch(err => console.error("Could not fetch data:", err));
+    const fetchJobs = async () => {
+      try {
+        // Change '/jobs' to '/api/jobs' to match your Postgres server
+        const response = await fetch('http://localhost:5000/api/jobs'); 
+        const data = await response.json();
+        setJobs(data);
+      } catch (error) {
+        console.error("Failed to load jobs:", error);
+      }
+    };
+    fetchJobs();
   }, []);
 
   const addJob = async (newJobData) => {
-    const response = await fetch('http://localhost:5000/jobs', {
+    const response = await fetch('http://localhost:5000/api/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...newJobData, id: Date.now().toString() })

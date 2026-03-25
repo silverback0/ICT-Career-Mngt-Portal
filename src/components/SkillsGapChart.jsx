@@ -1,77 +1,40 @@
 import React from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export default function SkillsGapChart({ data }) {
-  // 1. Safety Guard: Prevents the .reduce or .map errors if data hasn't loaded
-  if (!data || Object.keys(data).length === 0) {
+  // SAFETY CHECK: If data isn't an array, force it to be one or show nothing
+  const chartData = Array.isArray(data) ? data : [];
+
+  if (chartData.length === 0) {
     return (
-      <div className="h-[300px] flex flex-col items-center justify-center text-slate-400 gap-2">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-        <p className="text-sm italic font-medium">Analyzing skill demand...</p>
+      <div className="h-[300px] flex items-center justify-center border-2 border-dashed border-slate-200 rounded-xl">
+        <p className="text-slate-400 text-sm italic">Waiting for skill data...</p>
       </div>
     );
   }
 
-  // 2. Transform the 'bySkill' object into an array and take the Top 5
-  const chartData = Object.entries(data)
-    .map(([name, value]) => ({ 
-      name: name.length > 15 ? `${name.substring(0, 12)}...` : name, // Truncate long skill names
-      fullName: name,
-      value 
-    }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 5);
-
-  // High-contrast professional palette
-  const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-
   return (
-    <div className="h-[320px] w-full">
+    <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="45%"
-            innerRadius={70}
-            outerRadius={90}
-            paddingAngle={8}
-            dataKey="value"
-            animationBegin={0}
-            animationDuration={800}
-          >
-            {chartData.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={COLORS[index % COLORS.length]} 
-                stroke="none"
-              />
-            ))}
-          </Pie>
-          
+        <BarChart data={chartData} layout="vertical" margin={{ left: 40, right: 30 }}>
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+          <XAxis type="number" hide />
+          <YAxis 
+            dataKey="name" 
+            type="category" 
+            width={100} 
+            tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }}
+          />
           <Tooltip 
-            cursor={{ fill: 'transparent' }}
-            content={({ active, payload }) => {
-              if (active && payload && payload.length) {
-                return (
-                  <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
-                    <p className="font-bold mb-1">{payload[0].payload.fullName}</p>
-                    <p className="text-blue-400">{payload[0].value} Open Positions</p>
-                  </div>
-                );
-              }
-              return null;
-            }}
+            cursor={{ fill: '#f8fafc' }}
+            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
           />
-          
-          <Legend 
-            verticalAlign="bottom" 
-            align="center"
-            iconType="circle"
-            layout="horizontal"
-            wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: '600' }}
-          />
-        </PieChart>
+          <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={index < 3 ? '#6366f1' : '#94a3b8'} />
+            ))}
+          </Bar>
+        </BarChart>
       </ResponsiveContainer>
     </div>
   );

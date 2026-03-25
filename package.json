@@ -9,15 +9,21 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test-scraper": "node src/test-scrapers.js",
-    "server": "json-server --watch db.json --port 5000"
+    "server": "node server.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.3",
     "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
     "d3-scale": "^4.0.2",
+    "dom-to-image-more": "^3.7.2",
+    "express": "^5.2.1",
+    "html2canvas": "^1.4.1",
     "json-server": "^1.0.0-beta.5",
+    "jspdf": "^4.2.0",
     "lucide-react": "^0.564.0",
+    "pg": "^8.20.0",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
