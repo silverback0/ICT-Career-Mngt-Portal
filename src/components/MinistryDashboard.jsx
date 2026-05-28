@@ -30,7 +30,7 @@ export default function MinistryDashboard() {
   const { jobs, setJobs, addJob, updateJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
-  console.log("FIRST JOB OBJECT KEYS:", jobs[0] ? Object.keys(jobs[0]) : "No jobs");
+
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const stats = useMemo(() => {
@@ -79,8 +79,8 @@ const skillsArray = Object.entries(bySkillObj)
   .sort((a, b) => b.value - a.value)
   .slice(0, 8);
 
-    // ✅ LOGS ARE NOW INSIDE THE BLOCK WHERE THE DATA EXISTS
-    console.log("Calculated Skills Array:", skillsArray);
+    
+
 
     return { 
       totalJobs: filteredJobs.length, 
@@ -108,11 +108,6 @@ const skillsArray = Object.entries(bySkillObj)
     }
   };
 
-  // ✅ ONLY LOG 'jobs' HERE. 'skillsArray' is inside 'stats.bySkill'
-  console.log("Raw Jobs Data:", jobs);
-  console.log("Stats from Memo:", stats);
-  console.log("Skills Array:", stats.bySkill);
-  console.log("FULL Job Data:", JSON.stringify(jobs[0], null, 2));
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 relative text-slate-900 font-sans">
       <div id="dashboard-report-target" className="max-w-[1600px] mx-auto space-y-8">

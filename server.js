@@ -21,61 +21,64 @@ const pool = new Pool({
 // 2. The Route the Dashboard will call
 app.get('/api/jobs', async (req, res) => {
   try {
-    const { cohort } = req.query; // Get the cohort from the URL (e.g., /api/jobs?cohort=Cohort 2024/25)
-    
-    let queryText = `
+    const result = await pool.query(`
       SELECT 
-        t.id, t.name, t.company, t.position, t.status, t.county, 
-        t.is_verified AS "isVerified", 
-        t.vetting_status AS "vettingStatus", 
-        t.suitability_score AS "suitabilityScore", 
+        t.id, 
+        t.name, 
+        t.company,  
+        t.position, 
+        t.status, 
+        t.county, 
         t.cohort,
-        ARRAY_AGG(ts.skill_name) as "skillsRequired"
+        t.vetting_status AS "vettingStatus",
+        t.suitability_score AS "suitabilityScore",
+        COALESCE(
+          (SELECT json_agg(skill_name) FROM talent_skills WHERE talent_id = t.id), 
+          '[]'
+        ) AS "skillsRequired"
       FROM talents t
-      LEFT JOIN talent_skills ts ON t.id = ts.talent_id
-    `;
-
-    const queryParams = [];
-
-    // If a cohort is selected (and it's not "All Cohorts"), add a WHERE clause
-    if (cohort && cohort !== 'All Cohorts') {
-      queryText += ` WHERE t.cohort = $1`;
-      queryParams.push(cohort);
-    }
-
-    queryText += ` GROUP BY t.id ORDER BY t.suitability_score DESC`;
-
-    const result = await pool.query(queryText, queryParams);
+      ORDER BY t.id DESC
+    `);
     res.json(result.rows);
   } catch (err) {
-    console.error("Database Query Error:", err);
-    res.status(500).json({ error: "Database error" });
+    res.status(500).json({ error: err.message });
   }
 });
 
 // Add this to your server.js
 app.post('/api/jobs', async (req, res) => {
-  // Destructure using the EXACT keys sent from the modal
-  const { 
-    name, company, position, county, status, 
-    vetting_status, cohort, suitability_score 
-  } = req.body;
-
+  const client = await pool.connect(); // Get a client for the transaction
   try {
-    const result = await pool.query(
-      `INSERT INTO talents (
-        name, company, position, county, status, 
-        vetting_status, cohort, suitability_score
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+    const { name, company, position, county, status, vetting_status, cohort, suitability_score, skills } = req.body;
+
+    await client.query('BEGIN'); // Start Transaction
+
+    const result = await client.query(
+      `INSERT INTO talents (name, company, position, county, status, vetting_status, cohort, suitability_score) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
       [name, company, position, county, status, vetting_status, cohort, suitability_score]
     );
-    res.status(201).json(result.rows[0]);
+    const talentId = result.rows[0].id;
+
+    if (skills && Array.isArray(skills)) {
+      for (let skillName of skills) {
+        await client.query(
+          `INSERT INTO talent_skills (talent_id, skill_name) VALUES ($1, $2)`,
+          [talentId, skillName]
+        );
+      }
+    }
+
+    await client.query('COMMIT'); // Save everything at once
+    res.status(201).json({ ...req.body, id: talentId });
   } catch (err) {
-    console.error("Database Error:", err.message); // This will tell us if a column name is wrong
+    await client.query('ROLLBACK'); // Undo everything if ANY part fails
+    console.error("DATABASE ERROR:", err.message);
     res.status(500).json({ error: err.message });
+  } finally {
+    client.release(); // Always release the client back to the pool
   }
 });
-
 app.listen(5000, () => {
   console.log("🚀 Server running on http://localhost:5000");
 });

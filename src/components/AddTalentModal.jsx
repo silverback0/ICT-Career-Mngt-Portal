@@ -2,29 +2,55 @@ import React, { useState } from 'react';
 import { X, UserPlus } from 'lucide-react';
 
 export default function AddTalentModal({ isOpen, onClose, onAdd }) {
-  // We use the exact column names from your 'talent' table
+  const [selectedSkills, setSelectedSkills] = useState("");
+  const [isSaving, setIsSaving] = useState(false); // Added this state
   const [formData, setFormData] = useState({
-  name: '',
-  company: 'Unassigned',
-  position: 'ICT Intern', // Use 'position', not 'role'
-  county: 'Nairobi',
-  status: 'In Pipeline',
-  vetting_status: 'Pending',
-  cohort: 'Cohort 2024/25',
-  suitability_score: 70
-});
+    name: '',
+    company: 'Unassigned',
+    position: 'ICT Intern',
+    county: 'Nairobi',
+    status: 'In Pipeline',
+    vetting_status: 'Pending',
+    cohort: 'Cohort 2024/25',
+    suitability_score: 70
+  });
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  // Added 'async' here to fix the error
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Ensure numbers are sent as numbers
-    const finalData = {
-      ...formData,
-      suitability_score: parseInt(formData.suitability_score, 10)
-    };
-    onAdd(finalData);
-    onClose();
+    setIsSaving(true);
+    
+    try {
+      const finalData = {
+        ...formData,
+        suitability_score: parseInt(formData.suitability_score, 10),
+        skills: selectedSkills ? selectedSkills.split(',').map(s => s.trim()).filter(Boolean) : []
+      };
+
+      await onAdd(finalData); // This now works because of 'async' above
+      
+      alert("Talent added successfully!");
+      onClose();
+      setSelectedSkills("");
+      // Reset form if you want
+      setFormData({
+        name: '',
+        company: 'Unassigned',
+        position: 'ICT Intern',
+        county: 'Nairobi',
+        status: 'In Pipeline',
+        vetting_status: 'Pending',
+        cohort: 'Cohort 2024/25',
+        suitability_score: 70
+      });
+    } catch (error) {
+      console.error("Error adding talent:", error);
+      alert("An error occurred while adding the talent. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -79,6 +105,7 @@ export default function AddTalentModal({ isOpen, onClose, onAdd }) {
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">Cohort</label>
               <select 
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                value={formData.cohort}
                 onChange={(e) => setFormData({...formData, cohort: e.target.value})}
               >
                 <option value="Cohort 2024/25">Cohort 2024/25</option>
@@ -97,15 +124,39 @@ export default function AddTalentModal({ isOpen, onClose, onAdd }) {
                 onChange={(e) => setFormData({...formData, suitability_score: e.target.value})}
               />
             </div>
+
+            <div>
+              <label className="block text-xs font-black uppercase text-slate-400 mb-2">Company</label>
+              <input
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="e.g. Public Service"  
+                value={formData.company}
+                onChange={(e) => setFormData({...formData, company: e.target.value})}
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-xs font-black uppercase text-slate-400 mb-2">Skills (comma separated)</label>
+              <input
+                type="text"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                placeholder="e.g. React, Node, SQL"
+                value={selectedSkills}
+                onChange={(e) => setSelectedSkills(e.target.value)}
+              />
+            </div>
           </div>
 
           <div className="pt-4">
             <button 
               type="submit" 
-              className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 flex items-center justify-center gap-2"
+              disabled={isSaving}
+              className={`w-full py-4 text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 ${
+                isSaving ? 'bg-slate-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-800'
+              }`}
             >
               <UserPlus className="w-5 h-5" />
-              Save to Pipeline
+              {isSaving ? "Saving..." : "Save to Pipeline"}
             </button>
           </div>
         </form>
