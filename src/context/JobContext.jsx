@@ -4,6 +4,7 @@ export const JobContext = createContext();
 
 export const JobProvider = ({ children }) => {
   const [jobs, setJobs] = useState([]);
+  const [selectedCohort, setSelectedCohort] = useState('All Cohorts');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Initial Fetch
@@ -11,7 +12,11 @@ export const JobProvider = ({ children }) => {
     const fetchJobs = async () => {
       try {
         // Change '/jobs' to '/api/jobs' to match your Postgres server
-        const response = await fetch('http://localhost:5000/api/jobs'); 
+        let url = 'http://localhost:5000/api/jobs'; 
+        if (selectedCohort !== 'All Cohorts') {
+          url += `?cohort=${encodeURIComponent(selectedCohort)}`;
+        }
+        const response = await fetch(url);
         const data = await response.json();
         setJobs(data);
       } catch (error) {
@@ -19,16 +24,20 @@ export const JobProvider = ({ children }) => {
       }
     };
     fetchJobs();
-  }, []);
+  }, [selectedCohort]);
 
   const addJob = async (newJobData) => {
-    const response = await fetch('http://localhost:5000/api/jobs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...newJobData, id: Date.now().toString() })
-    });
-    const savedJob = await response.json();
-    setJobs(prev => [...prev, savedJob]);
+  const response = await fetch('http://localhost:5000/api/jobs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    // Ensure the keys here match your server/database columns
+    body: JSON.stringify(newJobData) 
+  });
+  
+  if (!response.ok) throw new Error("Server failed to save");
+  
+  const savedJob = await response.json();
+  setJobs(prev => [...prev, savedJob]);
   };
 
   const updateJob = async (updatedJob) => {
@@ -54,7 +63,7 @@ export const JobProvider = ({ children }) => {
 
   return (
     /* We include setJobs here so the Dashboard can update the context state */
-    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, moveJob, searchQuery, setSearchQuery }}>
+    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, moveJob, searchQuery, setSearchQuery, selectedCohort, setSelectedCohort }}>
       {children}
     </JobContext.Provider>
   );

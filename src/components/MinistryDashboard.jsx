@@ -7,6 +7,7 @@ import PlacementTrendChart from './PlacementTrendChart';
 import { fetchAllJobs } from '../services/scrapers/scraperOrchestrator';
 import { exportToPDF } from '../utils/exportReport';
 
+
 // Professional Lucide Icons
 import { 
   Users, 
@@ -25,19 +26,16 @@ import {
 } from 'lucide-react';
 
 export default function MinistryDashboard() {
-  const { jobs, setJobs, updateJob } = useContext(JobContext); 
+  const { jobs, setJobs, updateJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
-  const [selectedCohort, setSelectedCohort] = useState("");
   console.log("FIRST JOB OBJECT KEYS:", jobs[0] ? Object.keys(jobs[0]) : "No jobs");
 
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const stats = useMemo(() => {
     const safeJobs = Array.isArray(jobs) ? jobs : [];
     
-    let filteredJobs = safeJobs;
-    if (selectedCohort) {
-      filteredJobs = safeJobs.filter(j => j.history?.some(h => h.period === selectedCohort));
-    }
+    const filteredJobs = safeJobs;
     
     const pscJobs = filteredJobs.filter(j => 
       j?.jobSource === 'PSC' || 
@@ -91,7 +89,7 @@ const skillsArray = Object.entries(bySkillObj)
       byCounty, 
       bySkill: skillsArray 
     };
-  }, [jobs, selectedCohort]);
+  }, [jobs]);
 
   const handleRefreshJobs = async () => {
     setIsLoading(true);
@@ -142,26 +140,24 @@ const skillsArray = Object.entries(bySkillObj)
                 className="bg-transparent text-sm font-bold text-slate-700 outline-none pr-4 cursor-pointer"
               >
                 <option value="">All Cohorts</option>
-                <option value="2022/23">Cohort 2022/23</option>
-                <option value="2023/24">Cohort 2023/24</option>
-                <option value="2024/25">Cohort 2024/25</option>
+                <option value="Cohort 2022/23">Cohort 2022/23</option>
+                <option value="Cohort 2023/24">Cohort 2023/24</option>
+                <option value="Cohort 2024/25">Cohort 2024/25</option>
               </select>
             </div>
 
-            <button
-              onClick={handleRefreshJobs}
-              disabled={isLoading}
-              className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 disabled:bg-slate-300 transition-all flex items-center gap-2 shadow-md shadow-blue-100"
-            >
-              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-              {isLoading ? "Syncing..." : "Refresh Data"}
+            <button onClick={handleRefreshJobs} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100">
+              <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
-            <button
-              onClick={() => exportToPDF('dashboard-report-target')}
-              className="px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all flex items-center gap-2 shadow-md shadow-green-100"   
-            >
+
+            <button onClick={() => setIsAddModalOpen(true)} className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl flex items-center gap-2">
+              {/* If Plus icon is missing, import it from lucide-react at the top! */}
+              <span>+ Add Talent</span>
+            </button>
+
+            <button onClick={() => exportToPDF('dashboard-report-target')} className="px-6 py-3 bg-green-600 text-white font-bold rounded-xl flex items-center gap-2">
               <FileDown className="w-4 h-4" />
-              Export PDF
+              Export to PDF
             </button>
           </div>
         </header>
