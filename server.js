@@ -55,26 +55,24 @@ app.get('/api/jobs', async (req, res) => {
 
 // Add this to your server.js
 app.post('/api/jobs', async (req, res) => {
-  // Destructure the data coming from your AddTalentModal
+  // Destructure using the EXACT keys sent from the modal
   const { 
-    name, company, role, county, status, 
-    vetting_status, cohort, suitability_score, skills_required 
+    name, company, position, county, status, 
+    vetting_status, cohort, suitability_score 
   } = req.body;
 
   try {
-    const newTalent = await pool.query(
-      `INSERT INTO talent (
-        name, company, role, county, status, 
-        vetting_status, cohort, suitability_score, skills_required
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
-      [name, company, role, county, status, vetting_status, cohort, suitability_score, skills_required]
+    const result = await pool.query(
+      `INSERT INTO talents (
+        name, company, position, county, status, 
+        vetting_status, cohort, suitability_score
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [name, company, position, county, status, vetting_status, cohort, suitability_score]
     );
-
-    // Send the newly created person back to React
-    res.status(201).json(newTalent.rows[0]);
+    res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error("Database Error:", err.message);
-    res.status(500).json({ error: "Failed to save talent to database" });
+    console.error("Database Error:", err.message); // This will tell us if a column name is wrong
+    res.status(500).json({ error: err.message });
   }
 });
 

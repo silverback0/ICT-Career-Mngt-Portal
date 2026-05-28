@@ -6,6 +6,7 @@ import PlacementModal from './PlacementModal';
 import PlacementTrendChart from './PlacementTrendChart';
 import { fetchAllJobs } from '../services/scrapers/scraperOrchestrator';
 import { exportToPDF } from '../utils/exportReport';
+import AddTalentModal from './AddTalentModal';
 
 
 // Professional Lucide Icons
@@ -26,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export default function MinistryDashboard() {
-  const { jobs, setJobs, updateJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
+  const { jobs, setJobs, addJob, updateJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
   console.log("FIRST JOB OBJECT KEYS:", jobs[0] ? Object.keys(jobs[0]) : "No jobs");
@@ -266,6 +267,11 @@ const skillsArray = Object.entries(bySkillObj)
           }}
         />
       )}
+      <AddTalentModal 
+      isOpen={isAddModalOpen} 
+      onClose={() => setIsAddModalOpen(false)} 
+      onAdd={(newData) => addJob(newData)} 
+      />
     </div>
   );
 }
