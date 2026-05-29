@@ -40,19 +40,46 @@ export const JobProvider = ({ children }) => {
   setJobs(prev => [...prev, savedJob]);
   };
 
-  const updateJob = async (updatedJob) => {
-    await fetch(`http://localhost:5000/jobs/${updatedJob.id}`, {
+  const updateJob = async (updatedData) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/jobs/${updatedData.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedJob)
+      body: JSON.stringify(updatedData),
     });
-    setJobs(prev => prev.map(j => j.id === updatedJob.id ? updatedJob : j));
-  };
 
+    if (response.ok) {
+      setJobs(prevJobs => prevJobs.map(job => job.id === updatedData.id ? updatedData : job));
+      
+      // THIS IS YOUR NOTIFICATION
+      alert("✅ Talent Profile Updated Successfully!"); 
+      
+    } else {
+      alert("❌ Failed to update. Server error.");
+    }
+  } catch (error) {
+    console.error("Update Error:", error);
+    alert("❌ System Error: Could not reach the server.");
+  }
+};
   const deleteJob = async (id) => {
-    await fetch(`http://localhost:5000/jobs/${id}`, { method: 'DELETE' });
-    setJobs(prev => prev.filter(j => j.id !== id));
-  };
+  try {
+    const response = await fetch(`http://localhost:5000/api/jobs/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      // Update local state so the person vanishes instantly without a refresh
+      setJobs(prevJobs => prevJobs.filter(job => job.id !== id));
+      alert("Talent removed from pipeline.");
+    } else {
+      throw new Error("Failed to delete");
+    }
+  } catch (error) {
+    console.error("Error deleting talent:", error);
+    alert("Could not delete talent.");
+  }
+};
 
   const moveJob = async (jobId, newStatus) => {
     const jobToMove = jobs.find(j => j.id === jobId);

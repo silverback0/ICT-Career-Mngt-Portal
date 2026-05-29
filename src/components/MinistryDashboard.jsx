@@ -7,7 +7,7 @@ import PlacementTrendChart from './PlacementTrendChart';
 import { fetchAllJobs } from '../services/scrapers/scraperOrchestrator';
 import { exportToPDF } from '../utils/exportReport';
 import AddTalentModal from './AddTalentModal';
-
+import { Trash2, Edit3 } from 'lucide-react';
 
 // Professional Lucide Icons
 import { 
@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export default function MinistryDashboard() {
-  const { jobs, setJobs, addJob, updateJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
+  const { jobs, setJobs, addJob, updateJob, deleteJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
 
@@ -78,9 +78,6 @@ const skillsArray = Object.entries(bySkillObj)
   .map(([name, value]) => ({ name, value }))
   .sort((a, b) => b.value - a.value)
   .slice(0, 8);
-
-    
-
 
     return { 
       totalJobs: filteredJobs.length, 
@@ -235,12 +232,25 @@ const skillsArray = Object.entries(bySkillObj)
                         )}
                         <span className="text-xs font-black text-orange-400">{person.suitabilityScore}% Match</span>
                       </div>
-          
+                      {/* SEARCH/VIEW BUTTON */}
                       <button 
                         onClick={() => setSelectedTalent(person)}
                         className="bg-blue-600 p-2 rounded-lg hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
+                        title="View Details"
                       >
                         <Search className="w-4 h-4" />
+                      </button>
+                      {/* DELETE BUTTON */}
+                      <button
+                        onClick={() => {
+                         if(window.confirm(`Remove ${person.name} from the pipeline?`)) {
+                              deleteJob(person.id);
+                         }
+                        }}
+                        className="bg-red-600 p-2 rounded-lg hover:bg-red-500 transition-all shadow-lg shadow-red-900/20"
+                        title="Remove from Pipeline"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-400 group-hover/del:text-white" />
                       </button>
                     </div>
                   </div>
@@ -257,8 +267,13 @@ const skillsArray = Object.entries(bySkillObj)
           person={selectedTalent} 
           onClose={() => setSelectedTalent(null)}
           onConfirm={async (updatedData) => {
+            try {
             await updateJob(updatedData);
-            setSelectedTalent(null);
+            setSelectedTalent(null);}
+            catch (error) {
+              console.error("Update Error:", error);
+              alert("❌ System Error: Could not reach the server."); //for now will delete later
+            }
           }}
         />
       )}

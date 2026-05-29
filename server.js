@@ -79,6 +79,53 @@ app.post('/api/jobs', async (req, res) => {
     client.release(); // Always release the client back to the pool
   }
 });
+
+app.put('/api/jobs/:id', async (req, res) => {
+  const { id } = req.params;
+  const { company } = req.body; 
+
+  // LOG: This will show up in your TERMINAL (not the browser) 
+  // so we can see exactly what is happening.
+  console.log(`Attempting to place ID ${id} into ${company}`);
+
+  try {
+    const result = await pool.query(
+      `UPDATE talents 
+       SET company = $1, 
+           status = 'Placed (Public)'
+       WHERE id = $2`,
+      [company, id]
+    );
+
+    if (result.rowCount === 0) {
+      console.log("❌ No talent found with that ID");
+      return res.status(404).json({ error: "Talent not found" });
+    }
+
+    console.log("✅ Update successful in Postgres");
+    res.json({ message: "Placement successful!" });
+  } catch (err) {
+    // THIS IS THE SMOKING GUN
+    // Look at your terminal/command prompt where the server is running.
+    // It will print the exact reason for the 'Server Error'.
+    console.error("!!! DATABASE ERROR !!!:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/jobs/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Because of 'ON DELETE CASCADE' in your talent_skills table, 
+    // deleting the talent will automatically delete their skills!
+    await pool.query('DELETE FROM talents WHERE id = $1', [id]);
+    res.json({ message: "Talent deleted successfully" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(5000, () => {
   console.log("🚀 Server running on http://localhost:5000");
 });
