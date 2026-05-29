@@ -27,34 +27,32 @@ import {
 } from 'lucide-react';
 
 export default function MinistryDashboard() {
-  const { jobs, setJobs, addJob, updateJob, deleteJob, selectedCohort, setSelectedCohort } = useContext(JobContext); 
+  const { jobs, setJobs, addJob, updateJob, deleteJob, selectedCohort, setSelectedCohort, filteredJobs, searchTerm, setSearchTerm, filterCounty, setFilterCounty, handleRefreshJobs} = useContext(JobContext); 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
 
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const stats = useMemo(() => {
-    const safeJobs = Array.isArray(jobs) ? jobs : [];
+    const dataForStats = Array.isArray(filteredJobs) ? filteredJobs : [];
     
-    const filteredJobs = safeJobs;
-    
-    const pscJobs = filteredJobs.filter(j => 
+    const pscJobs = dataForStats.filter(j => 
       j?.jobSource === 'PSC' || 
       /Ministry|State Department|County Government|Authority|Commission|Govt/i.test(j?.company || '')
     ).length;
 
-    const pnpEligible = filteredJobs.filter(j => 
+    const pnpEligible = dataForStats.filter(j => 
       j?.vettingStatus === "Vetted" && j?.status !== "Placed (Public)"
     ).length;
 
-    const byCounty = filteredJobs.reduce((acc, job) => {
+    const byCounty = dataForStats.reduce((acc, job) => {
       const county = job?.county || 'Unknown';
       acc[county] = (acc[county] || 0) + 1;
       return acc;
     }, {});
 
     // This replaces the old bySkillObj logic inside useMemo
-  const bySkillObj = filteredJobs.reduce((acc, job) => {
+  const bySkillObj = dataForStats.reduce((acc, job) => {
   // 1. Try to find the skills field even if the name is slightly different
   const rawSkills = job.skillsRequired || job.skills || job.tags || job.competencies || [];
   
@@ -80,30 +78,15 @@ const skillsArray = Object.entries(bySkillObj)
   .slice(0, 8);
 
     return { 
-      totalJobs: filteredJobs.length, 
+      totalJobs: dataForStats.length, 
       pscJobs, 
-      privateJobs: filteredJobs.length - pscJobs, 
+      privateJobs: dataForStats.length - pscJobs, 
       pnpEligible, 
       byCounty, 
       bySkill: skillsArray 
     };
-  }, [jobs]);
+  }, [filteredJobs]);
 
-  const handleRefreshJobs = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('http://localhost:5000/api/jobs');
-      if (!response.ok) throw new Error("Database offline");
-      const data = await response.json();
-      setJobs(data); 
-      alert(`✅ Pipeline Synced: ${data.length} records updated.`);
-    } catch (error) {
-      console.error("Sync Error:", error);
-      alert("❌ System Offline: Ensure your JSON Server is running");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 relative text-slate-900 font-sans">
@@ -139,6 +122,16 @@ const skillsArray = Object.entries(bySkillObj)
               </select>
             </div>
 
+            {filterCounty !== 'All' && (
+              <button 
+                onClick={() => setFilterCounty('All')}
+                className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-xl border border-red-100 hover:bg-red-100 transition-colors shadow-sm animate-in fade-in zoom-in duration-200"
+              >
+              <span className="text-xs font-black uppercase tracking-wider">County: {filterCounty}</span>
+              <span className="font-bold">✕</span>
+              </button>
+            )}
+
             <button onClick={handleRefreshJobs} className="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100">
               <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
@@ -173,7 +166,11 @@ const skillsArray = Object.entries(bySkillObj)
                 <MapIcon className="w-5 h-5 text-blue-600" />
                 <h3 className="text-xl font-bold text-slate-900">National Deployment Map</h3>
               </div>
-              <CountyHeatmap data={stats.byCounty} />
+              <CountyHeatmap 
+                data={stats.byCounty} 
+                selectedCounty={filterCounty} // Shows the highlight
+                onCountyClick={(name) => setFilterCounty(name)} 
+              />
             </div>
 
             <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
@@ -207,7 +204,7 @@ const skillsArray = Object.entries(bySkillObj)
               </div>
               
               <div className="space-y-4 relative z-10">
-                {jobs
+                {filteredJobs
                   .filter(j => j.suitabilityScore >= 90 && j.status !== "Placed (Public)")
                   .slice(0, 5) 
                   .map(person => (

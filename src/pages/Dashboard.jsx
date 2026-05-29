@@ -13,16 +13,21 @@ const STATUSES = [
 ];
 
 function Dashboard() {
-  const { jobs, moveJob, deleteJob, searchQuery } = useJob();
+  const { jobs, moveJob, deleteJob, searchTerm } = useJob();
 
   // Filter jobs by status and search query
   const getJobsByStatus = (status) => {
-    const query = searchQuery.toLowerCase();
+    // 1. Use searchTerm (and handle if it's undefined with || '')
+    const query = (searchTerm || '').toLowerCase(); 
+    
     return jobs.filter(job => {
       const matchesStatus = job.status === status;
+      
+      // 2. Add ?. to company and position to prevent crashing on null fields
       const matchesSearch = !query || 
-        job.company.toLowerCase().includes(query) ||
-        job.position.toLowerCase().includes(query);
+        job?.company?.toLowerCase().includes(query) ||
+        job?.position?.toLowerCase().includes(query);
+        
       return matchesStatus && matchesSearch;
     });
   };

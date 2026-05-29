@@ -1,11 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 
 export const JobContext = createContext();
 
 export const JobProvider = ({ children }) => {
   const [jobs, setJobs] = useState([]);
   const [selectedCohort, setSelectedCohort] = useState('All Cohorts');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCounty, setFilterCounty] = useState("All");
+  const [activeDrillDown, setActiveDrillDown] = useState({ type: null, value: null });
 
   // Initial Fetch
   useEffect(() => {
@@ -88,9 +90,30 @@ export const JobProvider = ({ children }) => {
     }
   };
 
+  const filteredJobs = useMemo(() => {
+  const safeJobs = Array.isArray(jobs) ? jobs : [];
+  const query = (searchTerm || '').toLowerCase();
+
+  return safeJobs.filter(job => {
+    // 1. Search Logic (Name, ID, or Position)
+    const matchesSearch = !query || 
+      job?.name?.toLowerCase().includes(query) || 
+      job?.id?.toString() === query ||
+      job?.position?.toLowerCase().includes(query);
+      
+    // 2. County Logic (Merged Map + Dropdown)
+    const matchesCounty = filterCounty === "All" || job?.county === filterCounty;
+    
+    // 3. Cohort Logic (Already handled by API fetch, but good for safety)
+    const matchesCohort = selectedCohort === "All Cohorts" || job?.cohort === selectedCohort;
+
+    return matchesSearch && matchesCounty && matchesCohort;
+  });
+}, [jobs, searchTerm, filterCounty, selectedCohort]);
+
   return (
     /* We include setJobs here so the Dashboard can update the context state */
-    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, moveJob, searchQuery, setSearchQuery, selectedCohort, setSelectedCohort }}>
+    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, filteredJobs, searchTerm, filterCounty, setFilterCounty, setSearchTerm, moveJob, selectedCohort, setSelectedCohort }}>
       {children}
     </JobContext.Provider>
   );
