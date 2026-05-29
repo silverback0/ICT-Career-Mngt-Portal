@@ -90,7 +90,7 @@ const skillsArray = Object.entries(bySkillObj)
 
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 relative text-slate-900 font-sans">
-      <div id="dashboard-report-target" className="max-w-[1600px] mx-auto space-y-8">
+      <div id="dashboard-report-target" className="max-w-400 mx-auto space-y-8">
         
         {/* AUTHENTIC HEADER */}
         <header className="bg-white rounded-2xl shadow-sm p-8 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">

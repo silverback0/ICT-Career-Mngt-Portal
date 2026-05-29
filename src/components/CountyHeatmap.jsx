@@ -102,7 +102,7 @@ export default function CountyHeatmap({ data = {}, onCountyClick, selectedCounty
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">High Density</span>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex-1 h-2 bg-gradient-to-r from-[#f1f5f9] via-[#2dd4bf] to-[#115e59] rounded-full" />
+          <div className="flex-1 h-2 bg-linear-to-r from-[#f1f5f9] via-[#2dd4bf] to-[#115e59] rounded-full" />
         </div>
       </footer>
     </div>

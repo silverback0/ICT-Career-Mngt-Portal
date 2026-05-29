@@ -7,7 +7,7 @@ export default function SkillsGapChart({ data }) {
 
   if (chartData.length === 0) {
     return (
-      <div className="h-[300px] flex items-center justify-center border-2 border-dashed border-slate-200 rounded-xl">
+      <div className="h-75 flex items-center justify-center border-2 border-dashed border-slate-200 rounded-xl">
         <p className="text-slate-400 text-sm italic">Waiting for skill data...</p>
       </div>
     );
