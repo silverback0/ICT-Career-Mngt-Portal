@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 
 export const JobContext = createContext();
 
@@ -8,112 +9,74 @@ export const JobProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCounty, setFilterCounty] = useState("All");
   const [activeDrillDown, setActiveDrillDown] = useState({ type: null, value: null });
+  const [editingJob, setEditingJob] = useState(null);
 
   // Initial Fetch
   useEffect(() => {
     const fetchJobs = async () => {
-      try {
-        // Change '/jobs' to '/api/jobs' to match your Postgres server
-        let url = 'http://localhost:5000/api/jobs'; 
-        if (selectedCohort !== 'All Cohorts') {
-          url += `?cohort=${encodeURIComponent(selectedCohort)}`;
-        }
-        const response = await fetch(url);
-        const data = await response.json();
-        setJobs(data);
-      } catch (error) {
-        console.error("Failed to load jobs:", error);
+      let query = supabase.from('talents').select('*');
+      
+      if (selectedCohort !== 'All Cohorts') {
+        query = query.eq('cohort', selectedCohort);
       }
+      
+      const { data, error } = await query;
+      if (error) console.error("Error loading jobs:", error);
+      else setJobs(data || []);
     };
     fetchJobs();
   }, [selectedCohort]);
 
   const addJob = async (newJobData) => {
-  const response = await fetch('http://localhost:5000/api/jobs', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    // Ensure the keys here match your server/database columns
-    body: JSON.stringify(newJobData) 
-  });
-  
-  if (!response.ok) throw new Error("Server failed to save");
-  
-  const savedJob = await response.json();
-  setJobs(prev => [...prev, savedJob]);
+    const { data, error } = await supabase.from('talents').insert([newJobData]).select();
+    if (error) {
+      console.error("Error adding job:", error);
+      throw error;
+    }
+    setJobs(prev => [...prev, ...data]);
   };
 
   const updateJob = async (updatedData) => {
-  try {
-    const response = await fetch(`http://localhost:5000/api/jobs/${updatedData.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedData),
-    });
+    const { error } = await supabase
+      .from('talents')
+      .update(updatedData)
+      .eq('id', updatedData.id);
 
-    if (response.ok) {
-      setJobs(prevJobs => prevJobs.map(job => job.id === updatedData.id ? updatedData : job));
-      
-      // THIS IS YOUR NOTIFICATION
-      alert("✅ Talent Profile Updated Successfully!"); 
-      
+    if (error) {
+      alert("❌ Failed to update.");
+      console.error(error);
     } else {
-      alert("❌ Failed to update. Server error.");
-    }
-  } catch (error) {
-    console.error("Update Error:", error);
-    alert("❌ System Error: Could not reach the server.");
-  }
-};
-  const deleteJob = async (id) => {
-  try {
-    const response = await fetch(`http://localhost:5000/api/jobs/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      // Update local state so the person vanishes instantly without a refresh
-      setJobs(prevJobs => prevJobs.filter(job => job.id !== id));
-      alert("Talent removed from pipeline.");
-    } else {
-      throw new Error("Failed to delete");
-    }
-  } catch (error) {
-    console.error("Error deleting talent:", error);
-    alert("Could not delete talent.");
-  }
-};
-
-  const moveJob = async (jobId, newStatus) => {
-    const jobToMove = jobs.find(j => j.id === jobId);
-    if (jobToMove) {
-      updateJob({ ...jobToMove, status: newStatus });
+      setJobs(prev => prev.map(job => job.id === updatedData.id ? updatedData : job));
     }
   };
 
+  const deleteJob = async (id) => {
+    const { error } = await supabase.from('talents').delete().eq('id', id);
+    if (error) {
+      alert("Could not delete.");
+    } else {
+      setJobs(prev => prev.filter(job => job.id !== id));
+    }
+  };
+
+  const moveJob = async (jobId, newStatus) => {
+    const jobToMove = jobs.find(j => j.id === jobId);
+    if (jobToMove) updateJob({ ...jobToMove, status: newStatus });
+  };
+
   const filteredJobs = useMemo(() => {
-  const safeJobs = Array.isArray(jobs) ? jobs : [];
-  const query = (searchTerm || '').toLowerCase();
-
-  return safeJobs.filter(job => {
-    // 1. Search Logic (Name, ID, or Position)
-    const matchesSearch = !query || 
-      job?.name?.toLowerCase().includes(query) || 
-      job?.id?.toString() === query ||
-      job?.position?.toLowerCase().includes(query);
-      
-    // 2. County Logic (Merged Map + Dropdown)
-    const matchesCounty = filterCounty === "All" || job?.county === filterCounty;
-    
-    // 3. Cohort Logic (Already handled by API fetch, but good for safety)
-    const matchesCohort = selectedCohort === "All Cohorts" || job?.cohort === selectedCohort;
-
-    return matchesSearch && matchesCounty && matchesCohort;
-  });
-}, [jobs, searchTerm, filterCounty, selectedCohort]);
+    const query = (searchTerm || '').toLowerCase();
+    return jobs.filter(job => {
+      const matchesSearch = !query || job.name?.toLowerCase().includes(query) || job.position?.toLowerCase().includes(query);
+      const matchesCounty = filterCounty === "All" || job.county === filterCounty;
+      const matchesCohort = selectedCohort === "All Cohorts" || job.cohort === selectedCohort;
+      return matchesSearch && matchesCounty && matchesCohort;
+    });
+  }, [jobs, searchTerm, filterCounty, selectedCohort]);
 
   return (
     /* We include setJobs here so the Dashboard can update the context state */
-    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, filteredJobs, searchTerm, filterCounty, setFilterCounty, setSearchTerm, moveJob, selectedCohort, setSelectedCohort }}>
+    <JobContext.Provider value={{ jobs, setJobs, addJob, updateJob, deleteJob, setEditingJob, editingJob, filteredJobs, searchTerm, filterCounty, setFilterCounty, setSearchTerm, moveJob, selectedCohort, setSelectedCohort }}>
       {children}
     </JobContext.Provider>
   );

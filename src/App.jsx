@@ -7,9 +7,11 @@ import EditJobModal from './components/EditJobModal';
 import MinistryDashboard from './components/MinistryDashboard';
 import Analytics from './components/Analytics';
 import SkillsGapChart from './components/SkillsGapChart';
+import { supabase } from './supabaseClient';
 
 function App() {
-  const [view, setView] = useState('user'); 
+  const [view, setView] = useState('user');
+  
 
   return (
     <JobProvider>

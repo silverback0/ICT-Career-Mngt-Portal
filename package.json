@@ -12,6 +12,7 @@
     "server": "node server.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.3",
     "cheerio": "^1.2.0",

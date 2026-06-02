@@ -1,18 +1,13 @@
 import React from "react";
 import { useJob } from '../context/JobContext.jsx';
 
-const JobCard = ({ job, onDelete }) => {
+const JobCard = ({ job, onDelete, userRole, onEvaluate }) => { // 1. Props added
   const { setEditingJob } = useJob();
 
-  // 1. Updated color mapping to match our new Market-Ready categories
   const colorcard = {
-    'Backlog': '#95a5a6',      // Grey
-    'Tailoring': '#9b59b6',    // Purple
-    'Active': '#3498db',       // Blue
-    'In-Play': '#f1c40f',      // Yellow/Gold
-    'Offer': '#2ecc71',        // Green
-    'Rejected': '#e74c3c',     // Red
-    'Ghosted/Archive': '#34495e' // Dark Navy
+    'Backlog': '#95a5a6', 'Tailoring': '#9b59b6', 'Active': '#3498db',
+    'In-Play': '#f1c40f', 'Offer': '#2ecc71', 'Rejected': '#e74c3c',
+    'Ghosted/Archive': '#34495e'
   };
 
   return (
@@ -24,38 +19,36 @@ const JobCard = ({ job, onDelete }) => {
         cursor: 'pointer'
       }}
     >
-      {/* HEADER: Position and Delete Button */}
       <div style={headerStyle}>
         <h4 style={positionStyle}>{job.position}</h4>
         <button 
-          onClick={() => onDelete(job.id)} 
+          onClick={(e) => { e.stopPropagation(); onDelete(job.id); }} 
           style={deleteBtnStyle}
-          title="Delete application"
-        >
-          &times;
-        </button>
+        > &times; </button>
       </div>
 
-      {/* COMPANY NAME */}
-      <p style={companyStyle}>
-        <strong>{job.company}</strong>
-      </p>
+      <p style={companyStyle}><strong>{job.company}</strong></p>
 
-      {/* INTERVIEW DATE (If exists) */}
-      {job.interviewDate && (
-        <p style={dateStyle}>
-          📅 {new Date(job.interviewDate).toLocaleDateString()}
-        </p>
+      {/* ADMIN EVALUATION TRIGGER */} 
+      {userRole === 'admin' && (
+        <button 
+          onClick={(e) => { e.stopPropagation(); onEvaluate(job); }} 
+          style={adminBtnStyle}
+        >
+          🎯 Evaluate Intern
+        </button>
       )}
 
-      {/* JOB LINK (If exists) */}
+      {job.interviewDate && (
+        <p style={dateStyle}>📅 {new Date(job.interviewDate).toLocaleDateString()}</p>
+      )}
+
       {job.link && (
         <a href={job.link} target="_blank" rel="noreferrer" style={linkStyle}>
           🔗 View Job Posting
         </a>
       )}
 
-      {/* NOTES SNIPPET (If exists) */}
       {job.notes && (
         <div style={notesBoxStyle}>
           <p style={{ margin: 0 }}>📝 {job.notes}</p>
@@ -66,6 +59,17 @@ const JobCard = ({ job, onDelete }) => {
 };
 
 // --- STYLES ---
+const adminBtnStyle = {
+  backgroundColor: '#f0fdfa',
+  color: '#0d9488',
+  border: '1px solid #ccfbf1',
+  borderRadius: '6px',
+  padding: '4px 8px',
+  fontSize: '11px',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+  marginBottom: '8px'
+};
 
 const cardContainerStyle = {
   padding: '16px',

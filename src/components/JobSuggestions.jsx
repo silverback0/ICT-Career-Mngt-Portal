@@ -9,13 +9,34 @@ export default function JobSuggestions() {
     const [loading, setLoading] = React.useState(false);
     const [isRemoteOnly, setIsRemoteOnly] = React.useState(false);
     const [jobType, setJobType] = React.useState('ALL'); 
-    const { addJobFromSearch } = React.useContext(JobContext);
+    const { addJob } = React.useContext(JobContext)
+    const [trackingIds, setTrackingIds] = React.useState({});
 
     // 1. CLEAR SEARCH FUNCTION
     const clearSearch = () => {
         setResults([]);
         setQuery('');
     };
+
+
+    const handleTrack = async (job) => {
+  setTrackingIds(prev => ({ ...prev, [job.job_id]: true })); // Start loading
+  try {
+    await addJob({
+      name: job.job_title,
+      position: job.job_title,
+      county: 'Nairobi',
+      status: 'National Pipeline',
+      suitabilityScore: 0
+    });
+    alert("Added to Pipeline!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to save to database. Check console.");
+  } finally {
+    setTrackingIds(prev => ({ ...prev, [job.job_id]: false })); // Stop loading
+  }
+};
 
     const searchJobs = async () => {
     if (!query) return;
@@ -133,8 +154,13 @@ export default function JobSuggestions() {
                                 View Link
                             </a>
                             <button 
-                                onClick={() => addJobFromSearch(job)} 
-                                style={trackBtnSmall}
+                                onClick={() => addJob({
+                                name: job.job_title,
+                                position: job.job_title,
+                                county: 'Nairobi', // Default for now
+                                status: 'National Pipeline',
+                                suitabilityScore: 0
+                            })}
                             >
                                 ➕ Track
                             </button>
