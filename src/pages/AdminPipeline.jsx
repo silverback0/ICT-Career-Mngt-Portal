@@ -146,7 +146,7 @@ const AdminPipeline = () => {
 
       {/* FILTER SEARCH UTILITY INPUTS */}
       <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-6 flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex flex-1 min-w-[280px] gap-3">
+        <div className="flex flex-1 min-w-70 gap-3">
           <input 
             type="text" 
             placeholder="Search interns by name or functional track..." 
@@ -235,7 +235,7 @@ const AdminPipeline = () => {
                     <span className="text-xs font-bold bg-slate-200/80 px-2 py-0.5 rounded-full text-slate-600">{stageInterns.length}</span>
                   </div>
                   
-                  <div className="space-y-2.5 overflow-y-auto flex-1 min-h-[250px]">
+                  <div className="space-y-2.5 overflow-y-auto flex-1 min-h-62.5">
                     {stageInterns.map(intern => (
                       <div 
                         key={intern.id}
