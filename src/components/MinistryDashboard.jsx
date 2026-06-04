@@ -1,13 +1,11 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { JobContext } from '../context/JobContext';
+import React, { useState, useEffect, useMemo } from 'react';
 import CountyHeatmap from './CountyHeatmap';
 import SkillsGapChart from './SkillsGapChart';
 import PlacementModal from './PlacementModal'; 
 import PlacementTrendChart from './PlacementTrendChart';
-import { fetchAllJobs } from '../services/scrapers/scraperOrchestrator';
 import { exportToPDF } from '../utils/exportReport';
 import AddTalentModal from './AddTalentModal';
-import { Trash2, Edit3 } from 'lucide-react';
+import { supabase } from '../supabaseClient'; // Adjusted to point to your Supabase configuration
 
 // Professional Lucide Icons
 import { 
@@ -22,22 +20,78 @@ import {
   CheckCircle2,
   Clock,
   TrendingUp,
-  Search,
   FileDown,
+  Search,
+  Trash2
 } from 'lucide-react';
 
 export default function MinistryDashboard() {
-  const { jobs, setJobs, addJob, updateJob, deleteJob, selectedCohort, setSelectedCohort, filteredJobs, searchTerm, setSearchTerm, filterCounty, setFilterCounty, handleRefreshJobs} = useContext(JobContext); 
+  // Localized states replacing the legacy local JobContext tracking system
+  const [talents, setTalents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCohort, setSelectedCohort] = useState('');
+  const [filterCounty, setFilterCounty] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedTalent, setSelectedTalent] = useState(null);
-
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // 1. Core Supabase Data Hydration Hook
+  const handleRefreshJobs = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('talents')
+        .select('*, talent_skills ( skill_name )');
+
+      if (error) throw error;
+
+      // Map Supabase layout schema straight into your existing component parameters
+      const normalizedData = (data || []).map(t => ({
+        id: t.id,
+        // Correctly mapping to the 'name' column from your DB
+        name: t.name || 'Anonymous Intern', 
+        company: t.position || 'General Track', 
+        county: t.county || 'Unknown',
+        cohort: t.cohort || '',
+        status: t.status || 'National Pipeline',
+        suitabilityScore: t.suitability_score || 0,
+        // Adjusting vetting status based on your varchar column
+        vettingStatus: t.vetting_status === "Vetted" ? "Vetted" : "Pending",
+        // Ensure this points to the column where your skills data is actually stored
+        skillsRequired: t.talent_skills ? t.talent_skills.map(s => s.skill_name) : [] 
+      }));
+
+      setTalents(normalizedData);
+    } catch (err) {
+      console.error("System Fetch Error:", err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load data immediately upon dashboard activation
+  useEffect(() => {
+    handleRefreshJobs();
+  }, []);
+
+  // 2. Local Dynamic Filtering Layer
+  const filteredJobs = useMemo(() => {
+    return talents.filter(j => {
+      const matchesSearch = (j.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            (j.company || '').toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCohort = !selectedCohort || j.cohort === selectedCohort;
+      const matchesCounty = filterCounty === 'All' || j.county === filterCounty;
+      
+      return matchesSearch && matchesCohort && matchesCounty;
+    });
+  }, [talents, searchTerm, selectedCohort, filterCounty]);
+
+  // 3. Analytics engine recalculating when filtered data objects change
   const stats = useMemo(() => {
     const dataForStats = Array.isArray(filteredJobs) ? filteredJobs : [];
     
     const pscJobs = dataForStats.filter(j => 
-      j?.jobSource === 'PSC' || 
+      j?.status === "Placed (Public)" || 
       /Ministry|State Department|County Government|Authority|Commission|Govt/i.test(j?.company || '')
     ).length;
 
@@ -51,31 +105,27 @@ export default function MinistryDashboard() {
       return acc;
     }, {});
 
-    // This replaces the old bySkillObj logic inside useMemo
-  const bySkillObj = dataForStats.reduce((acc, job) => {
-  // 1. Try to find the skills field even if the name is slightly different
-  const rawSkills = job.skillsRequired || job.skills || job.tags || job.competencies || [];
-  
-  // 2. Handle both Arrays ["React"] and comma-strings "React, Node"
-  let skillsArray = [];
-  if (Array.isArray(rawSkills)) {
-    skillsArray = rawSkills;
-  } else if (typeof rawSkills === 'string') {
-    skillsArray = rawSkills.split(',').map(s => s.trim());
-  }
+    const bySkillObj = dataForStats.reduce((acc, job) => {
+      const rawSkills = job.skillsRequired || [];
+      let skillsArray = [];
+      
+      if (Array.isArray(rawSkills)) {
+        skillsArray = rawSkills;
+      } else if (typeof rawSkills === 'string') {
+        skillsArray = rawSkills.split(',').map(s => s.trim());
+      }
 
-  // 3. Count them up
-  skillsArray.forEach(skill => {
-    if (skill) acc[skill] = (acc[skill] || 0) + 1;
-  });
-  
-  return acc;
-}, {});
+      skillsArray.forEach(skill => {
+        if (skill) acc[skill] = (acc[skill] || 0) + 1;
+      });
+      
+      return acc;
+    }, {});
 
-const skillsArray = Object.entries(bySkillObj)
-  .map(([name, value]) => ({ name, value }))
-  .sort((a, b) => b.value - a.value)
-  .slice(0, 8);
+    const skillsArray = Object.entries(bySkillObj)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 8);
 
     return { 
       totalJobs: dataForStats.length, 
@@ -87,6 +137,54 @@ const skillsArray = Object.entries(bySkillObj)
     };
   }, [filteredJobs]);
 
+  // 4. Mutation Handlers pointed to your live database
+  const addJob = async (newData) => {
+    try {
+      const { error } = await supabase.from('talents').insert([{
+        full_name: newData.name,
+        position: newData.company,
+        county: newData.county,
+        cohort: newData.cohort,
+        suitability_score: newData.suitabilityScore || 0,
+        status: newData.status || 'National Pipeline'
+      }]);
+      if (error) throw error;
+      handleRefreshJobs();
+    } catch (err) {
+      alert(`Could not save asset: ${err.message}`);
+    }
+  };
+
+  const updateJob = async (updatedData) => {
+    try {
+      const { error } = await supabase
+        .from('talents')
+        .update({
+          full_name: updatedData.name,
+          position: updatedData.company,
+          county: updatedData.county,
+          status: updatedData.status,
+          suitability_score: updatedData.suitabilityScore
+        })
+        .eq('id', updatedData.id);
+
+      if (error) throw error;
+      handleRefreshJobs();
+    } catch (err) {
+      console.error(err);
+      alert("❌ System Error: Could not update record.");
+    }
+  };
+
+  const deleteJob = async (id) => {
+    try {
+      const { error } = await supabase.from('talents').delete().eq('id', id);
+      if (error) throw error;
+      setTalents(prev => prev.filter(item => item.id !== id));
+    } catch (err) {
+      alert(`Could not delete record: ${err.message}`);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 relative text-slate-900 font-sans">
@@ -109,6 +207,18 @@ const skillsArray = Object.entries(bySkillObj)
           </div>
           
           <div className="flex items-center gap-4">
+            {/* SEARCH INPUT BAR */}
+            <div className="bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 flex items-center gap-2">
+              <Search className="w-4 h-4 text-slate-400" />
+              <input 
+                type="text" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search candidates..." 
+                className="bg-transparent text-xs font-bold text-slate-700 outline-none w-40"
+              />
+            </div>
+
             <div className="bg-slate-50 p-2 rounded-xl border border-slate-100 flex items-center gap-3">
               <History className="w-4 h-4 text-slate-400 ml-2" />
               <select 
@@ -127,8 +237,8 @@ const skillsArray = Object.entries(bySkillObj)
                 onClick={() => setFilterCounty('All')}
                 className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-xl border border-red-100 hover:bg-red-100 transition-colors shadow-sm animate-in fade-in zoom-in duration-200"
               >
-              <span className="text-xs font-black uppercase tracking-wider">County: {filterCounty}</span>
-              <span className="font-bold">✕</span>
+                <span className="text-xs font-black uppercase tracking-wider">County: {filterCounty}</span>
+                <span className="font-bold">✕</span>
               </button>
             )}
 
@@ -137,7 +247,6 @@ const skillsArray = Object.entries(bySkillObj)
             </button>
 
             <button onClick={() => setIsAddModalOpen(true)} className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl flex items-center gap-2">
-              {/* If Plus icon is missing, import it from lucide-react at the top! */}
               <span>+ Add Talent</span>
             </button>
 
@@ -148,7 +257,7 @@ const skillsArray = Object.entries(bySkillObj)
           </div>
         </header>
 
-        {/* STATS ROW - Using Lucide Components */}
+        {/* STATS ROW */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard title="Total Workforce" value={stats.totalJobs} icon={<Users />} color="blue" />
           <StatCard title="Public Service" value={stats.pscJobs} icon={<Building2 />} color="green" />
@@ -168,7 +277,7 @@ const skillsArray = Object.entries(bySkillObj)
               </div>
               <CountyHeatmap 
                 data={stats.byCounty} 
-                selectedCounty={filterCounty} // Shows the highlight
+                selectedCounty={filterCounty} 
                 onCountyClick={(name) => setFilterCounty(name)} 
               />
             </div>
@@ -181,7 +290,7 @@ const skillsArray = Object.entries(bySkillObj)
                 </div>
                 <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">+12% growth</span>
               </div>
-              <PlacementTrendChart jobs={jobs} />
+              <PlacementTrendChart jobs={filteredJobs} />
             </div>
           </div>
 
@@ -192,7 +301,7 @@ const skillsArray = Object.entries(bySkillObj)
                 <BarChart3 className="w-5 h-5 text-purple-600" />
                 <h3 className="text-xl font-bold text-slate-900">High-Demand Skills</h3>
               </div>
-              <div className="p-2 rounded-md border-2 border-red-500 bg-red-50">
+              <div>
                  <SkillsGapChart data={stats.bySkill || []} />
               </div>
             </div>
@@ -212,7 +321,7 @@ const skillsArray = Object.entries(bySkillObj)
                     <div>
                       <p className="font-bold text-sm text-slate-100">{person.name}</p>
                       <p className="text-[10px] text-slate-400 font-medium">
-                        {person.company || 'Ministry Placement'}
+                        {person.company}
                       </p>
                     </div>
                     
@@ -229,15 +338,15 @@ const skillsArray = Object.entries(bySkillObj)
                         )}
                         <span className="text-xs font-black text-orange-400">{person.suitabilityScore}% Match</span>
                       </div>
-                      {/* SEARCH/VIEW BUTTON */}
+
                       <button 
                         onClick={() => setSelectedTalent(person)}
                         className="bg-blue-600 p-2 rounded-lg hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
                         title="View Details"
                       >
-                        <Search className="w-4 h-4" />
+                        <Search className="w-4 h-4 text-white" />
                       </button>
-                      {/* DELETE BUTTON */}
+
                       <button
                         onClick={() => {
                          if(window.confirm(`Remove ${person.name} from the pipeline?`)) {
@@ -247,7 +356,7 @@ const skillsArray = Object.entries(bySkillObj)
                         className="bg-red-600 p-2 rounded-lg hover:bg-red-500 transition-all shadow-lg shadow-red-900/20"
                         title="Remove from Pipeline"
                       >
-                        <Trash2 className="w-4 h-4 text-red-400 group-hover/del:text-white" />
+                        <Trash2 className="w-4 h-4 text-white" />
                       </button>
                     </div>
                   </div>
@@ -264,26 +373,20 @@ const skillsArray = Object.entries(bySkillObj)
           person={selectedTalent} 
           onClose={() => setSelectedTalent(null)}
           onConfirm={async (updatedData) => {
-            try {
             await updateJob(updatedData);
-            setSelectedTalent(null);}
-            catch (error) {
-              console.error("Update Error:", error);
-              alert("❌ System Error: Could not reach the server."); //for now will delete later
-            }
+            setSelectedTalent(null);
           }}
         />
       )}
       <AddTalentModal 
-      isOpen={isAddModalOpen} 
-      onClose={() => setIsAddModalOpen(false)} 
-      onAdd={(newData) => addJob(newData)} 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+        onAdd={(newData) => addJob(newData)} 
       />
     </div>
   );
 }
 
-// Professional StatCard Component
 function StatCard({ title, value, icon, color }) {
   const themes = {
     blue: "text-blue-600 bg-blue-50 border-blue-100",

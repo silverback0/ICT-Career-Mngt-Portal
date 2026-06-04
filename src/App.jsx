@@ -1,80 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { JobProvider } from './context/JobContext';
-import Stats from './components/Stats';
-import JobSuggestions from './components/JobSuggestions';
-import Dashboard from './pages/Dashboard';
-import EditJobModal from './components/EditJobModal';
-import MinistryDashboard from './components/MinistryDashboard';
-import Analytics from './components/Analytics';
-import SkillsGapChart from './components/SkillsGapChart';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminPipeline from './pages/AdminPipeline';
 import { supabase } from './supabaseClient';
+import Auth from './components/Auth'; 
+import InternDashboard from './pages/InternDashboard';
 
 function App() {
-  const [view, setView] = useState('user');
-  
+  const [session, setSession] = useState(null);
+  const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // LIFECYCLE 1: Natively monitor authentication states
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, currentSession) => {
+      setSession(currentSession);
+      
+      // If there is no active user, instantly kill the loader and clear roles
+      if (!currentSession) {
+        setRole(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // LIFECYCLE 2: Isolated database profile fetcher
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    async function verifyUserRole() {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+
+        if (error) {
+          console.error("Database Error:", error.message);
+          setRole(null);
+        } else {
+          console.log("Role matched successfully:", data?.role);
+          setRole(data?.role || null);
+        }
+      } catch (crash) {
+        console.error("Network Exception:", crash);
+        setRole(null);
+      } finally {
+        // This execution guarantee prevents the screen from freezing permanently
+        setLoading(false);
+      }
+    }
+
+    verifyUserRole();
+  }, [session]); // Fires cleanly only when the session object mutates
+
+  // Render UI Layouts
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 font-medium text-slate-600 gap-3">
+        <div className="w-9 h-9 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="tracking-wide text-sm">Verifying security access credentials...</span>
+      </div>
+    );
+  }
+  
+  if (!session) return <Auth />;
+  
   return (
     <JobProvider>
-      <div className="min-h-screen bg-slate-50 font-sans">
-        {/* HEADER SECTION */}
-        <header className="max-w-7xl mx-auto px-6 py-8 border-b border-gray-200 bg-white shadow-sm rounded-b-xl">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">
-                DevTrack <span className="text-emerald-500">Kenya</span>
-              </h1>
-              <p className="text-slate-500 font-medium mt-1">ICT Career Management Portal</p>
-            </div>
-
-            {/* NAVIGATION BUTTONS */}
-            <nav className="flex items-center bg-slate-100 p-1 rounded-lg">
-              <button 
-                onClick={() => setView('user')}
-                className={`px-6 py-2 rounded-md font-semibold transition-all ${
-                  view === 'user' 
-                  ? 'bg-white text-emerald-600 shadow-md' 
-                  : 'text-slate-600 hover:text-slate-800'
-                }`}
-              >
-                User Dashboard
-              </button>
-              <button 
-                onClick={() => setView('ministry')}
-                className={`px-6 py-2 rounded-md font-semibold transition-all ${
-                  view === 'ministry' 
-                  ? 'bg-emerald-500 text-white shadow-md' 
-                  : 'text-slate-600 hover:text-slate-800'
-                }`}
-              >
-                Ministry Analytics
-              </button>
-            </nav>
-          </div>
-        </header>
-
-        {/* MAIN CONTENT */}
-        <main className="max-w-7xl mx-auto px-6 py-10">
-          {view === 'user' ? (
-            <div className="space-y-12">
-              <Stats />
-              <section>
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 border-l-4 border-emerald-500 pl-4">Recommended for You</h2>
-                <JobSuggestions />
-              </section>
-              <section>
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 border-l-4 border-emerald-500 pl-4">Application Pipeline</h2>
-                <Dashboard />
-              </section>
-            </div>
-          ) : (
-            <section className="animate-in fade-in duration-500">
-              <MinistryDashboard />
-            </section>
-          )}
-        </main>
-
-        <EditJobModal /> 
-      </div>
+      {role === 'admin' ? <AdminDashboard /> : <InternDashboard talentId={session?.user?.id} />}
     </JobProvider>
   );
 }
