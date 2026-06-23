@@ -13,3 +13,4 @@ A professional dashboard for managing the national ICT talent lifecycle in Kenya
 - Tailwind CSS
 - D3.js / React-Simple-Maps
 - Context API for Global State
+- Supabase

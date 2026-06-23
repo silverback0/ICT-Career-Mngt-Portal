@@ -72,7 +72,13 @@ function App() {
   
   return (
     <JobProvider>
-      {role === 'admin' ? <AdminDashboard /> : <InternDashboard talentId={session?.user?.id} />}
+      {role === 'admin' ? (
+        <AdminDashboard />
+      ) : (
+        // Always render InternDashboard. 
+        // It will detect that 'profile' is null and show the form automatically.
+        <InternDashboard talentId={session.user.id} />
+      )}
     </JobProvider>
   );
 }

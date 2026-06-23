@@ -13,15 +13,32 @@ const InternDashboard = ({ talentId }) => {
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [upcomingInterviews, setUpcomingInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
+  const [newInterviewForm, setNewInterviewForm] = useState({
+    company: '',
+    position: '',
+    date: '',
+    time: '',
+    type: 'Technical',
+    mode: 'Remote'
+  });
   
   // Onboarding Form State
   const [formData, setFormData] = useState({
     name: '',
     position: '',
     county: '',
-    cohort: 'Cohort 24/25'
+    cohort: 'Cohort 24/25',
+    skills: ''
   });
   const [submitting, setSubmitting] = useState(false);
+
+  // NEW: Modal and Form States for Phase 2
+  const [showAppModal, setShowAppModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [newAppForm, setNewAppForm] = useState({ company: '', position: '', status: 'Backlog' });
+  const [resumeFile, setResumeFile] = useState(null);
 
   useEffect(() => {
     const fetchAllDashboardData = async () => {
@@ -32,7 +49,7 @@ const InternDashboard = ({ talentId }) => {
         const { data: talentData } = await supabase
           .from('talents')
           .select('*')
-          .eq('user_id', talentId) 
+          .eq('id', talentId) 
           .maybeSingle();
 
         if (talentData) {
@@ -45,15 +62,8 @@ const InternDashboard = ({ talentId }) => {
             .eq('intern_id', talentId) 
             .maybeSingle();
     
-          if (scoreError) {
-            console.error("Score fetch error:", scoreError);
-          }
-          if (scoreData) {
-            setScores(scoreData);
-          } else {
-            // This helps you debug if the DB is empty
-            console.log("No scores found for this user.");
-          }
+          if (scoreError) console.error("Score fetch error:", scoreError);
+          if (scoreData) setScores(scoreData);
 
           // 3. Fetch Skills
           const { data: skillsData } = await supabase
@@ -78,7 +88,6 @@ const InternDashboard = ({ talentId }) => {
             .limit(3);
             
           if (jobsData) {
-            // Mapping DB structure into UI match-cards dynamically
             const mappedJobs = jobsData.map((job, idx) => ({
               id: job.id,
               title: job.title,
@@ -86,7 +95,7 @@ const InternDashboard = ({ talentId }) => {
               location: job.location,
               type: job.type,
               salary: job.salary || 'Negotiable',
-              match: idx === 0 ? 92 : 78, // Dynamically simulated match score placeholder
+              match: idx === 0 ? 92 : 78,
               skills: job.tags || []
             }));
             setRecommendedJobs(mappedJobs);
@@ -125,7 +134,7 @@ const InternDashboard = ({ talentId }) => {
     fetchAllDashboardData();
   }, [talentId]);
 
-  // Calculate Pipeline Stats dynamically from live applications state row entries
+  // Calculate Pipeline Stats dynamically
   const pipelineStats = {
     backlog: applications.filter(a => a.status === 'Backlog').length,
     tailoring: applications.filter(a => a.status === 'Tailoring').length,
@@ -145,35 +154,140 @@ const InternDashboard = ({ talentId }) => {
 
   const handleOnboardingSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.position || !formData.county) {
-      alert("Please fill out all fields!");
-      return;
-    }
-
     setSubmitting(true);
     try {
-      const newTalentRecord = {
-        user_id: talentId,
-        name: formData.name,
-        position: formData.position,
-        county: formData.county,
-        cohort: formData.cohort,
-        status: 'National Pipeline' 
-      };
-
-      const { data, error } = await supabase
+      const { data: talent, error: talentError } = await supabase
         .from('talents')
-        .insert([newTalentRecord])
+        .insert([{ id: talentId, name: formData.name, position: formData.position, county: formData.county, cohort: formData.cohort, status: 'National Pipeline' }])
+        .select()
+        .single();
+
+      if (talentError) throw talentError;
+
+      const skillList = formData.skills.split(',').map(s => ({
+        talent_id: talent.id,
+        skill_name: s.trim()
+      }));
+
+      const { error: skillError } = await supabase.from('talent_skills').insert(skillList);
+      if (skillError) throw skillError;
+
+      setProfile(talent); 
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // NEW: Handle adding a new job application
+  const handleAddApplication = async (e) => {
+    e.preventDefault();
+    try {
+      const { data, error } = await supabase
+        .from('applications')
+        .insert([{ 
+          intern_id: talentId, 
+          company: newAppForm.company, 
+          position: newAppForm.position, 
+          status: newAppForm.status 
+        }])
         .select()
         .single();
 
       if (error) throw error;
-      setProfile(data); 
+      
+      setApplications([...applications, data]);
+      setShowAppModal(false);
+      setNewAppForm({ company: '', position: '', status: 'Backlog' }); 
     } catch (err) {
-      console.error("Onboarding Error:", err);
-      alert("Failed to save onboarding details.");
+      alert("Error adding application: " + err.message);
+    }
+  };
+
+  // Handle logging a new upcoming interview
+  const handleAddInterview = async (e) => {
+    e.preventDefault();
+    try {
+      // Combine date and time inputs into a single ISO timestamp for Postgres
+      const combinedDateTime = new Date(`${newInterviewForm.date}T${newInterviewForm.time}`).toISOString();
+
+      const { data, error } = await supabase
+        .from('interviews')
+        .insert([{ 
+          intern_id: talentId, 
+          company: newInterviewForm.company, 
+          position: newInterviewForm.position, 
+          interview_date: combinedDateTime,
+          type: newInterviewForm.type,
+          mode: newInterviewForm.mode
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      // Map the newly inserted database row to match your UI format instantly
+      const dateObj = new Date(data.interview_date);
+      const formattedInterview = {
+        id: data.id,
+        company: data.company,
+        position: data.position,
+        date: dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'short' }).toUpperCase(),
+        time: dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        type: data.type,
+        mode: data.mode
+      };
+
+      setUpcomingInterviews([...upcomingInterviews, formattedInterview]);
+      setShowInterviewModal(false);
+      setNewInterviewForm({ company: '', position: '', date: '', time: '', type: 'Technical', mode: 'Remote' }); // Reset
+      alert("Interview logged successfully!");
+    } catch (err) {
+      alert("Error saving interview: " + err.message);
+    }
+  };
+
+  // NEW: Handle Resume Upload & Profile Update
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+    try {
+      let finalResumeUrl = profile.resume_url; 
+
+      if (resumeFile) {
+        const fileExt = resumeFile.name.split('.').pop();
+        const fileName = `${talentId}-${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('resumes')
+          .upload(filePath, resumeFile, { upsert: true });
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('resumes')
+          .getPublicUrl(filePath);
+        
+        finalResumeUrl = publicUrl;
+      }
+
+      const { error: updateError } = await supabase
+        .from('talents')
+        .update({ resume_url: finalResumeUrl })
+        .eq('id', talentId);
+
+      if (updateError) throw updateError;
+
+      setProfile({ ...profile, resume_url: finalResumeUrl });
+      setShowProfileModal(false);
+      alert("Profile & Resume updated successfully!");
+
+    } catch (err) {
+      alert("Error updating profile: " + err.message);
     } finally {
-      setSubmitting(false);
+      setUploading(false);
     }
   };
 
@@ -187,7 +301,7 @@ const InternDashboard = ({ talentId }) => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
         <div className="max-w-xl w-full bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
           <div className="bg-slate-900 p-8 text-white flex justify-between items-start">
             <div>
@@ -271,7 +385,7 @@ const InternDashboard = ({ talentId }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-10">
+    <div className="min-h-screen bg-slate-50 p-6 md:p-10 relative">
       {/* HEADER */}
       <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -323,10 +437,6 @@ const InternDashboard = ({ talentId }) => {
               <p className="text-sm text-slate-600 font-medium">📊 <strong>Success Rate:</strong> {successRate}% ({pipelineStats.inPlay} interviews from {totalApplications} applications)</p>
               <p className="text-sm text-slate-600 font-medium">⏳ <strong>Total Applications:</strong> {totalApplications}</p>
             </div>
-
-            <a href="/devtrack" className="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold text-sm hover:bg-blue-600 transition-all">
-              View Full Pipeline →
-            </a>
           </section>
 
           {/* ===== 2. RECOMMENDED JOBS ===== */}
@@ -353,7 +463,6 @@ const InternDashboard = ({ talentId }) => {
                         <span key={i} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">{skill}</span>
                       ))}
                     </div>
-                    <button className="text-sm font-bold text-blue-600 hover:text-blue-700">Add to Pipeline →</button>
                   </div>
                 ))
               ) : (
@@ -507,19 +616,205 @@ const InternDashboard = ({ talentId }) => {
               Quick Actions
             </h3>
             <div className="space-y-2">
-              <button className="w-full text-left p-2 hover:bg-blue-100 rounded-lg text-sm font-bold text-blue-700 transition-all">
-                → Browse More Jobs
+              <button 
+                onClick={() => setShowAppModal(true)}
+                className="w-full text-left p-2 hover:bg-blue-100 rounded-lg text-sm font-bold text-blue-700 transition-all"
+              >
+                + Log New Application
+              </button>
+              
+              {/* NEW BUTTON FOR INTERVIEWS */}
+              <button 
+                onClick={() => setShowInterviewModal(true)}
+                className="w-full text-left p-2 hover:bg-blue-100 rounded-lg text-sm font-bold text-blue-700 transition-all"
+              >
+                🗓️ Log Scheduled Interview
+              </button>
+
+              <button 
+                onClick={() => setShowProfileModal(true)}
+                className="w-full text-left p-2 hover:bg-blue-100 rounded-lg text-sm font-bold text-blue-700 transition-all"
+              >
+                ↑ Upload Resume / Update
               </button>
               <button className="w-full text-left p-2 hover:bg-blue-100 rounded-lg text-sm font-bold text-blue-700 transition-all">
-                → Upskill Resources
-              </button>
-              <button className="w-full text-left p-2 hover:bg-blue-100 rounded-lg text-sm font-bold text-blue-700 transition-all">
-                → Update Profile
+                → Browse Job Pool
               </button>
             </div>
           </div>
         </aside>
       </div>
+
+      {/* ===== MODALS ===== */}
+      
+      {/* 1. Add Application Modal */}
+      {showAppModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h2 className="text-xl font-bold mb-4 text-slate-900">Log New Application</h2>
+            <form onSubmit={handleAddApplication} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Company</label>
+                <input 
+                  type="text" 
+                  required 
+                  value={newAppForm.company} 
+                  onChange={(e) => setNewAppForm({...newAppForm, company: e.target.value})} 
+                  className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" 
+                  placeholder="e.g. Safaricom" 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Position</label>
+                <input 
+                  type="text" 
+                  required 
+                  value={newAppForm.position} 
+                  onChange={(e) => setNewAppForm({...newAppForm, position: e.target.value})} 
+                  className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" 
+                  placeholder="e.g. Frontend Developer" 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Current Status</label>
+                <select 
+                  value={newAppForm.status} 
+                  onChange={(e) => setNewAppForm({...newAppForm, status: e.target.value})} 
+                  className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all cursor-pointer"
+                >
+                  <option value="Backlog">Backlog</option>
+                  <option value="Tailoring">Tailoring</option>
+                  <option value="In-Play">In-Play</option>
+                </select>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button type="button" onClick={() => setShowAppModal(false)} className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">Cancel</button>
+                <button type="submit" className="flex-1 py-3 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-sm">Save to Pipeline</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 2. Update Profile / Upload Resume Modal */}
+      {showProfileModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h2 className="text-xl font-bold mb-4 text-slate-900">Update Resume</h2>
+            <form onSubmit={handleUpdateProfile} className="space-y-4">
+              <div className="p-4 border border-dashed border-slate-300 bg-slate-50 rounded-xl text-center">
+                <label className="text-sm font-bold text-slate-700 block mb-2 cursor-pointer">
+                  Select PDF File
+                  <input 
+                    type="file" 
+                    accept=".pdf"
+                    onChange={(e) => setResumeFile(e.target.files[0])} 
+                    className="w-full mt-2 text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer" 
+                  />
+                </label>
+              </div>
+              {profile.resume_url && !resumeFile && (
+                <p className="text-xs text-emerald-600 font-medium text-center">✓ You already have a resume on file. Uploading a new one will replace it.</p>
+              )}
+              <div className="flex gap-3 mt-6">
+                <button type="button" onClick={() => setShowProfileModal(false)} className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">Cancel</button>
+                <button type="submit" disabled={uploading} className="flex-1 py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-all shadow-sm disabled:opacity-50">
+                  {uploading ? 'Uploading...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Log Interview Modal */}
+      {showInterviewModal && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h2 className="text-xl font-bold mb-4 text-slate-900">Log Scheduled Interview</h2>
+            <form onSubmit={handleAddInterview} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Company</label>
+                  <input 
+                    type="text" required 
+                    value={newInterviewForm.company} 
+                    onChange={(e) => setNewInterviewForm({...newInterviewForm, company: e.target.value})} 
+                    className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm font-medium" 
+                    placeholder="Safaricom, etc." 
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Position</label>
+                  <input 
+                    type="text" required 
+                    value={newInterviewForm.position} 
+                    onChange={(e) => setNewInterviewForm({...newInterviewForm, position: e.target.value})} 
+                    className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm font-medium" 
+                    placeholder="Frontend Engineer" 
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Date</label>
+                  <input 
+                    type="date" required 
+                    value={newInterviewForm.date} 
+                    onChange={(e) => setNewInterviewForm({...newInterviewForm, date: e.target.value})} 
+                    className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Time</label>
+                  <input 
+                    type="time" required 
+                    value={newInterviewForm.time} 
+                    onChange={(e) => setNewInterviewForm({...newInterviewForm, time: e.target.value})} 
+                    className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none" 
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Interview Type</label>
+                  <select 
+                    value={newInterviewForm.type} 
+                    onChange={(e) => setNewInterviewForm({...newInterviewForm, type: e.target.value})} 
+                    className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium cursor-pointer focus:ring-2 focus:ring-blue-500/20"
+                  >
+                    <option value="Technical">Technical</option>
+                    <option value="Behavioral">Behavioral</option>
+                    <option value="HR Screening">HR Screening</option>
+                    <option value="Final Round">Final Round</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Location Mode</label>
+                  <select 
+                    value={newInterviewForm.mode} 
+                    onChange={(e) => setNewInterviewForm({...newInterviewForm, mode: e.target.value})} 
+                    className="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium cursor-pointer focus:ring-2 focus:ring-blue-500/20"
+                  >
+                    <option value="Remote (Google Meet)">Remote (Google Meet)</option>
+                    <option value="Remote (Zoom)">Remote (Zoom)</option>
+                    <option value="Remote (Teams)">Remote (Teams)</option>
+                    <option value="On-Site / In-Person">On-Site / In-Person</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button type="button" onClick={() => setShowInterviewModal(false)} className="flex-1 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">Cancel</button>
+                <button type="submit" className="flex-1 py-3 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-sm">Save Schedule</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
