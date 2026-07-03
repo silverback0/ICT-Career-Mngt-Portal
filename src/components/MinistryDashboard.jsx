@@ -4,7 +4,7 @@ import SkillsGapChart from './SkillsGapChart';
 import PlacementModal from './PlacementModal'; 
 import PlacementTrendChart from './PlacementTrendChart';
 import { exportToPDF } from '../utils/exportReport';
-import AddTalentModal from './AddTalentModal';
+import InviteTalentModal from './InviteTalentModal';
 import { supabase } from '../supabaseClient'; // Adjusted to point to your Supabase configuration
 
 // Professional Lucide Icons
@@ -50,7 +50,8 @@ export default function MinistryDashboard() {
         id: t.id,
         // Correctly mapping to the 'name' column from your DB
         name: t.name || 'Anonymous Intern', 
-        company: t.position || 'General Track', 
+        company: t.company || 'General Track', 
+        position: t.position || 'Unassigned',
         county: t.county || 'Unknown',
         cohort: t.cohort || '',
         status: t.status || 'National Pipeline',
@@ -141,14 +142,26 @@ export default function MinistryDashboard() {
   const addJob = async (newData) => {
     try {
       const { error } = await supabase.from('talents').insert([{
-        full_name: newData.name,
-        position: newData.company,
+        name: newData.name,
+        position: newData.position,
+        company: newData.company,
         county: newData.county,
         cohort: newData.cohort,
         suitability_score: newData.suitabilityScore || 0,
-        status: newData.status || 'National Pipeline'
+        status: newData.status || 'National Pipeline',
+        vetting_status: 'Pending',     // default — not in form
+        is_verified: false 
       }]);
       if (error) throw error;
+
+      // Skills already arrive as an array from the modal
+      if (newData.skills?.length > 0 && data?.[0]?.id) {
+        const skillRows = newData.skills.map(skill => ({
+          talent_id: data[0].id,
+          skill_name: skill
+        }));
+        await supabase.from('talent_skills').insert(skillRows);
+      }
       handleRefreshJobs();
     } catch (err) {
       alert(`Could not save asset: ${err.message}`);
@@ -160,11 +173,14 @@ export default function MinistryDashboard() {
       const { error } = await supabase
         .from('talents')
         .update({
-          full_name: updatedData.name,
-          position: updatedData.company,
+          name: updatedData.name,
+          position: updatedData.position,
+          company: updatedData.company,
           county: updatedData.county,
           status: updatedData.status,
-          suitability_score: updatedData.suitabilityScore
+          suitability_score: updatedData.suitabilityScore,
+          vetting_status: updatedData.vettingStatus,
+          is_verified: updatedData.isVerified
         })
         .eq('id', updatedData.id);
 
@@ -229,6 +245,7 @@ export default function MinistryDashboard() {
                 <option value="Cohort 2022/23">Cohort 2022/23</option>
                 <option value="Cohort 2023/24">Cohort 2023/24</option>
                 <option value="Cohort 2024/25">Cohort 2024/25</option>
+                <option value="Cohort 2025/26">Cohort 2025/26</option>
               </select>
             </div>
 
@@ -246,8 +263,8 @@ export default function MinistryDashboard() {
               <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
 
-            <button onClick={() => setIsAddModalOpen(true)} className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl flex items-center gap-2">
-              <span>+ Add Talent</span>
+            <button onClick={() => setIsInviteModalOpen(true)} className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl flex items-center gap-2">
+              <span>+ Invite Talent</span>
             </button>
 
             <button onClick={() => exportToPDF('dashboard-report-target')} className="px-6 py-3 bg-green-600 text-white font-bold rounded-xl flex items-center gap-2">
@@ -378,7 +395,7 @@ export default function MinistryDashboard() {
           }}
         />
       )}
-      <AddTalentModal 
+      <InviteTalentModal 
         isOpen={isAddModalOpen} 
         onClose={() => setIsAddModalOpen(false)} 
         onAdd={(newData) => addJob(newData)} 

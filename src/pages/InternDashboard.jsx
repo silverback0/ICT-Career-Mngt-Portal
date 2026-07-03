@@ -49,7 +49,7 @@ const InternDashboard = ({ talentId }) => {
         const { data: talentData } = await supabase
           .from('talents')
           .select('*')
-          .eq('id', talentId) 
+          .eq('id', talentId)
           .maybeSingle();
 
         if (talentData) {
@@ -108,7 +108,7 @@ const InternDashboard = ({ talentId }) => {
             .eq('intern_id', talentId)
             .order('interview_date', { ascending: true });
   
-          if (interviewData) {
+          if (interviewData && interviewData.length > 0) {
             const mappedInterviews = interviewData.map(int => {
               const dateObj = new Date(int.interview_date);
               return {
@@ -119,11 +119,34 @@ const InternDashboard = ({ talentId }) => {
                 time: dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
                 type: int.type,
                 mode: int.mode
-             };
-          });
-          setUpcomingInterviews(mappedInterviews);
+              };
+            });
+            setUpcomingInterviews(mappedInterviews);
+          }
+
+          // NEW: Check if admin pre-registered this person by email
+          const { data: authData } = await supabase.auth.getUser();
+          const user = authData?.user;
+
+          if (user?.email) {
+            const { data: invite } = await supabase
+              .from('pending_invites')
+              .select('*')
+              .eq('email', user.email)
+              .maybeSingle();
+
+            if (invite) {
+              // Pre-fill the onboarding form with admin's data
+              setFormData({
+                name: invite.name || '',
+                position: invite.position || '',
+                county: invite.county || '',
+                cohort: invite.cohort || 'Cohort 2024/25',
+                skills: invite.skills ? invite.skills.join(', ') : ''
+              });
+            }
+          }
         }
-      }
       } catch (err) {
         console.error("Error loading dashboard data:", err);
       } finally {

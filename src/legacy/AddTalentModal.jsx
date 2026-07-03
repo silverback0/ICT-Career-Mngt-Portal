@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import { X, UserPlus } from 'lucide-react';
 
+const KENYA_COUNTIES = [
+  "Baringo","Bomet","Bungoma","Busia","Elgeyo-Marakwet","Embu","Garissa",
+  "Homa Bay","Isiolo","Kajiado","Kakamega","Kericho","Kiambu","Kilifi",
+  "Kirinyaga","Kisii","Kisumu","Kitui","Kwale","Laikipia","Lamu","Machakos",
+  "Makueni","Mandera","Marsabit","Meru","Migori","Mombasa","Murang'a",
+  "Nairobi","Nakuru","Nandi","Narok","Nyamira","Nyandarua","Nyeri","Samburu",
+  "Siaya","Taita-Taveta","Tana River","Tharaka-Nithi","Trans Nzoia","Turkana",
+  "Uasin Gishu","Vihiga","Wajir","West Pokot"
+];
+
 export default function AddTalentModal({ isOpen, onClose, onAdd }) {
   const [selectedSkills, setSelectedSkills] = useState("");
   const [isSaving, setIsSaving] = useState(false); // Added this state
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
     company: 'Unassigned',
     position: 'ICT Intern',
     county: 'Nairobi',
@@ -40,7 +51,7 @@ export default function AddTalentModal({ isOpen, onClose, onAdd }) {
         company: 'Unassigned',
         position: 'ICT Intern',
         county: 'Nairobi',
-        status: 'In Pipeline',
+        status: 'National Pipeline',
         vetting_status: 'Pending',
         cohort: 'Cohort 2024/25',
         suitability_score: 70
@@ -56,7 +67,7 @@ export default function AddTalentModal({ isOpen, onClose, onAdd }) {
   return (
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-999 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden border border-slate-200">
-        
+ 
         {/* Header */}
         <div className="bg-slate-50 px-8 py-6 border-b border-slate-100 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -69,72 +80,99 @@ export default function AddTalentModal({ isOpen, onClose, onAdd }) {
             <X className="w-6 h-6" />
           </button>
         </div>
-
+ 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-8 space-y-5">
           <div className="grid grid-cols-2 gap-4">
+ 
+            {/* Full Name — full width */}
             <div className="col-span-2">
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">Full Name</label>
-              <input 
+              <input
                 required
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 placeholder="e.g. John Doe"
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
-
+ 
+            {/* Email — full width — new field for ID linkage */}
+            <div className="col-span-2">
+              <label className="block text-xs font-black uppercase text-slate-400 mb-2">Email Address</label>
+              <input
+                required
+                type="email"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                placeholder="e.g. john.doe@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+ 
+            {/* Position */}
             <div>
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">Position</label>
-              <input 
+              <input
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 value={formData.position}
-                onChange={(e) => setFormData({...formData, position: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, position: e.target.value })}
               />
             </div>
-
+ 
+            {/* County — now a dropdown */}
             <div>
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">County</label>
-              <input 
+              <select
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="e.g. Mombasa"
-                onChange={(e) => setFormData({...formData, county: e.target.value})}
-              />
+                value={formData.county}
+                onChange={(e) => setFormData({ ...formData, county: e.target.value })}
+              >
+                {KENYA_COUNTIES.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
             </div>
-
+ 
+            {/* Cohort */}
             <div>
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">Cohort</label>
-              <select 
+              <select
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 value={formData.cohort}
-                onChange={(e) => setFormData({...formData, cohort: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, cohort: e.target.value })}
               >
+                <option value="Cohort 2025/26">Cohort 2025/26</option>
                 <option value="Cohort 2024/25">Cohort 2024/25</option>
                 <option value="Cohort 2023/24">Cohort 2023/24</option>
                 <option value="Cohort 2022/23">Cohort 2022/23</option>
               </select>
             </div>
-
+ 
+            {/* Match Score */}
             <div>
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">Match Score (%)</label>
-              <input 
+              <input
                 type="number"
                 min="0" max="100"
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                 value={formData.suitability_score}
-                onChange={(e) => setFormData({...formData, suitability_score: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, suitability_score: e.target.value })}
               />
             </div>
-
-            <div>
-              <label className="block text-xs font-black uppercase text-slate-400 mb-2">Company</label>
+ 
+            {/* MDA / Organization — renamed from Company */}
+            <div className="col-span-2">
+              <label className="block text-xs font-black uppercase text-slate-400 mb-2">MDA / Organization</label>
               <input
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="e.g. Public Service"  
+                placeholder="e.g. Ministry of Health, KRA, Unassigned"
                 value={formData.company}
-                onChange={(e) => setFormData({...formData, company: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               />
             </div>
-
+ 
+            {/* Skills */}
             <div className="col-span-2">
               <label className="block text-xs font-black uppercase text-slate-400 mb-2">Skills (comma separated)</label>
               <input
@@ -146,10 +184,10 @@ export default function AddTalentModal({ isOpen, onClose, onAdd }) {
               />
             </div>
           </div>
-
+ 
           <div className="pt-4">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSaving}
               className={`w-full py-4 text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 ${
                 isSaving ? 'bg-slate-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-800'
