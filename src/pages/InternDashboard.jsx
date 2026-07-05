@@ -388,9 +388,10 @@ const InternDashboard = ({ talentId }) => {
                 onChange={(e) => setFormData({...formData, cohort: e.target.value})}
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm font-medium cursor-pointer"
               >
-                <option value="Cohort 24/25">Cohort 24/25</option>
-                <option value="Cohort 23/24">Cohort 23/24</option>
-                <option value="Cohort 22/23">Cohort 22/23</option>
+                <option value="Cohort 2025/2026">Cohort 2025/2026</option>
+                <option value="Cohort 2024/2025">Cohort 2024/2025</option>
+                <option value="Cohort 2023/2024">Cohort 2023/2024</option>
+                <option value="Cohort 2022/2023">Cohort 2022/2023</option>
               </select>
             </div>
 

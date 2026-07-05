@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient'; // Ensure correct path to your client
+import toast, { Toaster } from 'react-hot-toast';
+import { 
+  List, 
+  Kanban, 
+  LogOut, 
+  MapPin, 
+  X, 
+  RefreshCw, 
+  ShieldCheck, 
+  Zap, 
+  GraduationCap 
+} from 'lucide-react';
 
 const AdminPipeline = () => {
   const [viewType, setViewType] = useState('list');
@@ -38,6 +50,7 @@ const AdminPipeline = () => {
       setInterns(flattenedRecords);
     } catch (err) {
       console.error("Critical error building cohort view:", err.message);
+      toast.error(`Failed to load cohort data: ${err.message}`);
     } finally {
       setLoadingData(false);
     }
@@ -62,8 +75,10 @@ const AdminPipeline = () => {
       if (selectedIntern && selectedIntern.id === id) {
         setSelectedIntern(prev => ({ ...prev, status: newStatus }));
       }
+      
+      toast.success(`Pipeline status updated successfully!`);
     } catch (err) {
-      alert(`Database rejected modification: ${err.message}`);
+      toast.error(`Database rejected modification: ${err.message}`);
     }
   };
 
@@ -72,8 +87,9 @@ const AdminPipeline = () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      toast.success('Signed out successfully');
     } catch (err) {
-      alert(`Logout failed: ${err.message}`);
+      toast.error(`Logout failed: ${err.message}`);
     }
   };
 
@@ -122,15 +138,15 @@ const AdminPipeline = () => {
           <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded-xl border border-slate-300/40">
             <button 
               onClick={() => setViewType('list')}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewType === 'list' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${viewType === 'list' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
             >
-              📋 Cohort List View
+              <List className="w-3.5 h-3.5" /> Cohort List View
             </button>
             <button 
               onClick={() => setViewType('kanban')}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${viewType === 'kanban' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${viewType === 'kanban' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
             >
-              📊 Rotation Kanban
+              <Kanban className="w-3.5 h-3.5" /> Rotation Kanban
             </button>
           </div>
 
@@ -139,7 +155,7 @@ const AdminPipeline = () => {
             onClick={handleLogout}
             className="px-4 py-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl transition-all shadow-sm flex items-center gap-1.5"
           >
-            🚪 Sign Out
+            <LogOut className="w-3.5 h-3.5" /> Sign Out
           </button>
         </div>
       </div>
@@ -245,7 +261,7 @@ const AdminPipeline = () => {
                         <h4 className="font-semibold text-slate-800 text-sm tracking-tight">{intern.name}</h4>
                         <p className="text-xs text-slate-500 mt-1">{intern.track}</p>
                         <div className="flex justify-between items-center mt-3 pt-2 border-t border-slate-100 text-[11px] text-slate-400">
-                          <span>📍 {intern.county}</span>
+                          <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {intern.county}</span>
                           <span className="font-bold text-emerald-600">{intern.technicalScore}%</span>
                         </div>
                       </div>
@@ -279,7 +295,7 @@ const AdminPipeline = () => {
                 onClick={() => setSelectedIntern(null)}
                 className="text-slate-400 hover:text-white bg-slate-800 p-2 rounded-lg transition"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
@@ -334,28 +350,28 @@ const AdminPipeline = () => {
                     onClick={() => updateInternStatus(selectedIntern.id, 'MDA Rotation')}
                     className={`p-2.5 text-xs text-left font-bold rounded-lg border transition flex items-center justify-between ${selectedIntern.status === 'MDA Rotation' ? 'bg-teal-50 border-teal-200 text-teal-700' : 'border-slate-200 hover:bg-slate-50'}`}
                   >
-                    <span>🔄 Assign to Active MDA Rotation</span>
+                    <span className="flex items-center gap-1.5"><RefreshCw className="w-3.5 h-3.5" /> Assign to Active MDA Rotation</span>
                     <span>{selectedIntern.status === 'MDA Rotation' ? '✓' : '→'}</span>
                   </button>
                   <button 
                     onClick={() => updateInternStatus(selectedIntern.id, 'Verification Phase')}
                     className={`p-2.5 text-xs text-left font-bold rounded-lg border transition flex items-center justify-between ${selectedIntern.status === 'Verification Phase' ? 'bg-teal-50 border-teal-200 text-teal-700' : 'border-slate-200 hover:bg-slate-50'}`}
                   >
-                    <span>🛡️ Initiate Interview Verification</span>
+                    <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Initiate Interview Verification</span>
                     <span>{selectedIntern.status === 'Verification Phase' ? '✓' : '→'}</span>
                   </button>
                   <button 
                     onClick={() => updateInternStatus(selectedIntern.id, 'Deployment Ready')}
                     className={`p-2.5 text-xs text-left font-bold rounded-lg border transition flex items-center justify-between ${selectedIntern.status === 'Deployment Ready' ? 'bg-teal-50 border-teal-200 text-teal-700' : 'border-slate-200 hover:bg-slate-50'}`}
                   >
-                    <span>⚡ Add to Cabinet Fast-Track Pool</span>
+                    <span className="flex items-center gap-1.5"><Zap className="w-3.5 h-3.5" /> Add to Cabinet Fast-Track Pool</span>
                     <span>{selectedIntern.status === 'Deployment Ready' ? '✓' : '→'}</span>
                   </button>
                   <button 
                     onClick={() => updateInternStatus(selectedIntern.id, 'Placed (Public)')}
                     className={`p-2.5 text-xs text-left font-bold border transition flex items-center justify-between ${selectedIntern.status === 'Placed (Public)' ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-teal-600 border-teal-700 text-white hover:bg-teal-700'}`}
                   >
-                    <span>🎓 Finalize Public Sector Placement</span>
+                    <span className="flex items-center gap-1.5"><GraduationCap className="w-3.5 h-3.5" /> Finalize Public Sector Placement</span>
                     <span>{selectedIntern.status === 'Placed (Public)' ? '✓' : '→'}</span>
                   </button>
                 </div>
