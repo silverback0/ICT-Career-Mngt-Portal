@@ -1,7 +1,7 @@
+import AdminPipeline from './pages/AdminPipeline';
 import React, { useState, useEffect } from 'react';
 import { JobProvider } from './context/JobContext';
 import AdminDashboard from './pages/AdminDashboard';
-import AdminPipeline from './pages/AdminPipeline';
 import { supabase } from './supabaseClient';
 import Auth from './components/Auth'; 
 import InternDashboard from './pages/InternDashboard';
@@ -11,14 +11,27 @@ function App() {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // LIFECYCLE 1: Natively monitor authentication states
+  // LIFECYCLE 1: Monitor auth state changes
+  // TOKEN_REFRESHED is ignored — it fires every ~60s silently and
+  // would otherwise unmount InternDashboard and wipe all tab state
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, currentSession) => {
-      setSession(currentSession);
-      
-      // If there is no active user, instantly kill the loader and clear roles
-      if (!currentSession) {
-        setRole(null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, currentSession) => {
+        if (event === 'TOKEN_REFRESHED') return;
+
+        setSession(currentSession);
+
+        if (!currentSession) {
+          setRole(null);
+          setLoading(false);
+        }
+      }
+    );
+
+    // Also get the initial session on first mount
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      setSession(initialSession);
+      if (!initialSession) {
         setLoading(false);
       }
     });
@@ -26,7 +39,9 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // LIFECYCLE 2: Isolated database profile fetcher
+  // LIFECYCLE 2: Fetch role from profiles table
+  // Keyed on session.user.id — NOT the full session object
+  // This means it only re-runs on actual login/logout, not token refreshes
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -50,33 +65,30 @@ function App() {
         console.error("Network Exception:", crash);
         setRole(null);
       } finally {
-        // This execution guarantee prevents the screen from freezing permanently
         setLoading(false);
       }
     }
 
     verifyUserRole();
-  }, [session]); // Fires cleanly only when the session object mutates
+  }, [session?.user?.id]); // ← only fires when the actual user changes
 
-  // Render UI Layouts
+  // Loading spinner
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 font-medium text-slate-600 gap-3">
-        <div className="w-9 h-9 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
-        <span className="tracking-wide text-sm">Verifying security access credentials...</span>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 font-medium text-slate-400 gap-3">
+        <div className="w-9 h-9 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        <span className="tracking-wide text-sm">Verifying access credentials...</span>
       </div>
     );
   }
-  
+
   if (!session) return <Auth />;
-  
+
   return (
     <JobProvider>
       {role === 'admin' ? (
         <AdminDashboard />
       ) : (
-        // Always render InternDashboard. 
-        // It will detect that 'profile' is null and show the form automatically.
         <InternDashboard talentId={session.user.id} />
       )}
     </JobProvider>
