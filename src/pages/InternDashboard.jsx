@@ -461,7 +461,7 @@ const InternDashboard = ({ talentId }) => {
     dashboard: (
       <div className="space-y-6">
         {/* Hero card */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-3xl p-8 relative overflow-hidden">
+        <div className="bg-linear-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-3xl p-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
           <div className="relative z-10">
             <div className="flex items-start justify-between mb-6">
@@ -490,7 +490,7 @@ const InternDashboard = ({ talentId }) => {
               </div>
               <div className="w-full bg-slate-700 rounded-full h-2">
                 <div
-                  className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-700"
+                  className="h-2 rounded-full bg-linear-to-r from-emerald-500 to-emerald-400 transition-all duration-700"
                   style={{ width: `${profileStrength.percentage}%` }}
                 />
               </div>
