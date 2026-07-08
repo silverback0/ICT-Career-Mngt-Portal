@@ -93,6 +93,11 @@ const AdminPipeline = () => {
         .update({ status: newStatus })
         .eq('id', id);
       if (error) throw error;
+      await supabase.from('notifications').insert([{
+        talent_id: id,
+        message: `Your pipeline status has been updated to "${newStatus}" by the ICT Authority admin.`,
+        is_read: false
+     }]);
 
       setInterns(prev => prev.map(item =>
         item.id === id ? { ...item, status: newStatus } : item
@@ -139,6 +144,12 @@ const AdminPipeline = () => {
         supervisorNotes: payload.supervisor_comments || 'No evaluations logged yet.',
         hasScoreRecord:  true,
       };
+      await supabase.from('notifications').insert([{
+        talent_id: selectedIntern.id,
+        message: `Your performance evaluation has been recorded. Technical: ${payload.technical_proficiency}%, Work Ethic: ${payload.work_ethic}%.`,
+        is_read: false
+      }]);
+      
       setSelectedIntern(updated);
       setInterns(prev => prev.map(i => i.id === selectedIntern.id ? updated : i));
       setEditingScores(false);

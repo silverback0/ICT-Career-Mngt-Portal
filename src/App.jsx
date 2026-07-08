@@ -6,6 +6,11 @@ import { supabase } from './supabaseClient';
 import Auth from './components/Auth'; 
 import InternDashboard from './pages/InternDashboard';
 
+const RequireRole = ({ role, requiredRole, children, fallback }) => {
+  if (role !== requiredRole) return fallback;
+  return children;
+};
+
 function App() {
   const [session, setSession] = useState(null);
   const [role, setRole] = useState(null);
@@ -72,6 +77,29 @@ function App() {
     verifyUserRole();
   }, [session?.user?.id]); // ← only fires when the actual user changes
 
+   // LIFECYCLE 3: Inactivity timeout — auto logout after 30 mins of no interaction
+  useEffect(() => {
+    if (!session) return;
+
+    let timeout;
+    const resetTimer = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(async () => {
+        await supabase.auth.signOut();
+        window.location.reload();
+      }, 30 * 60 * 1000); // 30 minutes
+    };
+
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(e => window.addEventListener(e, resetTimer));
+    resetTimer();
+
+    return () => {
+      clearTimeout(timeout);
+      events.forEach(e => window.removeEventListener(e, resetTimer));
+    };
+  }, [session]);
+
   // Loading spinner
   if (loading) {
     return (
@@ -86,11 +114,13 @@ function App() {
 
   return (
     <JobProvider>
-      {role === 'admin' ? (
+      <RequireRole
+        role={role}
+        requiredRole="admin"
+        fallback={<InternDashboard talentId={session.user.id} />}
+      >
         <AdminDashboard />
-      ) : (
-        <InternDashboard talentId={session.user.id} />
-      )}
+      </RequireRole>
     </JobProvider>
   );
 }

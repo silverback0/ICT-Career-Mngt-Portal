@@ -79,6 +79,7 @@ const InternDashboard = ({ talentId }) => {
   const [recommendedJobs, setRecommendedJobs]   = useState([]);
   const [upcomingInterviews, setUpcomingInterviews] = useState([]);
   const [notifications, setNotifications]       = useState([]);
+  const [cohortStats, setCohortStats] = useState({ total: 0, hired: 0, inInterviews: 0 });
   const [loading, setLoading]     = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -161,6 +162,24 @@ const InternDashboard = ({ talentId }) => {
             .maybeSingle();
 
           if (profData) setProfileDetails(profData);
+          // Fetch live cohort stats
+          const { data: cohortData } = await supabase
+            .from('talents')
+            .select('status')
+            .eq('cohort', talentData.cohort);
+
+          if (cohortData) {
+            setCohortStats({
+              total: cohortData.length,
+              hired: cohortData.filter(t =>
+                t.status === 'Placed (Public)' ||
+                t.status === 'Placed (Private)'
+              ).length,
+              inInterviews: cohortData.filter(t =>
+                t.status === 'Verification Phase'
+              ).length,
+            });
+          }
         } else {
           // Check pending invite for pre-fill
           const { data: authData } = await supabase.auth.getUser();
@@ -217,7 +236,10 @@ const InternDashboard = ({ talentId }) => {
         .from('talents')
         .insert([{ id: talentId, name: formData.name, position: formData.position,
           county: formData.county, cohort: formData.cohort, status: 'National Pipeline',
-          profile_id: talentId }])
+          profile_id: talentId, vetting_status: 'Pending',
+          is_verified: false,
+          suitability_score: 0,
+          company: 'Unassigned' }])
         .select().single();
       if (error) throw error;
 
@@ -566,6 +588,30 @@ const InternDashboard = ({ talentId }) => {
             <div>
               <p className="font-bold text-orange-300 text-sm">{profile.status}</p>
               <p className="text-xs text-slate-500 mt-0.5">Live pipeline — managed by ICT Authority admin</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Cohort Stats */}
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Users className="w-4 h-4 text-indigo-400" /> Cohort Overview
+            <span className="text-slate-600 font-medium normal-case tracking-normal text-xs">
+            ({profile.cohort})
+            </span>
+          </h3>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 text-center">
+              <p className="text-2xl font-black text-white">{cohortStats.total}</p>
+              <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">Total Interns</p>
+            </div>
+            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 text-center">
+              <p className="text-2xl font-black text-emerald-400">{cohortStats.hired}</p>
+              <p className="text-[10px] font-bold text-emerald-600 mt-1 uppercase tracking-wider">Placed</p>
+            </div>
+            <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
+              <p className="text-2xl font-black text-purple-400">{cohortStats.inInterviews}</p>
+              <p className="text-[10px] font-bold text-purple-600 mt-1 uppercase tracking-wider">In Verification</p>
             </div>
           </div>
         </div>
