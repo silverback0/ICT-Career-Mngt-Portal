@@ -10,7 +10,7 @@ import {
 // ─── Profile Strength Calculator ──────────────────────────────────────────────
 const calcProfileStrength = (profile, skills, documents, profileDetails) => {
   const sections = [
-    { name: 'Personal Info',     done: !!(profile?.name && profile?.email) },
+    { name: 'Personal Info',     done: !!(profile?.name) },
     { name: 'County',            done: !!profile?.county },
     { name: 'ICT Track',         done: !!profile?.position },
     { name: 'Skills',            done: skills.length > 0 },
@@ -114,6 +114,11 @@ const InternDashboard = ({ talentId }) => {
 
         if (talentData) {
           setProfile(talentData);
+
+          const { data: authData } = await supabase.auth.getUser();
+          if (authData?.user?.email) {
+            setProfile(prev => ({ ...prev, email: authData.user.email }));
+          }
 
           const [scoreRes, skillsRes, appsRes, jobsRes, interviewRes, docsRes, notifRes] =
             await Promise.all([
@@ -691,7 +696,7 @@ const InternDashboard = ({ talentId }) => {
                 { label: 'Full Name',        key: 'name',           placeholder: 'e.g. John Doe' },
                 { label: 'ICT Track',        key: 'position',       placeholder: 'e.g. Software Engineer' },
                 { label: 'County',           key: 'county',         placeholder: 'e.g. Nairobi' },
-                { label: 'Education',        key: 'education',      placeholder: 'e.g. BSc Computer Science' },
+                { label: 'Education',        key: 'education',      placeholder: 'e.g. University of Nairobi' },
                 { label: 'Field of Study',   key: 'field_of_study', placeholder: 'e.g. Information Technology' },
               ].map(field => (
                 <div key={field.key}>
@@ -736,6 +741,7 @@ const InternDashboard = ({ talentId }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 { label: 'Full Name',       value: profile.name },
+                { label: 'Email',           value: profile.email },
                 { label: 'ICT Track',       value: profile.position },
                 { label: 'County',          value: profile.county },
                 { label: 'Cohort',          value: profile.cohort },
@@ -913,14 +919,36 @@ const InternDashboard = ({ talentId }) => {
                     </div>
                   )}
                   <div className="flex gap-2 mt-3">
-                    <button onClick={() => setShowAppModal(true)}
-                      className="flex-1 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 rounded-lg text-xs font-bold transition-all">
-                      Log Application
-                    </button>
+                    {['Backlog', 'Tailoring', 'In-Play'].map(status => (
+                      <button
+                        key={status}
+                        onClick={async () => {
+                          try {
+                            const { data, error } = await supabase
+                              .from('applications')
+                              .insert([{
+                                intern_id: talentId,
+                                company: job.company,
+                                position: job.title,
+                                status
+                              }])
+                              .select().single();
+                            if (error) throw error;
+                            setApplications(prev => [...prev, data]);
+                            alert(`Added to ${status}!`);
+                          } catch (err) {
+                            alert('Error: ' + err.message);
+                          }
+                        }}
+                        className="flex-1 py-2 bg-slate-800 border border-slate-700 text-slate-300 hover:border-emerald-500/50 hover:text-emerald-400 rounded-lg text-xs font-bold transition-all"
+                      >
+                        + {status}
+                      </button>
+                    ))}
                     {job.url && (
                       <a href={job.url} target="_blank" rel="noreferrer"
-                        className="flex-1 py-2 bg-slate-700 border border-slate-600 text-slate-300 hover:bg-slate-600 rounded-lg text-xs font-bold text-center transition-all">
-                        View Listing →
+                        className="py-2 px-3 bg-slate-700 border border-slate-600 text-slate-300 hover:bg-slate-600 rounded-lg text-xs font-bold text-center transition-all">
+                        View →
                       </a>
                     )}
                   </div>
