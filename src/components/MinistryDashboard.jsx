@@ -34,6 +34,7 @@ export default function MinistryDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTalent, setSelectedTalent] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   // 1. Core Supabase Data Hydration Hook
   const handleRefreshJobs = async () => {
@@ -204,7 +205,6 @@ export default function MinistryDashboard() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 relative text-slate-900 font-sans">
-      <div id="dashboard-report-target" className="max-w-400 mx-auto space-y-8">
         
         {/* AUTHENTIC HEADER */}
         <header className="bg-white rounded-2xl shadow-sm p-8 border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -274,6 +274,9 @@ export default function MinistryDashboard() {
           </div>
         </header>
 
+        {/* PDF EXPORT STARTS HERE */}
+        <div id="dashboard-report-target" className="space-y-8">
+
         {/* STATS ROW */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard title="Total Workforce" value={stats.totalJobs} icon={<Users />} color="blue" />
@@ -305,7 +308,7 @@ export default function MinistryDashboard() {
                   <TrendingUp className="w-5 h-5 text-emerald-500" />
                   <h3 className="text-xl font-bold text-slate-900">Placement Success Trend</h3>
                 </div>
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">+12% growth</span>
+                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">{filteredJobs.length}</span>
               </div>
               <PlacementTrendChart jobs={filteredJobs} />
             </div>
@@ -357,14 +360,15 @@ export default function MinistryDashboard() {
                       </div>
 
                       <button 
+                        data-exclude-pdf="true"
                         onClick={() => setSelectedTalent(person)}
                         className="bg-blue-600 p-2 rounded-lg hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
                         title="View Details"
                       >
                         <Search className="w-4 h-4 text-white" />
                       </button>
-
                       <button
+                        data-exclude-pdf="true"
                         onClick={() => {
                          if(window.confirm(`Remove ${person.name} from the pipeline?`)) {
                               deleteJob(person.id);
@@ -373,7 +377,7 @@ export default function MinistryDashboard() {
                         className="bg-red-600 p-2 rounded-lg hover:bg-red-500 transition-all shadow-lg shadow-red-900/20"
                         title="Remove from Pipeline"
                       >
-                        <Trash2 className="w-4 h-4 text-white" />
+                      <Trash2 className="w-4 h-4 text-white" />
                       </button>
                     </div>
                   </div>
@@ -396,9 +400,8 @@ export default function MinistryDashboard() {
         />
       )}
       <InviteTalentModal 
-        isOpen={isAddModalOpen} 
-        onClose={() => setIsAddModalOpen(false)} 
-        onAdd={(newData) => addJob(newData)} 
+          isOpen={isInviteModalOpen} 
+          onClose={() => setIsInviteModalOpen(false)} 
       />
     </div>
   );
