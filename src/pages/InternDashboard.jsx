@@ -231,7 +231,7 @@ const InternDashboard = ({ talentId }) => {
     : 0;
 
   // ── Handlers ─────────────────────────────────────────────────────────────────
-  const handleLogout = async () => { await supabase.auth.signOut(); window.location.reload(); };
+  const handleLogout = async () => { await supabase.auth.signOut(); window.location.href = '/'; };
 
   const handleOnboardingSubmit = async (e) => {
     e.preventDefault();
