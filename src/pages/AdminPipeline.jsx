@@ -178,6 +178,7 @@ const AdminPipeline = () => {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       toast.success('Signed out successfully');
+      window.location.href = '/';
     } catch (err) {
       toast.error(`Logout failed: ${err.message}`);
     }
