@@ -389,66 +389,66 @@ const InternDashboard = ({ talentId }) => {
 
   // ── Loading ──────────────────────────────────────────────────────────────────
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="flex flex-col items-center gap-4">
         <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-        <p className="text-slate-400 font-medium text-sm">Loading your portal...</p>
+        <p className="text-gray-500 font-medium text-sm">Loading your portal...</p>
       </div>
     </div>
   );
 
   // ── Onboarding ───────────────────────────────────────────────────────────────
   if (!profile) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="w-full max-w-lg">
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full mb-4">
-            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">ICT Talent Pipeline</span>
+          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-full mb-4">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest">ICT Talent Pipeline</span>
           </div>
-          <h1 className="text-3xl font-black text-white mb-2">Complete Your Profile</h1>
-          <p className="text-slate-400 text-sm">Set up your intern portal to access the full dashboard.</p>
+          <h1 className="text-3xl font-black text-gray-900 mb-2">Complete Your Profile</h1>
+          <p className="text-gray-500 text-sm">Set up your intern portal to access the full dashboard.</p>
         </div>
 
-        <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden">
+        <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
           <form onSubmit={handleOnboardingSubmit} className="p-8 space-y-5">
             <div>
-              <label className="flex items-center gap-1.5 text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+              <label className="flex items-center gap-1.5 text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
                 <UserPlus className="w-3 h-3" /> Full Name
               </label>
               <input required type="text" placeholder="e.g. John Doe" value={formData.name}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:border-emerald-500 transition-all text-sm placeholder:text-slate-600"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all text-sm placeholder:text-gray-400"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+                <label className="flex items-center gap-1.5 text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
                   <Building className="w-3 h-3" /> ICT Track
                 </label>
                 <input required type="text" placeholder="e.g. Software Engineer" value={formData.position}
                   onChange={e => setFormData({ ...formData, position: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:border-emerald-500 transition-all text-sm placeholder:text-slate-600"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all text-sm placeholder:text-gray-400"
                 />
               </div>
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+                <label className="flex items-center gap-1.5 text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
                   <MapPin className="w-3 h-3" /> County
                 </label>
                 <input required type="text" placeholder="e.g. Nairobi" value={formData.county}
                   onChange={e => setFormData({ ...formData, county: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:border-emerald-500 transition-all text-sm placeholder:text-slate-600"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all text-sm placeholder:text-gray-400"
                 />
               </div>
             </div>
 
             <div>
-              <label className="flex items-center gap-1.5 text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+              <label className="flex items-center gap-1.5 text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
                 <GraduationCap className="w-3 h-3" /> Cohort
               </label>
               <select value={formData.cohort} onChange={e => setFormData({ ...formData, cohort: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:border-emerald-500 transition-all text-sm cursor-pointer">
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all text-sm cursor-pointer">
                 <option value="Cohort 2025/2026">Cohort 2025/26</option>
                 <option value="Cohort 2024/2025">Cohort 2024/25</option>
                 <option value="Cohort 2023/2024">Cohort 2023/24</option>
@@ -457,25 +457,25 @@ const InternDashboard = ({ talentId }) => {
             </div>
 
             <div>
-              <label className="flex items-center gap-1.5 text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+              <label className="flex items-center gap-1.5 text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
                 <Sparkles className="w-3 h-3" /> Skills (comma separated)
               </label>
               <input type="text" placeholder="e.g. React, Python, SQL" value={formData.skills}
                 onChange={e => setFormData({ ...formData, skills: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:border-emerald-500 transition-all text-sm placeholder:text-slate-600"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all text-sm placeholder:text-gray-400"
               />
             </div>
 
             <button type="submit" disabled={submitting}
-              className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-900 font-black rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 mt-2">
+              className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-black rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 mt-2">
               {submitting ? 'Setting up your portal...' : 'Enter the Pipeline →'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-slate-600 text-xs mt-4">
+        <p className="text-center text-gray-400 text-xs mt-4">
           Already registered?{' '}
-          <button onClick={handleLogout} className="text-slate-400 underline hover:text-white">Sign out</button>
+          <button onClick={handleLogout} className="text-gray-500 underline hover:text-gray-900">Sign out</button>
         </p>
       </div>
     </div>
@@ -488,41 +488,41 @@ const InternDashboard = ({ talentId }) => {
     dashboard: (
       <div className="space-y-6">
         {/* Hero card */}
-        <div className="bg-linear-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-3xl p-8 relative overflow-hidden">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-3xl p-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
           <div className="relative z-10">
             <div className="flex items-start justify-between mb-6">
               <div>
-                <span className="text-xs font-black uppercase tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+                <span className="text-xs font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
                   {profile.cohort}
                 </span>
-                <h2 className="text-3xl font-black text-white mt-3">
-                  Welcome back, <span className="text-emerald-400">{profile.name?.split(' ')[0]}</span>
+                <h2 className="text-3xl font-black text-gray-900 mt-3">
+                  Welcome back, <span className="text-emerald-600">{profile.name?.split(' ')[0]}</span>
                 </h2>
-                <p className="text-slate-400 text-sm mt-1">
+                <p className="text-gray-500 text-sm mt-1">
                   {profile.position} · {profile.county} County
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-4xl font-black text-white">{profileStrength.percentage}%</p>
-                <p className="text-xs text-slate-400 font-bold">Profile complete</p>
+                <p className="text-4xl font-black text-gray-900">{profileStrength.percentage}%</p>
+                <p className="text-xs text-gray-500 font-bold">Profile complete</p>
               </div>
             </div>
 
             {/* Profile strength bar */}
             <div>
-              <div className="flex justify-between text-xs font-bold text-slate-400 mb-2">
+              <div className="flex justify-between text-xs font-bold text-gray-500 mb-2">
                 <span>Profile strength</span>
                 <span>{profileStrength.completed}/{profileStrength.total} sections</span>
               </div>
-              <div className="w-full bg-slate-700 rounded-full h-2">
+              <div className="w-full bg-gray-100 rounded-full h-2">
                 <div
                   className="h-2 rounded-full bg-linear-to-r from-emerald-500 to-emerald-400 transition-all duration-700"
                   style={{ width: `${profileStrength.percentage}%` }}
                 />
               </div>
               {profileStrength.percentage < 100 && (
-                <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
                   Complete your profile to unlock all placement opportunities
                 </p>
@@ -542,16 +542,16 @@ const InternDashboard = ({ talentId }) => {
         {/* Pipeline + Next Steps */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Pipeline stats */}
-          <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-5 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-blue-400" /> Application Pipeline
+          <div className="lg:col-span-2 bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+            <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-5 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-blue-500" /> Application Pipeline
             </h3>
             <div className="grid grid-cols-4 gap-3 mb-5">
               {[
-                { label: 'Backlog',   value: pipelineStats.backlog,   color: 'bg-slate-800 border-slate-700 text-slate-300' },
-                { label: 'Tailoring', value: pipelineStats.tailoring, color: 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400' },
-                { label: 'In-Play',   value: pipelineStats.inPlay,    color: 'bg-purple-500/10 border-purple-500/20 text-purple-400' },
-                { label: 'Hired',     value: pipelineStats.hired,     color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' },
+                { label: 'Backlog',   value: pipelineStats.backlog,   color: 'bg-gray-50 border-gray-200 text-gray-600' },
+                { label: 'Tailoring', value: pipelineStats.tailoring, color: 'bg-yellow-50 border-yellow-200 text-yellow-700' },
+                { label: 'In-Play',   value: pipelineStats.inPlay,    color: 'bg-purple-50 border-purple-200 text-purple-700' },
+                { label: 'Hired',     value: pipelineStats.hired,     color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
               ].map(s => (
                 <div key={s.label} className={`text-center p-4 rounded-xl border ${s.color}`}>
                   <p className="text-2xl font-black">{s.value}</p>
@@ -560,21 +560,21 @@ const InternDashboard = ({ talentId }) => {
               ))}
             </div>
             <button onClick={() => setShowAppModal(true)}
-              className="w-full py-2.5 border border-dashed border-slate-700 text-slate-500 hover:border-emerald-500/50 hover:text-emerald-400 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+              className="w-full py-2.5 border border-dashed border-gray-300 text-gray-400 hover:border-emerald-400 hover:text-emerald-600 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
               <Plus className="w-4 h-4" /> Log New Application
             </button>
           </div>
 
           {/* Next steps */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-5">Next Steps</h3>
+          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+            <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-5">Next Steps</h3>
             <div className="space-y-3">
               {profileStrength.sections.map(s => (
                 <div key={s.name} className="flex items-center gap-3">
                   {s.done
-                    ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    : <div className="w-4 h-4 rounded-full border-2 border-slate-600 shrink-0" />}
-                  <span className={`text-sm font-medium ${s.done ? 'text-slate-400 line-through' : 'text-slate-200'}`}>
+                    ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    : <div className="w-4 h-4 rounded-full border-2 border-gray-300 shrink-0" />}
+                  <span className={`text-sm font-medium ${s.done ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
                     {s.name}
                   </span>
                 </div>
@@ -584,38 +584,38 @@ const InternDashboard = ({ talentId }) => {
         </div>
 
         {/* Pipeline status */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <Shield className="w-4 h-4 text-orange-400" /> Placement Status
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+          <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Shield className="w-4 h-4 text-orange-500" /> Placement Status
           </h3>
-          <div className="flex items-center gap-4 p-4 bg-orange-500/10 border border-orange-500/20 rounded-xl">
+          <div className="flex items-center gap-4 p-4 bg-orange-50 border border-orange-200 rounded-xl">
             <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
             <div>
-              <p className="font-bold text-orange-300 text-sm">{profile.status}</p>
-              <p className="text-xs text-slate-500 mt-0.5">Live pipeline — managed by ICT Authority admin</p>
+              <p className="font-bold text-orange-700 text-sm">{profile.status}</p>
+              <p className="text-xs text-gray-400 mt-0.5">Live pipeline — managed by ICT Authority admin</p>
             </div>
           </div>
         </div>
 
         {/* Cohort Stats */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <Users className="w-4 h-4 text-indigo-400" /> Cohort Overview
-            <span className="text-slate-600 font-medium normal-case tracking-normal text-xs">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+          <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Users className="w-4 h-4 text-indigo-500" /> Cohort Overview
+            <span className="text-gray-400 font-medium normal-case tracking-normal text-xs">
             ({profile.cohort})
             </span>
           </h3>
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 text-center">
-              <p className="text-2xl font-black text-white">{cohortStats.total}</p>
-              <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">Total Interns</p>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center">
+              <p className="text-2xl font-black text-gray-900">{cohortStats.total}</p>
+              <p className="text-[10px] font-bold text-gray-500 mt-1 uppercase tracking-wider">Total Interns</p>
             </div>
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 text-center">
-              <p className="text-2xl font-black text-emerald-400">{cohortStats.hired}</p>
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+              <p className="text-2xl font-black text-emerald-600">{cohortStats.hired}</p>
               <p className="text-[10px] font-bold text-emerald-600 mt-1 uppercase tracking-wider">Placed</p>
             </div>
-            <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
-              <p className="text-2xl font-black text-purple-400">{cohortStats.inInterviews}</p>
+            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center">
+              <p className="text-2xl font-black text-purple-600">{cohortStats.inInterviews}</p>
               <p className="text-[10px] font-bold text-purple-600 mt-1 uppercase tracking-wider">In Verification</p>
             </div>
           </div>
@@ -627,25 +627,25 @@ const InternDashboard = ({ talentId }) => {
     profile: (
       <div className="space-y-6">
         {/* Profile Builder checklist — unchanged */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-6 flex items-center gap-2">
-            <User className="w-4 h-4 text-blue-400" /> Profile Builder
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+          <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+            <User className="w-4 h-4 text-blue-500" /> Profile Builder
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {profileStrength.sections.map(s => (
               <div key={s.name}
                 className={`flex items-center justify-between p-4 rounded-xl border ${
-                  s.done ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-slate-800/50 border-slate-700'
+                  s.done ? 'bg-emerald-50/60 border-emerald-200' : 'bg-gray-50 border-gray-200'
                 }`}>
                 <div className="flex items-center gap-3">
                   {s.done
-                    ? <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                    : <div className="w-5 h-5 rounded-full border-2 border-slate-600" />}
-                  <span className={`text-sm font-bold ${s.done ? 'text-emerald-300' : 'text-slate-300'}`}>
+                    ? <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                    : <div className="w-5 h-5 rounded-full border-2 border-gray-300" />}
+                  <span className={`text-sm font-bold ${s.done ? 'text-emerald-700' : 'text-gray-700'}`}>
                     {s.name}
                   </span>
                 </div>
-                <span className={`text-xs font-black ${s.done ? 'text-emerald-400' : 'text-slate-600'}`}>
+                <span className={`text-xs font-black ${s.done ? 'text-emerald-600' : 'text-gray-400'}`}>
                   {s.done ? '100%' : '0%'}
                 </span>
               </div>
@@ -654,10 +654,10 @@ const InternDashboard = ({ talentId }) => {
         </div>
 
         {/* Editable Personal Info */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
-              <User className="w-4 h-4 text-blue-400" /> Personal Info
+            <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+              <User className="w-4 h-4 text-blue-500" /> Personal Info
             </h3>
             {!editingProfile ? (
               <button
@@ -673,17 +673,17 @@ const InternDashboard = ({ talentId }) => {
                   });
                   setEditingProfile(true);
                 }}
-                className="text-xs font-bold text-blue-400 hover:text-blue-300 border border-blue-500/20 hover:border-blue-500/40 px-3 py-1.5 rounded-lg transition-all">
+                className="text-xs font-bold text-blue-600 hover:text-blue-700 border border-blue-200 hover:border-blue-300 bg-blue-50 px-3 py-1.5 rounded-lg transition-all">
                 Edit Profile →
               </button>
             ) : (
               <div className="flex gap-2">
                 <button onClick={() => setEditingProfile(false)}
-                  className="text-xs font-bold text-slate-400 border border-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-all">
+                  className="text-xs font-bold text-gray-500 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-all">
                   Cancel
                 </button>
                 <button onClick={handleSaveProfile}
-                  className="text-xs font-bold text-slate-900 bg-emerald-500 hover:bg-emerald-400 px-4 py-1.5 rounded-lg transition-all">
+                  className="text-xs font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-4 py-1.5 rounded-lg transition-all">
                   Save Changes
                 </button>
               </div>
@@ -700,23 +700,23 @@ const InternDashboard = ({ talentId }) => {
                 { label: 'Field of Study',   key: 'field_of_study', placeholder: 'e.g. Information Technology' },
               ].map(field => (
                 <div key={field.key}>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">{field.label}</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">{field.label}</label>
                   <input
                     type="text"
                     value={profileForm[field.key] || ''}
                     placeholder={field.placeholder}
                     onChange={e => setProfileForm({ ...profileForm, [field.key]: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm placeholder:text-slate-600 transition-all"
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm placeholder:text-gray-400 transition-all"
                   />
                 </div>
               ))}
 
               {/* Cohort — dropdown */}
               <div>
-                <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Cohort</label>
+                <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Cohort</label>
                 <select value={profileForm.cohort || ''}
                   onChange={e => setProfileForm({ ...profileForm, cohort: e.target.value })}
-                  className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm cursor-pointer">
+                  className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm cursor-pointer">
                   <option value="Cohort 2025/2026">Cohort 2025/2026</option>
                   <option value="Cohort 2024/2025">Cohort 2024/2025</option>
                   <option value="Cohort 2023/2024">Cohort 2023/2024</option>
@@ -726,13 +726,13 @@ const InternDashboard = ({ talentId }) => {
 
               {/* Motivation letter — full width */}
               <div className="col-span-2">
-                <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Motivation Letter</label>
+                <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Motivation Letter</label>
                 <textarea
                   rows={4}
                   value={profileForm.motivation_letter || ''}
                   placeholder="Write a brief motivation statement for your placement..."
                   onChange={e => setProfileForm({ ...profileForm, motivation_letter: e.target.value })}
-                  className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm placeholder:text-slate-600 resize-none transition-all"
+                  className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm placeholder:text-gray-400 resize-none transition-all"
                 />
               </div>
             </div>
@@ -748,17 +748,17 @@ const InternDashboard = ({ talentId }) => {
                 { label: 'Education',       value: profileDetails.education },
                 { label: 'Field of Study',  value: profileDetails.field_of_study },
               ].map(item => (
-                <div key={item.label} className="p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
-                  <p className="text-[10px] font-black text-slate-600 uppercase tracking-wider mb-1">{item.label}</p>
-                  <p className={`text-sm font-bold ${item.value ? 'text-white' : 'text-slate-600 italic'}`}>
+                <div key={item.label} className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">{item.label}</p>
+                  <p className={`text-sm font-bold ${item.value ? 'text-gray-900' : 'text-gray-400 italic'}`}>
                     {item.value || 'Not set'}
                   </p>
                 </div>
               ))}
               {profileDetails.motivation_letter && (
-                <div className="col-span-2 p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
-                  <p className="text-[10px] font-black text-slate-600 uppercase tracking-wider mb-2">Motivation Letter</p>
-                  <p className="text-sm text-slate-300 leading-relaxed">{profileDetails.motivation_letter}</p>
+                <div className="col-span-2 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider mb-2">Motivation Letter</p>
+                  <p className="text-sm text-gray-600 leading-relaxed">{profileDetails.motivation_letter}</p>
                 </div>
               )}
             </div>
@@ -766,53 +766,53 @@ const InternDashboard = ({ talentId }) => {
         </div>
 
         {/* Skills */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-purple-400" /> Technical Skills
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+          <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-purple-500" /> Technical Skills
           </h3>
           <div className="flex flex-wrap gap-2">
             {skills.length > 0 ? skills.map((s, i) => (
               <span key={i}
-                className="px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-full text-xs font-bold">
+                className="px-3 py-1.5 bg-purple-50 border border-purple-200 text-purple-700 rounded-full text-xs font-bold">
                 {s.skill_name}
               </span>
             )) : (
-              <p className="text-slate-500 text-sm italic">No skills added yet — complete onboarding to add skills.</p>
+              <p className="text-gray-400 text-sm italic">No skills added yet — complete onboarding to add skills.</p>
             )}
           </div>
         </div>
 
         {/* Verified Scores */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <Award className="w-4 h-4 text-emerald-400" /> Verified Scores
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+          <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Award className="w-4 h-4 text-emerald-500" /> Verified Scores
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-xl p-5">
-              <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-3">Technical Proficiency</p>
-              <p className="text-4xl font-black text-white">{scores?.technical_proficiency ?? 'N/A'}</p>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+              <p className="text-xs font-black text-gray-500 uppercase tracking-wider mb-3">Technical Proficiency</p>
+              <p className="text-4xl font-black text-gray-900">{scores?.technical_proficiency ?? 'N/A'}</p>
               {scores?.technical_proficiency && (
-                <div className="mt-3 w-full bg-slate-700 rounded-full h-1.5">
-                  <div className="h-1.5 rounded-full bg-emerald-400"
+                <div className="mt-3 w-full bg-gray-200 rounded-full h-1.5">
+                  <div className="h-1.5 rounded-full bg-emerald-500"
                     style={{ width: `${scores.technical_proficiency}%` }} />
                 </div>
               )}
             </div>
-            <div className="bg-slate-800 border border-slate-700 rounded-xl p-5">
-              <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-3">Work Ethic</p>
-              <p className="text-4xl font-black text-white">{scores?.work_ethic ?? 'N/A'}</p>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+              <p className="text-xs font-black text-gray-500 uppercase tracking-wider mb-3">Work Ethic</p>
+              <p className="text-4xl font-black text-gray-900">{scores?.work_ethic ?? 'N/A'}</p>
               {scores?.work_ethic && (
-                <div className="mt-3 w-full bg-slate-700 rounded-full h-1.5">
-                  <div className="h-1.5 rounded-full bg-blue-400"
+                <div className="mt-3 w-full bg-gray-200 rounded-full h-1.5">
+                  <div className="h-1.5 rounded-full bg-blue-500"
                     style={{ width: `${scores.work_ethic}%` }} />
                 </div>
               )}
             </div>
           </div>
           {scores?.supervisor_comments && (
-            <div className="mt-4 p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
-              <p className="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Supervisor Comments</p>
-              <p className="text-slate-300 text-sm italic">"{scores.supervisor_comments}"</p>
+            <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+              <p className="text-xs font-black text-gray-500 uppercase tracking-wider mb-2">Supervisor Comments</p>
+              <p className="text-gray-600 text-sm italic">"{scores.supervisor_comments}"</p>
             </div>
           )}
         </div>
@@ -822,13 +822,13 @@ const InternDashboard = ({ talentId }) => {
     // ── DOCUMENTS TAB ──────────────────────────────────────────────────────────
     documents: (
       <div className="space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
-              <FileText className="w-4 h-4 text-blue-400" /> My Documents
+            <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+              <FileText className="w-4 h-4 text-blue-500" /> My Documents
             </h3>
             <button onClick={() => setShowProfileModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 rounded-xl text-xs font-bold transition-all">
+              className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-600 hover:bg-blue-100 rounded-xl text-xs font-bold transition-all">
               <Upload className="w-3.5 h-3.5" /> Upload Document
             </button>
           </div>
@@ -837,30 +837,30 @@ const InternDashboard = ({ talentId }) => {
             <div className="space-y-3">
               {documents.map(doc => (
                 <div key={doc.id}
-                  className="flex items-center justify-between p-4 bg-slate-800 border border-slate-700 rounded-xl">
+                  className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                      <FileText className="w-4 h-4 text-blue-400" />
+                    <div className="p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                      <FileText className="w-4 h-4 text-blue-500" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white">{doc.name}</p>
-                      <p className="text-[10px] text-slate-500">{doc.type} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
+                      <p className="text-sm font-bold text-gray-900">{doc.name}</p>
+                      <p className="text-[10px] text-gray-400">{doc.type} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
                     </div>
                   </div>
                   <a href={doc.url} target="_blank" rel="noreferrer"
-                    className="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors">
+                    className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors">
                     View →
                   </a>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 border border-dashed border-slate-700 rounded-xl">
-              <FileText className="w-8 h-8 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-400 font-bold text-sm">No documents uploaded yet</p>
-              <p className="text-slate-600 text-xs mt-1">Upload your CV, certificates, or national ID</p>
+            <div className="text-center py-12 border border-dashed border-gray-300 rounded-xl">
+              <FileText className="w-8 h-8 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 font-bold text-sm">No documents uploaded yet</p>
+              <p className="text-gray-400 text-xs mt-1">Upload your CV, certificates, or national ID</p>
               <button onClick={() => setShowProfileModal(true)}
-                className="mt-4 px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-bold hover:bg-blue-500/20 transition-all">
+                className="mt-4 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 transition-all">
                 Upload your first document
               </button>
             </div>
@@ -868,16 +868,16 @@ const InternDashboard = ({ talentId }) => {
         </div>
 
         {profile?.resume_url && (
-          <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-4 flex items-center justify-between">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
               <div>
-                <p className="text-sm font-bold text-emerald-300">Resume on file</p>
-                <p className="text-xs text-slate-500">Your resume is visible to the admin team</p>
+                <p className="text-sm font-bold text-emerald-700">Resume on file</p>
+                <p className="text-xs text-gray-500">Your resume is visible to the admin team</p>
               </div>
             </div>
             <a href={profile.resume_url} target="_blank" rel="noreferrer"
-              className="text-xs font-bold text-emerald-400 hover:text-emerald-300">
+              className="text-xs font-bold text-emerald-600 hover:text-emerald-700">
               View →
             </a>
           </div>
@@ -888,31 +888,31 @@ const InternDashboard = ({ talentId }) => {
     // ── JOBS TAB ───────────────────────────────────────────────────────────────
     jobs: (
       <div className="space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest mb-5 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-400" /> Recommended For You
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+          <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest mb-5 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-500" /> Recommended For You
           </h3>
           {recommendedJobs.length > 0 ? (
             <div className="space-y-4">
               {recommendedJobs.map(job => (
                 <div key={job.id}
-                  className="p-5 bg-slate-800 border border-slate-700 hover:border-slate-600 rounded-xl transition-all group">
+                  className="p-5 bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-xl transition-all group">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h4 className="font-bold text-white group-hover:text-emerald-400 transition-colors">{job.title}</h4>
-                      <p className="text-sm text-slate-400">{job.company}</p>
+                      <h4 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">{job.title}</h4>
+                      <p className="text-sm text-gray-500">{job.company}</p>
                     </div>
-                    <span className="text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-black">
+                    <span className="text-xs bg-emerald-50 border border-emerald-200 text-emerald-700 px-2.5 py-1 rounded-full font-black">
                       {job.match}% match
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 mb-3">
+                  <p className="text-xs text-gray-400 mb-3">
                     📍 {job.location} · {job.type} · 💰 {job.salary}
                   </p>
                   {job.skills?.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {job.skills.map((skill, i) => (
-                        <span key={i} className="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">
+                        <span key={i} className="text-xs bg-blue-50 border border-blue-200 text-blue-600 px-2 py-0.5 rounded-full">
                           {skill}
                         </span>
                       ))}
@@ -940,14 +940,14 @@ const InternDashboard = ({ talentId }) => {
                             alert('Error: ' + err.message);
                           }
                         }}
-                        className="flex-1 py-2 bg-slate-800 border border-slate-700 text-slate-300 hover:border-emerald-500/50 hover:text-emerald-400 rounded-lg text-xs font-bold transition-all"
+                        className="flex-1 py-2 bg-white border border-gray-200 text-gray-600 hover:border-emerald-400 hover:text-emerald-600 rounded-lg text-xs font-bold transition-all"
                       >
                         + {status}
                       </button>
                     ))}
                     {job.url && (
                       <a href={job.url} target="_blank" rel="noreferrer"
-                        className="py-2 px-3 bg-slate-700 border border-slate-600 text-slate-300 hover:bg-slate-600 rounded-lg text-xs font-bold text-center transition-all">
+                        className="py-2 px-3 bg-gray-100 border border-gray-200 text-gray-600 hover:bg-gray-200 rounded-lg text-xs font-bold text-center transition-all">
                         View →
                       </a>
                     )}
@@ -956,39 +956,39 @@ const InternDashboard = ({ talentId }) => {
               ))}
             </div>
           ) : (
-            <p className="text-slate-500 text-sm italic text-center py-8">No job recommendations yet — check back soon.</p>
+            <p className="text-gray-400 text-sm italic text-center py-8">No job recommendations yet — check back soon.</p>
           )}
         </div>
 
         {/* Upcoming Interviews */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
           <div className="flex items-center justify-between mb-5">
-            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
-              <Clock className="w-4 h-4 text-red-400" /> Upcoming Interviews
+            <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+              <Clock className="w-4 h-4 text-red-500" /> Upcoming Interviews
             </h3>
             <button onClick={() => setShowInterviewModal(true)}
-              className="text-xs font-bold text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">
+              className="text-xs font-bold text-gray-500 hover:text-gray-900 border border-gray-200 hover:border-gray-400 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">
               <Plus className="w-3 h-3" /> Log Interview
             </button>
           </div>
           {upcomingInterviews.length > 0 ? (
             <div className="space-y-3">
               {upcomingInterviews.map(iv => (
-                <div key={iv.id} className="flex items-center gap-4 p-4 bg-red-500/5 border border-red-500/15 rounded-xl">
-                  <div className="text-center min-w-12 border-r border-red-500/20 pr-4">
-                    <p className="text-2xl font-black text-red-400">{iv.date.split(' ')[0]}</p>
-                    <p className="text-[10px] text-red-500 font-bold">{iv.date.split(' ')[1]}</p>
+                <div key={iv.id} className="flex items-center gap-4 p-4 bg-red-50/60 border border-red-200 rounded-xl">
+                  <div className="text-center min-w-12 border-r border-red-200 pr-4">
+                    <p className="text-2xl font-black text-red-500">{iv.date.split(' ')[0]}</p>
+                    <p className="text-[10px] text-red-400 font-bold">{iv.date.split(' ')[1]}</p>
                   </div>
                   <div>
-                    <p className="font-bold text-white text-sm">{iv.type} · {iv.company}</p>
-                    <p className="text-xs text-slate-400">{iv.position}</p>
-                    <p className="text-xs text-slate-500 mt-1">{iv.mode} · {iv.time}</p>
+                    <p className="font-bold text-gray-900 text-sm">{iv.type} · {iv.company}</p>
+                    <p className="text-xs text-gray-500">{iv.position}</p>
+                    <p className="text-xs text-gray-400 mt-1">{iv.mode} · {iv.time}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-slate-500 text-sm italic text-center py-8">No interviews scheduled yet.</p>
+            <p className="text-gray-400 text-sm italic text-center py-8">No interviews scheduled yet.</p>
           )}
         </div>
       </div>
@@ -997,14 +997,14 @@ const InternDashboard = ({ talentId }) => {
     // ── NOTIFICATIONS TAB ──────────────────────────────────────────────────────
     notifications: (
       <div className="space-y-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
           <div className="flex items-center justify-between mb-5">
-            <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
-              <Bell className="w-4 h-4 text-blue-400" /> Notifications
+            <h3 className="text-sm font-black text-gray-600 uppercase tracking-widest flex items-center gap-2">
+              <Bell className="w-4 h-4 text-blue-500" /> Notifications
             </h3>
             {unreadCount > 0 && (
               <button onClick={markAllRead}
-                className="text-xs font-bold text-slate-400 hover:text-white transition-colors">
+                className="text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors">
                 Mark all read
               </button>
             )}
@@ -1015,16 +1015,16 @@ const InternDashboard = ({ talentId }) => {
                 <div key={n.id}
                   className={`p-4 rounded-xl border transition-all ${
                     n.is_read
-                      ? 'bg-slate-800/40 border-slate-800 opacity-60'
-                      : 'bg-blue-500/5 border-blue-500/20'
+                      ? 'bg-gray-50 border-gray-200 opacity-60'
+                      : 'bg-blue-50/60 border-blue-200'
                   }`}>
                   <div className="flex items-start gap-3">
-                    {!n.is_read && <div className="w-2 h-2 bg-blue-400 rounded-full mt-1.5 shrink-0" />}
+                    {!n.is_read && <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 shrink-0" />}
                     <div>
-                      <p className={`text-sm font-medium ${n.is_read ? 'text-slate-500' : 'text-slate-200'}`}>
+                      <p className={`text-sm font-medium ${n.is_read ? 'text-gray-400' : 'text-gray-700'}`}>
                         {n.message}
                       </p>
-                      <p className="text-[10px] text-slate-600 mt-1">
+                      <p className="text-[10px] text-gray-400 mt-1">
                         {new Date(n.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
                     </div>
@@ -1034,9 +1034,9 @@ const InternDashboard = ({ talentId }) => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <Bell className="w-8 h-8 text-slate-700 mx-auto mb-3" />
-              <p className="text-slate-500 font-bold text-sm">No notifications yet</p>
-              <p className="text-slate-600 text-xs mt-1">You'll see updates from the admin team here</p>
+              <Bell className="w-8 h-8 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 font-bold text-sm">No notifications yet</p>
+              <p className="text-gray-400 text-xs mt-1">You'll see updates from the admin team here</p>
             </div>
           )}
         </div>
@@ -1046,23 +1046,23 @@ const InternDashboard = ({ talentId }) => {
 
   // ── Main Shell ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-slate-950 flex">
+    <div className="min-h-screen bg-gray-50 flex">
 
       {/* SIDEBAR */}
-      <aside className="w-64 shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col p-4 sticky top-0 h-screen">
+      <aside className="w-64 shrink-0 bg-white border-r border-gray-200 flex flex-col p-4 sticky top-0 h-screen">
         {/* Logo */}
         <div className="mb-8 px-2">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-7 h-7 bg-emerald-500 rounded-lg flex items-center justify-center">
-              <BarChart2 className="w-4 h-4 text-slate-900" />
+              <BarChart2 className="w-4 h-4 text-white" />
             </div>
-            <span className="font-black text-white text-sm">DevTrack</span>
+            <span className="font-black text-gray-900 text-sm">DevTrack</span>
           </div>
-          <p className="text-[10px] text-slate-600 font-medium pl-9">ICT Talent Pipeline</p>
+          <p className="text-[10px] text-gray-400 font-medium pl-9">ICT Talent Pipeline</p>
         </div>
 
         {/* Label */}
-        <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest px-2 mb-2">
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2 mb-2">
           Candidate Menu
         </p>
 
@@ -1076,9 +1076,9 @@ const InternDashboard = ({ talentId }) => {
         </nav>
 
         {/* Profile snapshot */}
-        <div className="border-t border-slate-800 pt-4 mt-4">
+        <div className="border-t border-gray-200 pt-4 mt-4">
           <div className="px-2 mb-3">
-            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-3">Profile Snapshot</p>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Profile Snapshot</p>
             <div className="space-y-2 text-xs">
               {[
                 { label: 'County',  value: profile.county    || 'Not set' },
@@ -1088,8 +1088,8 @@ const InternDashboard = ({ talentId }) => {
                 { label: 'Status',  value: profile.status    || 'Pipeline' },
               ].map(item => (
                 <div key={item.label} className="flex justify-between">
-                  <span className="text-slate-600 font-medium">{item.label}</span>
-                  <span className={`font-bold truncate max-w-24 ${item.value === 'Not set' ? 'text-slate-700' : 'text-slate-300'}`}>
+                  <span className="text-gray-400 font-medium">{item.label}</span>
+                  <span className={`font-bold truncate max-w-24 ${item.value === 'Not set' ? 'text-gray-300' : 'text-gray-700'}`}>
                     {item.value}
                   </span>
                 </div>
@@ -1098,16 +1098,16 @@ const InternDashboard = ({ talentId }) => {
           </div>
 
           {/* User + signout */}
-          <div className="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-800 transition-all cursor-pointer group"
+          <div className="flex items-center gap-2 p-2 rounded-xl hover:bg-gray-50 transition-all cursor-pointer group"
             onClick={handleLogout}>
-            <div className="w-8 h-8 bg-emerald-500/20 border border-emerald-500/30 rounded-lg flex items-center justify-center text-emerald-400 font-black text-xs shrink-0">
+            <div className="w-8 h-8 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-center text-emerald-600 font-black text-xs shrink-0">
               {profile.name?.[0]?.toUpperCase() || '?'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-slate-300 truncate">{profile.name}</p>
-              <p className="text-[10px] text-slate-600">Candidate</p>
+              <p className="text-xs font-bold text-gray-700 truncate">{profile.name}</p>
+              <p className="text-[10px] text-gray-400">Candidate</p>
             </div>
-            <LogOut className="w-3.5 h-3.5 text-slate-600 group-hover:text-red-400 transition-colors" />
+            <LogOut className="w-3.5 h-3.5 text-gray-400 group-hover:text-red-500 transition-colors" />
           </div>
         </div>
       </aside>
@@ -1117,16 +1117,15 @@ const InternDashboard = ({ talentId }) => {
         {/* Top bar */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">NextGen Workspace</p>
-            <h1 className="text-2xl font-black text-white capitalize">{activeTab}</h1>
+            <h1 className="text-2xl font-black text-gray-900 capitalize">{activeTab}</h1>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setShowInterviewModal(true)}
-              className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-800 border border-slate-700 text-slate-300 hover:border-slate-500 rounded-xl text-xs font-bold transition-all">
+              className="hidden md:flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-600 hover:border-gray-400 rounded-xl text-xs font-bold transition-all">
               <Clock className="w-3.5 h-3.5" /> Log Interview
             </button>
             <button onClick={() => setShowAppModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-xl text-xs font-black transition-all shadow-lg shadow-emerald-500/20">
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-black transition-all shadow-lg shadow-emerald-500/20">
               <Plus className="w-3.5 h-3.5" /> New Application
             </button>
           </div>
@@ -1140,31 +1139,31 @@ const InternDashboard = ({ talentId }) => {
 
       {/* Add Application */}
       {showAppModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-black text-white">Log Application</h2>
-              <button onClick={() => setShowAppModal(false)} className="text-slate-500 hover:text-white">
+              <h2 className="text-lg font-black text-gray-900">Log Application</h2>
+              <button onClick={() => setShowAppModal(false)} className="text-gray-400 hover:text-gray-900">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleAddApplication} className="space-y-4">
               <div>
-                <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Company</label>
+                <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Company</label>
                 <input required type="text" value={newAppForm.company} placeholder="e.g. Safaricom"
                   onChange={e => setNewAppForm({ ...newAppForm, company: e.target.value })}
-                  className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm placeholder:text-slate-600" />
+                  className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm placeholder:text-gray-400" />
               </div>
               <div>
-                <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Position</label>
+                <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Position</label>
                 <input required type="text" value={newAppForm.position} placeholder="e.g. Frontend Developer"
                   onChange={e => setNewAppForm({ ...newAppForm, position: e.target.value })}
-                  className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm placeholder:text-slate-600" />
+                  className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm placeholder:text-gray-400" />
               </div>
               <div>
-                <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Status</label>
+                <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Status</label>
                 <select value={newAppForm.status} onChange={e => setNewAppForm({ ...newAppForm, status: e.target.value })}
-                  className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm cursor-pointer">
+                  className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm cursor-pointer">
                   <option value="Backlog">Backlog</option>
                   <option value="Tailoring">Tailoring</option>
                   <option value="In-Play">In-Play</option>
@@ -1172,11 +1171,11 @@ const InternDashboard = ({ talentId }) => {
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowAppModal(false)}
-                  className="flex-1 py-3 bg-slate-800 border border-slate-700 text-slate-300 rounded-xl font-bold hover:bg-slate-700 transition-all text-sm">
+                  className="flex-1 py-3 bg-gray-50 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm">
                   Cancel
                 </button>
                 <button type="submit"
-                  className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-xl font-black transition-all text-sm">
+                  className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-black transition-all text-sm">
                   Save
                 </button>
               </div>
@@ -1187,48 +1186,48 @@ const InternDashboard = ({ talentId }) => {
 
       {/* Log Interview */}
       {showInterviewModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-black text-white">Log Interview</h2>
-              <button onClick={() => setShowInterviewModal(false)} className="text-slate-500 hover:text-white">
+              <h2 className="text-lg font-black text-gray-900">Log Interview</h2>
+              <button onClick={() => setShowInterviewModal(false)} className="text-gray-400 hover:text-gray-900">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleAddInterview} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Company</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Company</label>
                   <input required type="text" value={newInterviewForm.company} placeholder="Safaricom"
                     onChange={e => setNewInterviewForm({ ...newInterviewForm, company: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm placeholder:text-slate-600" />
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm placeholder:text-gray-400" />
                 </div>
                 <div>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Position</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Position</label>
                   <input required type="text" value={newInterviewForm.position} placeholder="Developer"
                     onChange={e => setNewInterviewForm({ ...newInterviewForm, position: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm placeholder:text-slate-600" />
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm placeholder:text-gray-400" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Date</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Date</label>
                   <input required type="date" value={newInterviewForm.date}
                     onChange={e => setNewInterviewForm({ ...newInterviewForm, date: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm" />
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm" />
                 </div>
                 <div>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Time</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Time</label>
                   <input required type="time" value={newInterviewForm.time}
                     onChange={e => setNewInterviewForm({ ...newInterviewForm, time: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm" />
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Type</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Type</label>
                   <select value={newInterviewForm.type} onChange={e => setNewInterviewForm({ ...newInterviewForm, type: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm cursor-pointer">
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm cursor-pointer">
                     <option>Technical</option>
                     <option>Behavioral</option>
                     <option>HR Screening</option>
@@ -1236,9 +1235,9 @@ const InternDashboard = ({ talentId }) => {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-black text-slate-500 uppercase tracking-wider">Mode</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-wider">Mode</label>
                   <select value={newInterviewForm.mode} onChange={e => setNewInterviewForm({ ...newInterviewForm, mode: e.target.value })}
-                    className="w-full mt-1.5 p-3 bg-slate-800 border border-slate-700 text-white rounded-xl focus:border-emerald-500 outline-none text-sm cursor-pointer">
+                    className="w-full mt-1.5 p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:border-emerald-500 focus:bg-white outline-none text-sm cursor-pointer">
                     <option>Remote (Google Meet)</option>
                     <option>Remote (Zoom)</option>
                     <option>Remote (Teams)</option>
@@ -1248,11 +1247,11 @@ const InternDashboard = ({ talentId }) => {
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowInterviewModal(false)}
-                  className="flex-1 py-3 bg-slate-800 border border-slate-700 text-slate-300 rounded-xl font-bold hover:bg-slate-700 transition-all text-sm">
+                  className="flex-1 py-3 bg-gray-50 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm">
                   Cancel
                 </button>
                 <button type="submit"
-                  className="flex-1 py-3 bg-blue-500 hover:bg-blue-400 text-white rounded-xl font-black transition-all text-sm">
+                  className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-black transition-all text-sm">
                   Save
                 </button>
               </div>
@@ -1263,39 +1262,39 @@ const InternDashboard = ({ talentId }) => {
 
       {/* Upload Document */}
       {showProfileModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-black text-white">Upload Document</h2>
-              <button onClick={() => setShowProfileModal(false)} className="text-slate-500 hover:text-white">
+              <h2 className="text-lg font-black text-gray-900">Upload Document</h2>
+              <button onClick={() => setShowProfileModal(false)} className="text-gray-400 hover:text-gray-900">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
-              <div className="p-6 border-2 border-dashed border-slate-700 hover:border-slate-500 bg-slate-800/50 rounded-xl text-center transition-all">
-                <Upload className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+              <div className="p-6 border-2 border-dashed border-gray-200 hover:border-gray-400 bg-gray-50 rounded-xl text-center transition-all">
+                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                 <label className="cursor-pointer">
-                  <p className="text-sm font-bold text-slate-300 mb-1">
+                  <p className="text-sm font-bold text-gray-700 mb-1">
                     {resumeFile ? resumeFile.name : 'Click to select a PDF'}
                   </p>
-                  <p className="text-xs text-slate-600">CV, Certificate, or ID document</p>
+                  <p className="text-xs text-gray-400">CV, Certificate, or ID document</p>
                   <input type="file" accept=".pdf,.doc,.docx"
                     onChange={e => setResumeFile(e.target.files[0])}
                     className="hidden" />
                 </label>
               </div>
               {profile.resume_url && !resumeFile && (
-                <p className="text-xs text-emerald-500 font-medium text-center flex items-center justify-center gap-1">
+                <p className="text-xs text-emerald-600 font-medium text-center flex items-center justify-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Resume already on file — uploading will replace it
                 </p>
               )}
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowProfileModal(false)}
-                  className="flex-1 py-3 bg-slate-800 border border-slate-700 text-slate-300 rounded-xl font-bold hover:bg-slate-700 transition-all text-sm">
+                  className="flex-1 py-3 bg-gray-50 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-all text-sm">
                   Cancel
                 </button>
                 <button type="submit" disabled={uploading || !resumeFile}
-                  className="flex-1 py-3 bg-blue-500 hover:bg-blue-400 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl font-black transition-all text-sm">
+                  className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl font-black transition-all text-sm">
                   {uploading ? 'Uploading...' : 'Upload'}
                 </button>
               </div>
