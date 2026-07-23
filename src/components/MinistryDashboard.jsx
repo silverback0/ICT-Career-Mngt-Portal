@@ -142,7 +142,7 @@ export default function MinistryDashboard() {
   // 4. Mutation Handlers pointed to your live database
   const addJob = async (newData) => {
     try {
-      const { error } = await supabase.from('talents').insert([{
+      const { data, error } = await supabase.from('talents').insert([{
         name: newData.name,
         position: newData.position,
         company: newData.company,
