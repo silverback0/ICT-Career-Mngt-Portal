@@ -1,10 +1,11 @@
-import AdminPipeline from './pages/AdminPipeline';
 import React, { useState, useEffect } from 'react';
+import AdminPipeline from './pages/AdminPipeline';
 import { JobProvider } from './context/JobContext';
 import AdminDashboard from './pages/AdminDashboard';
 import { supabase } from './supabaseClient';
 import Auth from './components/Auth'; 
 import InternDashboard from './pages/InternDashboard';
+import LandingPage from './pages/LandingPage'; // 1. Import your Landing Page component
 
 const RequireRole = ({ role, requiredRole, children, fallback }) => {
   if (role !== requiredRole) return fallback;
@@ -15,10 +16,11 @@ function App() {
   const [session, setSession] = useState(null);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // 2. Track whether the user wants to see the login view vs landing page
+  const [showAuth, setShowAuth] = useState(false);
 
   // LIFECYCLE 1: Monitor auth state changes
-  // TOKEN_REFRESHED is ignored — it fires every ~60s silently and
-  // would otherwise unmount InternDashboard and wipe all tab state
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
@@ -45,8 +47,6 @@ function App() {
   }, []);
 
   // LIFECYCLE 2: Fetch role from profiles table
-  // Keyed on session.user.id — NOT the full session object
-  // This means it only re-runs on actual login/logout, not token refreshes
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -75,9 +75,9 @@ function App() {
     }
 
     verifyUserRole();
-  }, [session?.user?.id]); // ← only fires when the actual user changes
+  }, [session?.user?.id]);
 
-   // LIFECYCLE 3: Inactivity timeout — auto logout after 30 mins of no interaction
+  // LIFECYCLE 3: Inactivity timeout — auto logout after 30 mins of no interaction
   useEffect(() => {
     if (!session) return;
 
@@ -110,8 +110,30 @@ function App() {
     );
   }
 
-  if (!session) return <Auth />;
+  // 3. LOGGED-OUT FLOW:
+  // Show Landing Page by default. Pass `onNavigateToAuth` so buttons can trigger the Auth component.
+  if (!session) {
+    if (showAuth) {
+      return (
+        <div>
+          {/* Back button so users aren't trapped on the Auth screen */}
+          <div className="bg-slate-950 p-4">
+            <button 
+              onClick={() => setShowAuth(false)}
+              className="text-slate-400 hover:text-white text-sm transition-colors"
+            >
+              ← Back to Home
+            </button>
+          </div>
+          <Auth />
+        </div>
+      );
+    }
+    
+    return <LandingPage onNavigateToAuth={() => setShowAuth(true)} />;
+  }
 
+  // 4. LOGGED-IN FLOW:
   return (
     <JobProvider>
       <RequireRole
