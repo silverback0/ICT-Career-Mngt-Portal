@@ -16,7 +16,7 @@ export default function LandingPage({ onNavigateToAuth }) {
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             {/* DevTrack Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-linear-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-slate-950 text-lg shadow-md shadow-emerald-500/20">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-slate-950 text-lg shadow-md shadow-emerald-500/20">
                 DT
               </div>
               <span className="font-extrabold text-xl text-white tracking-tight">
@@ -39,20 +39,20 @@ export default function LandingPage({ onNavigateToAuth }) {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-8">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Kenya's National ICT Talent Pipeline
+            ICT Talent Pipeline & Placement Platform
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight mb-6">
             Your Gateway to <br className="hidden sm:inline" />
-            <span className="bg-linear-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-              Government ICT Placement
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+              National Tech Placement
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Track your internship journey from registration to county deployment across Ministries, Departments, and Agencies (MDAs).
+            Track your tech internship journey from registration to county-level deployment across strategic digital initiatives.
           </p>
 
           {/* CTAs */}
@@ -77,7 +77,7 @@ export default function LandingPage({ onNavigateToAuth }) {
               <div className="w-3 h-3 rounded-full bg-rose-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
-              <span className="text-xs text-slate-500 font-mono ml-2">devtrack.icta.go.ke/dashboard</span>
+              <span className="text-xs text-slate-500 font-mono ml-2">devtrack.app/dashboard</span>
             </div>
             <div className="h-64 sm:h-80 rounded-lg bg-slate-950/80 border border-slate-800/80 flex flex-col items-center justify-center p-6 text-center">
               <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-3xl mb-4 border border-emerald-500/20">
@@ -85,7 +85,7 @@ export default function LandingPage({ onNavigateToAuth }) {
               </div>
               <h3 className="text-lg font-bold text-white mb-1">County Placement & Candidate Pipeline</h3>
               <p className="text-slate-400 text-sm max-w-md">
-                Real-time tracking system connecting talent cohorts with 47 county government deployments.
+                Real-time tracking system connecting tech talent cohorts with 47 county deployments.
               </p>
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function LandingPage({ onNavigateToAuth }) {
         <section id="what-it-is" className="max-w-6xl mx-auto px-6 py-20 border-t border-slate-800/60">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-white mb-3">How DevTrack Works</h2>
-            <p className="text-slate-400">A structured path from application to national digital impact.</p>
+            <p className="text-slate-400">A structured path from application to high-impact placement.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -117,7 +117,7 @@ export default function LandingPage({ onNavigateToAuth }) {
               </div>
               <h3 className="text-xl font-bold text-white mb-3">Get Matched</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Our pipeline matches your technical skill sets directly with active government MDA opportunities.
+                Our pipeline matches your technical skill sets directly with public and strategic tech projects.
               </p>
             </div>
 
@@ -128,7 +128,7 @@ export default function LandingPage({ onNavigateToAuth }) {
               </div>
               <h3 className="text-xl font-bold text-white mb-3">Get Placed</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Receive official deployment to county-level positions and track your field progress in real-time.
+                Receive deployment to county-level positions and track your progress in real-time.
               </p>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function LandingPage({ onNavigateToAuth }) {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                  <span>Direct access to official MDA placement details and county assignments.</span>
+                  <span>Direct access to placement details and county assignments.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-emerald-400 font-bold mt-0.5">✓</span>
@@ -184,11 +184,11 @@ export default function LandingPage({ onNavigateToAuth }) {
               </ul>
             </div>
 
-            {/* For ICT Authority Admins Column */}
+            {/* For Program Administrators Column */}
             <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl">
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-2xl">🛡️</span>
-                <h3 className="text-xl font-bold text-white">For ICT Authority Admins</h3>
+                <h3 className="text-xl font-bold text-white">For Program Administrators</h3>
               </div>
               <ul className="space-y-4 text-slate-400 text-sm">
                 <li className="flex items-start gap-3">
@@ -197,7 +197,7 @@ export default function LandingPage({ onNavigateToAuth }) {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                  <span>Role-based access management to pair interns with specific government MDAs.</span>
+                  <span>Role-based access management to pair interns with active host organizations.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-emerald-400 font-bold mt-0.5">✓</span>
@@ -210,14 +210,14 @@ export default function LandingPage({ onNavigateToAuth }) {
 
         {/* --- SECTION 5: CALL TO ACTION --- */}
         <section className="max-w-4xl mx-auto text-center px-6 py-20 border-t border-slate-800/60">
-          <div className="bg-linear-to-b from-slate-900 to-slate-950 border border-slate-800 p-10 sm:p-14 rounded-3xl relative overflow-hidden">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 p-10 sm:p-14 rounded-3xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl"></div>
             
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
               Ready to join the pipeline?
             </h2>
             <p className="text-slate-400 text-base sm:text-lg mb-8 max-w-xl mx-auto">
-              Whether you're starting your internship or managing national deployments, sign in to access your portal.
+              Whether you're starting your internship or managing regional deployments, sign in to access your portal.
             </p>
             <button
               onClick={onNavigateToAuth}
@@ -238,7 +238,7 @@ export default function LandingPage({ onNavigateToAuth }) {
                 </div>
                 <span className="font-bold text-white text-base">DevTrack</span>
               </div>
-              <p className="text-slate-500 text-xs mt-1">Built for Kenya's digital future.</p>
+              <p className="text-slate-500 text-xs mt-1">Empowering regional ICT talent development.</p>
             </div>
 
             <div className="flex items-center gap-6 text-xs text-slate-400">
