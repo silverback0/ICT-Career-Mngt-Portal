@@ -449,6 +449,7 @@ const InternDashboard = ({ talentId }) => {
               </label>
               <select value={formData.cohort} onChange={e => setFormData({ ...formData, cohort: e.target.value })}
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all text-sm cursor-pointer">
+                  \\ may need to create more drop down for previous years
                 <option value="Cohort 2025/2026">Cohort 2025/26</option>
                 <option value="Cohort 2024/2025">Cohort 2024/25</option>
                 <option value="Cohort 2023/2024">Cohort 2023/24</option>
